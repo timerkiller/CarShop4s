@@ -70,6 +70,7 @@ implements View.OnClickListener{
     public void onClick(View v){
         //启动相应界面的Fragment,
         FragmentManager fragmentManager = getFragmentManager();
+        Log.d(m_Tag,"In Click function");
         switch (v.getId()){
             case R.id.tech_line_container_task:
                 mTaskButton.setBackgroundResource(R.drawable.icon_bottom_mission_green);
