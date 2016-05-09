@@ -62,6 +62,8 @@ implements View.OnClickListener{
         mTaskLinearLayOut.setOnClickListener(this);
         mMessageLinearLayOut.setOnClickListener(this);
         mPersonalInfoLinearLayOut.setOnClickListener(this);
+
+        Log.i(m_Tag,"Set on click listener done!");
     }
 
     @Override
