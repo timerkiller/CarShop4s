@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:showIn="@layout/fragment_sign_in" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ToggleButton
+                android:id="@+id/tech_toggle_button_remember_password"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="40dp"
+                android:textOff="@string/disp_null"
+                android:textOn="@string/disp_null"
+                android:background="@drawable/load_remember" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#646464"
+                android:text="@string/tech_remember_passwd"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/tech_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/btn_load_submit"
+            android:text="@string/tech_login_button"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="90dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tech_text_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tech_text_register"
+                android:textColor="#636363"
+                android:paddingBottom="25dp"
+                android:clickable="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/dillve"
+                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:text="@string/tech_text_erect"
+                android:gravity="center"
+                android:textColor="#636363"
+                android:paddingBottom="25dp" />
+
+            <TextView
+                android:id="@+id/tech_text_forget_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tech_text_forget_password"
+                android:textColor="#636363"
+                android:paddingBottom="25dp"
+                android:clickable="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+</LinearLayout>
