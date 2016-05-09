@@ -24,17 +24,20 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorWhite">
         <LinearLayout
+            android:id="@+id/tech_line_container_task"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/tech_task_list_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/icon_bottom_mission_gray"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/tech_task_list_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tech_task_list"
@@ -44,17 +47,20 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/tech_line_container_message"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/tech_message_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/icon_bottom_msg_gray"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/tech_message_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tech_message"
@@ -64,17 +70,20 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/tech_line_container_personal_info"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/tech_personal_info_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/icon_bottom_mine_gray"
                 android:layout_gravity="center" />
             <TextView
+                android:id="@+id/tech_personal_info_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tech_personal_infomation"

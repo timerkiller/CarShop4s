@@ -158,8 +158,6 @@ public class SignInFragment extends Fragment {
                         bundle.putString("password","123456");
                         bundle.putString("accessToken","fdskfjksdlajfdsklffdsaf");
 
-
-
                         removeDoneFab(new Runnable() {
                             @Override
                             public void run() {
@@ -173,7 +171,7 @@ public class SignInFragment extends Fragment {
                         });
                         startActivity(startHomeActivityIntent,bundle);
 
-                        getActivity().finish();
+                        //getActivity().finish();
                         break;
                     default:
                         throw new UnsupportedOperationException(

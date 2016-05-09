@@ -11,6 +11,14 @@ import android.view.ViewGroup;
  */
 public class MessageFragment extends ListFragment {
 
+    public static MessageFragment newInstance() {
+        Bundle args = new Bundle();
+
+        MessageFragment fragment = new MessageFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +27,7 @@ public class MessageFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        //return super.onCreateView(inflater, container, savedInstanceState);
+        return null;
     }
 }
