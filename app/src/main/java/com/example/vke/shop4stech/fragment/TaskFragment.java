@@ -2,6 +2,7 @@ package com.example.vke.shop4stech.fragment;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
  * Created by vke on 2016/5/8.
  */
 public class TaskFragment extends ListFragment{
+
+    private static final String mTag = "TaskFragment";
 
     public static TaskFragment newInstance() {
 
@@ -37,6 +40,7 @@ public class TaskFragment extends ListFragment{
 
     @Override
     public void onPause() {
-        super.onPause();
+        Log.i(mTag,"onPause enter");
+
     }
 }

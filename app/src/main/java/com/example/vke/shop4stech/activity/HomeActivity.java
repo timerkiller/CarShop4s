@@ -55,6 +55,9 @@ implements View.OnClickListener{
         mMessageTextView = (TextView)this.findViewById(R.id.tech_message_text);
         mPersonalInfoTextView = (TextView)this.findViewById(R.id.tech_personal_info_text);
 
+        mTaskButton.setBackgroundResource(R.drawable.icon_bottom_mission_green);
+        mTaskTextView.setTextColor(Color.parseColor("#05C0AB"));
+
         initClickListener();
     }
 
@@ -65,6 +68,7 @@ implements View.OnClickListener{
 
         Log.i(m_Tag,"Set on click listener done!");
     }
+
 
     @Override
     public void onClick(View v){

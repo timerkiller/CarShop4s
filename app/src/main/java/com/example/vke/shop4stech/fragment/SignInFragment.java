@@ -171,7 +171,7 @@ public class SignInFragment extends Fragment {
                         });
                         startActivity(startHomeActivityIntent,bundle);
 
-                        //getActivity().finish();
+                        getActivity().finish();
                         break;
                     default:
                         throw new UnsupportedOperationException(
