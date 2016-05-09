@@ -40,7 +40,8 @@ public class TaskFragment extends ListFragment{
 
     @Override
     public void onPause() {
-        Log.i(mTag,"onPause enter");
+        Log.i(mTag,"onPause Enter");
 
+        super.onPause();
     }
 }

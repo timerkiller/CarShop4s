@@ -18,7 +18,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:id="@+id/fragment_sign_in_content"
              android:layout_width="match_parent"
-             android:background="#F5F5F5"
+             android:background="#FFFFFF"
              android:layout_height="match_parent">
 
     <ProgressBar
