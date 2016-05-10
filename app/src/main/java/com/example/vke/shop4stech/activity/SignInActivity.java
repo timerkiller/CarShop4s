@@ -23,7 +23,7 @@ public class SignInActivity extends FragmentActivity
                 starter,
                 ActivityOptionsCompat.makeSceneTransitionAnimation(activity).toBundle());
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

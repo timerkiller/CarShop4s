@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity"
+        <activity
+            android:name=".activity.HomeActivity"
             android:theme="@style/Theme.AppCompat">
             <intent-filter android:label="HomeActivity">
                 <action android:name="android.intent.action.VIEW" />
@@ -41,9 +42,18 @@
                     android:scheme="example" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TaskActivity">
+        <activity android:name=".activity.TaskActivity" />
+        <!--
+     ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
-        </activity>
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.ForgetPasswordActivity" />
+        <activity android:name=".activity.AboutUsActivity"></activity>
     </application>
 
 </manifest>
