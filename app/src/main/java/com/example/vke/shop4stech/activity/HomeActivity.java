@@ -46,9 +46,9 @@ implements View.OnClickListener{
     private List<Fragment> mFragmentList;
     private FragmentAdapter mFragmentAdapter;
 
-    private final static int mFRAGMENT_ID_TASK_LIST = 0;
-    private final static int mFRAGMENT_ID_MESSAGE = 1;
-    private final static int mFRAGMENT_ID_PERSONAL_INFO =2;
+    private final static int FRAGMENT_ID_TASK_LIST = 0;
+    private final static int FRAGMENT_ID_MESSAGE = 1;
+    private final static int FRAGMENT_ID_PERSONAL_INFO =2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ implements View.OnClickListener{
                 mTaskTextView.setTextColor(Color.parseColor("#05C0AB"));
 
                 Log.d(m_Tag,"In task tab click");
-                mViewPager.setCurrentItem(mFRAGMENT_ID_TASK_LIST);
+                mViewPager.setCurrentItem(FRAGMENT_ID_TASK_LIST);
 
                 break;
             case R.id.tech_line_container_message:
@@ -131,14 +131,14 @@ implements View.OnClickListener{
                 mMessageTextView.setTextColor(Color.parseColor("#05C0AB"));
 
                 Log.d(m_Tag,"In message tab click");
-                mViewPager.setCurrentItem(mFRAGMENT_ID_MESSAGE);
+                mViewPager.setCurrentItem(FRAGMENT_ID_MESSAGE);
                 break;
             case R.id.tech_line_container_personal_info:
                 mPersonalInfoButton.setBackgroundResource(R.drawable.icon_bottom_mine_green);
                 mPersonalInfoTextView.setTextColor(Color.parseColor("#05C0AB"));
 
                 Log.d(m_Tag,"In personal info tab click");
-                mViewPager.setCurrentItem(mFRAGMENT_ID_PERSONAL_INFO);
+                mViewPager.setCurrentItem(FRAGMENT_ID_PERSONAL_INFO);
                 break;
             default:
                 throw new UnsupportedOperationException(
@@ -159,15 +159,15 @@ implements View.OnClickListener{
             //重置所有TextView和Button的字体颜色
             resetWidget();
             switch (position) {
-                case 0:
+                case FRAGMENT_ID_TASK_LIST:
                     mTaskButton.setBackgroundResource(R.drawable.icon_bottom_mission_green);
                     mTaskTextView.setTextColor(Color.parseColor("#05C0AB"));
                     break;
-                case 1:
+                case FRAGMENT_ID_MESSAGE:
                     mMessageButton.setBackgroundResource(R.drawable.icon_bottom_msg_green);
                     mMessageTextView.setTextColor(Color.parseColor("#05C0AB"));
                     break;
-                case 2:
+                case FRAGMENT_ID_PERSONAL_INFO:
                     mPersonalInfoButton.setBackgroundResource(R.drawable.icon_bottom_mine_green);
                     mPersonalInfoTextView.setTextColor(Color.parseColor("#05C0AB"));
                     break;
