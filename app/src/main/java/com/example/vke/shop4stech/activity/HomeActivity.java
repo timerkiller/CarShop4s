@@ -151,6 +151,33 @@ implements View.OnClickListener{
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            Log.i(m_Tag,"position:" + position+" positionOffset:"+positionOffset + " positionOffsetPixels" + positionOffsetPixels);
+
+
+//            if (position == FRAGMENT_ID_TASK_LIST) {
+//                mMessageButton.setBackgroundResource(R.drawable.icon_bottom_msg_green);
+//                mMessageTextView.setTextColor(Color.parseColor("#05C0AB"));
+//
+//                mTaskButton.setBackgroundResource(R.drawable.icon_bottom_mission_green);
+//                mTaskTextView.setTextColor(Color.parseColor("#05C0AB"));
+//
+//                mMessageButton.setAlpha(positionOffset);
+//                mMessageTextView.setAlpha(positionOffset);
+//
+//
+//                mTaskButton.setAlpha(1-positionOffset);
+//                mTaskTextView.setAlpha(1-positionOffset);
+//
+//            }
+//            else if(position == FRAGMENT_ID_MESSAGE) {
+//                mMessageButton.setAlpha(1-positionOffset);
+//                mMessageTextView.setAlpha(1-positionOffset);
+//            }
+//            else if (position == FRAGMENT_ID_PERSONAL_INFO){
+//                mPersonalInfoButton.setAlpha(1-positionOffset);
+//                mPersonalInfoTextView.setAlpha(1-positionOffset);
+//            }
+
 
         }
 
@@ -176,7 +203,6 @@ implements View.OnClickListener{
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
         }
     }
 
@@ -188,17 +214,26 @@ implements View.OnClickListener{
         mTaskTextView.setTextColor(Color.parseColor("#808080"));
         mMessageTextView.setTextColor(Color.parseColor("#808080"));
         mPersonalInfoTextView.setTextColor(Color.parseColor("#808080"));
+
+        mTaskButton.setAlpha(1.0f);
+        mMessageButton.setAlpha(1.0f);
+        mPersonalInfoButton.setAlpha(1.0f);
+
+        mTaskTextView.setAlpha(1.0f);
+        mMessageTextView.setAlpha(1.0f);
+        mPersonalInfoTextView.setAlpha(1.0f);
         Log.i(m_Tag,"reset widget");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.action_search:
                 //openSearch();
                 return true;
             case R.id.action_settings:
-                //openSettings();
+                //openSettings()
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
