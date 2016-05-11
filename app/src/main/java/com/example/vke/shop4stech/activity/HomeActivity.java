@@ -267,6 +267,7 @@ implements View.OnClickListener{
                 //openSettings()
                 PreferencesHelper.signOut(this);
                 SignInActivity.start(this);
+                this.finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
