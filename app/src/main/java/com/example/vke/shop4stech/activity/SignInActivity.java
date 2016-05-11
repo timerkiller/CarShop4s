@@ -16,7 +16,7 @@ import com.example.vke.shop4stech.helper.PreferencesHelper;
 public class SignInActivity extends FragmentActivity
         implements SignInFragment.OnFragmentInteractionListener{
 
-    public static void start(Activity activity, Boolean edit) {
+    public static void start(Activity activity) {
         Intent starter = new Intent(activity, SignInActivity.class);
         //noinspection unchecked
         ActivityCompat.startActivity(activity,

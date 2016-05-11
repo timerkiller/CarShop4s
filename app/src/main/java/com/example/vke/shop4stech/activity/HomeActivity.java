@@ -2,6 +2,12 @@ package com.example.vke.shop4stech.activity;
 
 
 //import android.app.FragmentManager;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +29,8 @@ import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.fragment.MessageFragment;
 import com.example.vke.shop4stech.fragment.PersonalFragment;
 import com.example.vke.shop4stech.fragment.TaskFragment;
+import com.example.vke.shop4stech.helper.PreferencesHelper;
+import com.example.vke.shop4stech.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +40,7 @@ public class HomeActivity extends AppCompatActivity
 implements View.OnClickListener{
 
     private final static String m_Tag = "HomeActivity";
+    private final static String EXTRA_USER_INFO = "UserInfomation";
     private Button mTaskButton;
     private Button mMessageButton;
     private Button mPersonalInfoButton;
@@ -49,6 +58,24 @@ implements View.OnClickListener{
     private final static int FRAGMENT_ID_TASK_LIST = 0;
     private final static int FRAGMENT_ID_MESSAGE = 1;
     private final static int FRAGMENT_ID_PERSONAL_INFO =2;
+
+
+    public static void start(Activity activity, User user, ActivityOptionsCompat options) {
+        Intent starter = getStartIntent(activity, user);
+        ActivityCompat.startActivity(activity, starter, options.toBundle());
+    }
+
+    public static void start(Context context, User user) {
+        Intent starter = getStartIntent(context, user);
+        context.startActivity(starter);
+    }
+
+    @NonNull
+    static Intent getStartIntent(Context context, User user) {
+        Intent starter = new Intent(context, HomeActivity.class);
+        starter.putExtra(EXTRA_USER_INFO, user);
+        return starter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +252,10 @@ implements View.OnClickListener{
         Log.i(m_Tag,"reset widget");
     }
 
+    private void signOut(Activity activity){
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -232,8 +263,10 @@ implements View.OnClickListener{
             case R.id.action_search:
                 //openSearch();
                 return true;
-            case R.id.action_settings:
+            case R.id.action_sign_out:
                 //openSettings()
+                PreferencesHelper.signOut(this);
+                SignInActivity.start(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

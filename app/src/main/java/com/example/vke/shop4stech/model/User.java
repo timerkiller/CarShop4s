@@ -21,16 +21,24 @@ public class User implements Parcelable {
     };
     private final String mUserName;
     private final String mPassword;
-
+    private final String mAccessToken;
 
     public User(String userName, String password) {
         mUserName = userName;
         mPassword = password;
+        mAccessToken = "";
+    }
+
+    public User(String userName, String password,String accessToken) {
+        mUserName = userName;
+        mPassword = password;
+        mAccessToken = accessToken;
     }
 
     protected User(Parcel in) {
         mUserName = in.readString();
         mPassword = in.readString();
+        mAccessToken = in.readString();
     }
 
     public String getUserName() {
@@ -41,6 +49,9 @@ public class User implements Parcelable {
         return mPassword;
     }
 
+    public String getAccessToken() {
+        return mAccessToken;
+    }
 
     @Override
     public int describeContents() {
@@ -51,6 +62,7 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mUserName);
         dest.writeString(mPassword);
+        dest.writeString(mAccessToken);
     }
 
     @SuppressWarnings("RedundantIfStatement")

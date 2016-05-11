@@ -5,26 +5,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.HomeActivity;
+import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.helper.TransitionHelper;
+import com.example.vke.shop4stech.model.LoginUIAccountInfo;
 import com.example.vke.shop4stech.model.User;
 
 
@@ -34,13 +45,56 @@ import com.example.vke.shop4stech.model.User;
 public class SignInFragment extends Fragment {
 
     private static final String ARG_EDIT = "EDIT";
+    private static final String mTag = "SignInFragment";
     private User mUser;
+    private LoginUIAccountInfo mUIAccountInfo;
     private EditText mUserName;
     private EditText mPassword;
     private Button mLoginButton;
+    private LinearLayout mContentLinear;
+    private ToggleButton mShowPasswordToggleButton;
+    private ToggleButton mRememberPasswordToggleButton;
+
     private boolean edit;
     private static SignInFragment ourInstance = null;
     private OnFragmentInteractionListener mListener;
+    private static final int LOGIN_SERVICE_OK = 0x200;
+    private static final int LOGIN_SERVICE_ERR = 0x201;
+    private static final int TOKEN_INVALID = 0x202;
+    private static final int TOKEN_OK = 0x203;
+
+    private Handler mLoginHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case LOGIN_SERVICE_OK:
+                    saveUserData(getActivity(),"123123123sfdsaf");
+                    if (mRememberPasswordToggleButton.isChecked()){
+                        saveUiAccountInfoData(getActivity(),true);
+                    }
+                    else{
+                        saveUiAccountInfoData(getActivity(),false);
+                    }
+                case TOKEN_OK:
+                    Log.i(mTag,"User already login,so start home activity directly");
+                    final Activity activity = getActivity();
+                    HomeActivity.start(activity, mUser);
+                    activity.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
+                    activity.finish();
+                    break;
+                case LOGIN_SERVICE_ERR:
+                    Toast.makeText(getActivity(), R.string.tech_user_login_error , Toast.LENGTH_SHORT).show();
+                    break;
+
+                case TOKEN_INVALID:
+                    Log.i(mTag,">>>>>>>>>>>>> Token INVALID");
+                    mContentLinear.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     public SignInFragment() {
         // Required empty public constructor
@@ -75,7 +129,9 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return  inflater.inflate(R.layout.fragment_sign_in, container, false);
+        View contentView = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        mContentLinear = (LinearLayout) contentView.findViewById(R.id.tech_sign_in_content);
+        return  contentView;
     }
 
     @Override
@@ -90,22 +146,39 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        assurePlayerInit();
-        checkIsInEditMode();
-
-        if (mUser == null || edit) {
-            System.out.println(">>>>>>>>>>>>>>in  onViewCreated");
+        assureUserInit();
+        initContentViews(view);
+        initContents();
+        if (mUser == null) {
+            Log.i(mTag,"User is null ,so need start login UI");
             view.findViewById(R.id.empty).setVisibility(View.GONE);
-//            view.findViewById(R.id.content).setVisibility(View.VISIBLE);
-            initContentViews(view);
-            initContents();
+            view.findViewById(R.id.tech_sign_in_content).setVisibility(View.VISIBLE);
         } else {
-            System.out.println(">>>>>>>>>>>>>>in  else");
-            final Activity activity = getActivity();
-//            CategorySelectionActivity.start(activity, mPlayer);
-//            activity.finish();
+            Log.i(mTag,"User is not null, so need to verify the token,username:"+mUser.getUserName()+" password:"+mUser.getPassword()+" accessToken:"+mUser.getAccessToken());
+            view.findViewById(R.id.empty).setVisibility(View.GONE);
+            String accessToken = mUser.getAccessToken();
+            if (!accessToken.equals(""))//如果accessToken不为空，需要登陆到服务器去判断token是否可用
+            {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkTokenValid();
+                    }
+
+                }).start();
+            }
+            else {
+
+                view.findViewById(R.id.empty).setVisibility(View.GONE);
+                view.findViewById(R.id.tech_sign_in_content).setVisibility(View.VISIBLE);
+            }
         }
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void checkTokenValid(){
+
+        mLoginHandler.sendEmptyMessage(TOKEN_OK);
     }
 
     private void checkIsInEditMode() {
@@ -144,34 +217,35 @@ public class SignInFragment extends Fragment {
         mUserName.addTextChangedListener(textWatcher);
         mPassword = (EditText) view.findViewById(R.id.edit_text_password);
         mPassword.addTextChangedListener(textWatcher);
+        mRememberPasswordToggleButton = (ToggleButton)view.findViewById(R.id.tech_toggle_button_remember_password);
+        mRememberPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListerners());
+        mShowPasswordToggleButton = (ToggleButton)view.findViewById(R.id.tech_toggle_show_password);
+        mShowPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListerners());
+
         mLoginButton = (Button) view.findViewById(R.id.tech_button_login);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tech_button_login:
-                        //save data should not put
                         //savePlayer(getActivity());
-                        Intent startHomeActivityIntent = new Intent(getActivity(),HomeActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("username","vic");
-                        bundle.putString("password","123456");
-                        bundle.putString("accessToken","fdskfjksdlajfdsklffdsaf");
+//                        Intent startHomeActivityIntent = new Intent(getActivity(),HomeActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("username","vic");
+//                        bundle.putString("password","123456");
+//                        bundle.putString("accessToken","fdskfjksdlajfdsklffdsaf");
 
-                        removeDoneFab(new Runnable() {
+                        new Thread(new Runnable() {
                             @Override
                             public void run() {
-//                                if (null == mSelectedAvatarView) {
-//                                    performSignInWithTransition(mAvatarGrid.getChildAt(
-//                                            mSelectedAvatar.ordinal()));
-//                                } else {
-//                                    //performSignInWithTransition(mSelectedAvatarView);
-//                                }
+                                NetOperationHelper.login();
+                                mLoginHandler.sendEmptyMessage(LOGIN_SERVICE_OK);
                             }
-                        });
-                        startActivity(startHomeActivityIntent,bundle);
+                        }).start();
 
-                        getActivity().finish();
+//                        startActivity(startHomeActivityIntent,bundle);
+//                        getActivity().overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
+//                        getActivity().finish();
                         break;
                     default:
                         throw new UnsupportedOperationException(
@@ -204,26 +278,41 @@ public class SignInFragment extends Fragment {
     }
 
     private void initContents() {
-        assurePlayerInit();
-        if (mUser != null) {
-            mUserName.setText(mUser.getUserName());
-            mPassword.setText(mUser.getPassword());
+        assureUserInit();
+        if (mUIAccountInfo != null) {
+            Log.i(mTag,"username :" +mUIAccountInfo.getUserName() + "password:" + mUIAccountInfo.getPassword() + " Flag:" + mUIAccountInfo.getRememberFlag());
+            mUserName.setText(mUIAccountInfo.getUserName());
+            mPassword.setText(mUIAccountInfo.getPassword());
+            if (mUIAccountInfo.getRememberFlag()) {
+                mRememberPasswordToggleButton.setChecked(true);
+            }
+            else{
+                mRememberPasswordToggleButton.setChecked(false);
+            }
+        }
+        else {
+            Log.i(mTag,"mUIAccountInfo is null");
         }
     }
 
-    private void assurePlayerInit() {
+
+    private void assureUserInit() {
         if (mUser == null) {
             mUser = PreferencesHelper.getUser(getActivity());
         }
+
+        if (mUIAccountInfo == null){
+            mUIAccountInfo = PreferencesHelper.getUIAccountInfo(getActivity());
+        }
     }
 
-    private void savePlayer(Activity activity) {
-        mUser = new User(mUserName.getText().toString(), mPassword.getText().toString());
+    private void saveUserData(Activity activity,String accessToken) {
+        mUser = new User(mUserName.getText().toString(), mPassword.getText().toString(),accessToken);
         PreferencesHelper.writeToPreferences(activity, mUser);
     }
 
-    private boolean isAvatarSelected() {
-        return true;
+    private void saveUiAccountInfoData(Activity activity,boolean remember){
+        PreferencesHelper.writeUiInfoToPreferences(getActivity(),new LoginUIAccountInfo( mUserName.getText().toString(),mPassword.getText().toString(),remember));
     }
 
     private boolean isInputDataValid() {
@@ -262,5 +351,54 @@ public class SignInFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onResume() {
+        Log.i(mTag,">>>>>..Fragment onResume");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+
+        Log.i(mTag,">>>>>..Fragment onPause");
+        if (mRememberPasswordToggleButton.isChecked()) {
+            PreferencesHelper.writeUiInfoToPreferences(getActivity(),new LoginUIAccountInfo( mUserName.getText().toString(),mPassword.getText().toString(),true));
+        }
+        else {
+            PreferencesHelper.writeUiInfoToPreferences(getActivity(),new LoginUIAccountInfo("","",false));
+        }
+        super.onPause();
+    }
+
+    class ToggleButtonListerners implements CompoundButton.OnCheckedChangeListener {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView,
+                                     boolean isChecked) {
+            switch (buttonView.getId()) {
+                case R.id.tech_toggle_show_password:
+                    if (isChecked) {
+                        mPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    } else {
+                        mPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    }
+                    break;
+
+
+                case R.id.tech_toggle_button_remember_password:
+                    if (isChecked) {
+                        String username = mUserName.getText().toString();
+                        String password = mPassword.getText().toString();
+                        if ( password.equals("")||username.equals("")) {
+                            Toast.makeText(getActivity().getApplicationContext(),"请输入用户名和密码",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
 }
 

@@ -13,7 +13,8 @@
     <string name="tech_message">消息</string>
     <string name="tech_personal_infomation">我的</string>
     <string name="tech_action_back">返回</string>
-    <string name="tech_action_setting">设置</string>
+    <string name="tech_action_setting">登出</string>
+    <string name="tech_user_login_error">登陆失败，请重新输入用户名密码</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
