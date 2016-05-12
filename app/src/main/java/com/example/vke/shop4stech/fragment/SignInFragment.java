@@ -17,6 +17,7 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +33,15 @@ import android.widget.ToggleButton;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.HomeActivity;
+import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.helper.TransitionHelper;
 import com.example.vke.shop4stech.model.LoginUIAccountInfo;
 import com.example.vke.shop4stech.model.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -54,7 +59,7 @@ public class SignInFragment extends Fragment {
     private LinearLayout mContentLinear;
     private ToggleButton mShowPasswordToggleButton;
     private ToggleButton mRememberPasswordToggleButton;
-
+    private String mAccessToken;
     private static SignInFragment ourInstance = null;
     private OnFragmentInteractionListener mListener;
     private static final int LOGIN_SERVICE_OK = 0x200;
@@ -67,7 +72,7 @@ public class SignInFragment extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOGIN_SERVICE_OK:
-                    saveUserData(getActivity(),"123123123sfdsaf");
+                    saveUserData(getActivity(),mAccessToken);
                     if (mRememberPasswordToggleButton.isChecked()){
                         saveUiAccountInfoData(getActivity(),true);
                     }
@@ -225,8 +230,27 @@ public class SignInFragment extends Fragment {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                NetOperationHelper.login();
-                                mLoginHandler.sendEmptyMessage(LOGIN_SERVICE_OK);
+                                HashMap<String,Object> loginDataMap = new HashMap<String, Object>();
+                                loginDataMap.put(RequestDataKey.PHONE,mUserName.getText().toString().replace(" ",""));
+                                loginDataMap.put(RequestDataKey.LOGIN_MODE,"login");
+                                loginDataMap.put(RequestDataKey.PASSWORD, Base64.encodeToString(mPassword.getText().toString().getBytes(),Base64.DEFAULT));
+                                loginDataMap.put(RequestDataKey.JPUSH_ID,"fjdsklfjkdj3fejkfjkdf");
+                                loginDataMap.put(RequestDataKey.TYPE,"mantain");
+
+                                String result = NetOperationHelper.login(loginDataMap);
+                                if(result != null){
+                                    String [] data = result.split(" ");
+                                    if (data[0].equals("ok")){
+                                        mAccessToken = data[1];
+
+                                        mLoginHandler.sendEmptyMessage(LOGIN_SERVICE_OK);
+                                    }
+                                    else {
+                                        //Toast.makeText(getActivity().getApplicationContext(),data[1],Toast.LENGTH_SHORT).show();
+                                        mLoginHandler.sendEmptyMessage(LOGIN_SERVICE_ERR);
+                                    }
+                                }
+
                             }
                         }).start();
 

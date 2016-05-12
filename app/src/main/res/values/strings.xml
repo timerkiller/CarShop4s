@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Shop4STech</string>
+    <string name="app_name">4s技师</string>
     <string name="login_logo">LoginLogo</string>
     <string name="disp_null"></string>
     <string name="tech_input_username">请输入手机号</string>

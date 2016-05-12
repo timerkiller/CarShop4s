@@ -280,9 +280,12 @@ implements View.OnClickListener{
             case R.id.action_sign_out:
                 //openSettings()
                 PreferencesHelper.signOut(this);
+                this.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
                 SignInActivity.start(this);
                 this.finish();
+
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
