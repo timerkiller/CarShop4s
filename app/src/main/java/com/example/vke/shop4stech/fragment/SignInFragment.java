@@ -55,7 +55,6 @@ public class SignInFragment extends Fragment {
     private ToggleButton mShowPasswordToggleButton;
     private ToggleButton mRememberPasswordToggleButton;
 
-    private boolean edit;
     private static SignInFragment ourInstance = null;
     private OnFragmentInteractionListener mListener;
     private static final int LOGIN_SERVICE_OK = 0x200;
@@ -177,18 +176,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void checkTokenValid(){
-
         mLoginHandler.sendEmptyMessage(TOKEN_OK);
-    }
-
-    private void checkIsInEditMode() {
-        final Bundle arguments = getArguments();
-        //noinspection SimplifiableIfStatement
-        if (arguments == null) {
-            edit = false;
-        } else {
-            edit = arguments.getBoolean(ARG_EDIT, false);
-        }
     }
 
     private void initContentViews(View view) {
@@ -202,14 +190,14 @@ public class SignInFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // hiding the floating action button if text is empty
                 if (s.length() == 0) {
-                   System.out.println("onTextChanged");
+                   Log.i(mTag,"onTextChanged");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // showing the floating action button if avatar is selected and input data is valid
-                System.out.println("onTextChanged");
+                Log.i(mTag,"afterTextChanged");
             }
         };
 
@@ -218,9 +206,9 @@ public class SignInFragment extends Fragment {
         mPassword = (EditText) view.findViewById(R.id.edit_text_password);
         mPassword.addTextChangedListener(textWatcher);
         mRememberPasswordToggleButton = (ToggleButton)view.findViewById(R.id.tech_toggle_button_remember_password);
-        mRememberPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListerners());
+        mRememberPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListeners());
         mShowPasswordToggleButton = (ToggleButton)view.findViewById(R.id.tech_toggle_show_password);
-        mShowPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListerners());
+        mShowPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListeners());
 
         mLoginButton = (Button) view.findViewById(R.id.tech_button_login);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -228,12 +216,11 @@ public class SignInFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tech_button_login:
-                        //savePlayer(getActivity());
-//                        Intent startHomeActivityIntent = new Intent(getActivity(),HomeActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("username","vic");
-//                        bundle.putString("password","123456");
-//                        bundle.putString("accessToken","fdskfjksdlajfdsklffdsaf");
+                        Log.d(mTag,"mUserName:"+mUserName.getText().toString().equals("") + " mPassword:"+mPassword.getText().toString().equals(""));
+                        if (mUserName.getText().toString().equals("") || mPassword.getText().toString().equals("")){
+                            Toast.makeText(getActivity().getApplicationContext(),R.string.tech_account_info_not_null,Toast.LENGTH_SHORT).show();
+                            break;
+                        }
 
                         new Thread(new Runnable() {
                             @Override
@@ -243,9 +230,6 @@ public class SignInFragment extends Fragment {
                             }
                         }).start();
 
-//                        startActivity(startHomeActivityIntent,bundle);
-//                        getActivity().overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
-//                        getActivity().finish();
                         break;
                     default:
                         throw new UnsupportedOperationException(
@@ -256,26 +240,6 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    private void removeDoneFab(@Nullable Runnable endAction) {
-        ViewCompat.animate(mLoginButton)
-                .scaleX(0)
-                .scaleY(0)
-                .setInterpolator(new FastOutSlowInInterpolator())
-                .withEndAction(endAction)
-                .start();
-    }
-
-
-    private void performSignInWithTransition(View v) {
-        final Activity activity = getActivity();
-//
-//        final Pair[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, true,
-//                new Pair<>(v, activity.getString(R.string.transition_avatar)));
-//        @SuppressWarnings("unchecked")
-//        ActivityOptionsCompat activityOptions = ActivityOptionsCompat
-//                .makeSceneTransitionAnimation(activity, pairs);
-//        HomeActivity.start(activity, mUser, activityOptions);
-    }
 
     private void initContents() {
         assureUserInit();
@@ -370,7 +334,7 @@ public class SignInFragment extends Fragment {
         super.onPause();
     }
 
-    class ToggleButtonListerners implements CompoundButton.OnCheckedChangeListener {
+    class ToggleButtonListeners implements CompoundButton.OnCheckedChangeListener {
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView,
@@ -384,15 +348,15 @@ public class SignInFragment extends Fragment {
                     }
                     break;
 
-
                 case R.id.tech_toggle_button_remember_password:
                     if (isChecked) {
                         String username = mUserName.getText().toString();
                         String password = mPassword.getText().toString();
                         if ( password.equals("")||username.equals("")) {
-                            Toast.makeText(getActivity().getApplicationContext(),"请输入用户名和密码",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(),R.string.tech_pls_input_account_info,Toast.LENGTH_SHORT).show();
                         }
                     }
+
                     break;
                 default:
                     break;

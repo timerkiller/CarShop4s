@@ -5,6 +5,8 @@ package com.example.vke.shop4stech.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
@@ -41,6 +44,7 @@ implements View.OnClickListener{
 
     private final static String m_Tag = "HomeActivity";
     private final static String EXTRA_USER_INFO = "UserInfomation";
+    private ActionBar mActionBar;
     private Button mTaskButton;
     private Button mMessageButton;
     private Button mPersonalInfoButton;
@@ -81,6 +85,7 @@ implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mActionBar = getSupportActionBar();
         initContentViews();
         Log.d(m_Tag,"view create done !!!!");
     }
@@ -104,6 +109,8 @@ implements View.OnClickListener{
     }
 
     private void initContentViews(){
+
+
         mTaskButton = (Button)this.findViewById(R.id.tech_task_list_btn);
         mMessageButton = (Button)this.findViewById(R.id.tech_message_btn);
         mPersonalInfoButton=(Button)this.findViewById(R.id.tech_personal_info_btn);
@@ -127,6 +134,12 @@ implements View.OnClickListener{
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.addOnPageChangeListener(new TabOnPageChangeListener());
 
+
+        mActionBar.setTitle("4s技师端");
+        mActionBar.setDisplayShowHomeEnabled(false);
+        Resources resources = getResources();
+        Drawable  drawable = resources.getDrawable(R.drawable.actionbar_background,null);
+        mActionBar.setBackgroundDrawable(drawable);
         initClickListener();
     }
 
@@ -256,13 +269,14 @@ implements View.OnClickListener{
 
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.action_search:
+            //case R.id.action_search:
                 //openSearch();
-                return true;
+               // return true;
             case R.id.action_sign_out:
                 //openSettings()
                 PreferencesHelper.signOut(this);
