@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.fragment.MessageFragment;
@@ -37,6 +39,8 @@ import com.example.vke.shop4stech.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.zip.Inflater;
 
 public class HomeActivity extends AppCompatActivity
@@ -90,6 +94,36 @@ implements View.OnClickListener{
         Log.d(m_Tag,"view create done !!!!");
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            exitBy2Click(); //调用双击退出函数
+        }
+        return false;
+    }
+
+    private static Boolean isExit = false;
+
+    private void exitBy2Click() {
+        Timer exitTimer= null;
+        if (!isExit) {
+            isExit = true; // 准备退出
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTimer = new Timer();
+            exitTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false; // 取消退出
+                }
+            }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
     public static class FragmentAdapter extends FragmentPagerAdapter {
         private List<Fragment> mFragments;
         public FragmentAdapter(FragmentManager fm,List<Fragment> fragments) {
@@ -265,8 +299,13 @@ implements View.OnClickListener{
         Log.i(m_Tag,"reset widget");
     }
 
-    private void signOut(Activity activity){
-
+    private void signOut(){
+        Log.i(m_Tag,"signOut");
+        PreferencesHelper.signOut(this);
+        //this.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
+        //SignInActivity.start(this);
+        SignInActivity.startWithNoAnimate(this);
+        ActivityCompat.finishAfterTransition(this);
     }
 
 
@@ -274,16 +313,8 @@ implements View.OnClickListener{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            //case R.id.action_search:
-                //openSearch();
-               // return true;
             case R.id.action_sign_out:
-                //openSettings()
-                PreferencesHelper.signOut(this);
-                this.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
-                SignInActivity.start(this);
-                this.finish();
-
+                signOut();
                 return true;
 
             default:
@@ -297,4 +328,6 @@ implements View.OnClickListener{
         menuInflater.inflate(R.menu.menu_home,menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
 }

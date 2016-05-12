@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -83,6 +84,7 @@ public class SignInFragment extends Fragment {
                     Log.i(mTag,"User already login,so start home activity directly");
                     final Activity activity = getActivity();
                     HomeActivity.start(activity, mUser);
+                    //ActivityCompat.finishAfterTransition(getActivity());
                     activity.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
                     activity.finish();
                     break;

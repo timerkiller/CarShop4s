@@ -24,12 +24,15 @@ public class SignInActivity extends FragmentActivity
                 ActivityOptionsCompat.makeSceneTransitionAnimation(activity).toBundle());
     }
 
+    public static void startWithNoAnimate(Activity activity){
+        Intent starter = new Intent(activity, SignInActivity.class);
+        activity.startActivity(starter);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        String username = "vic";
-        String password = "123456";
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.sign_in_container, SignInFragment.newInstance(false)).commit();
