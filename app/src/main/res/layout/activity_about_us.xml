@@ -1,12 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.vke.shop4stech.customLayout.SildingFinishLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.vke.shop4stech.activity.AboutUsActivity">
+    android:background="@color/colorWhite"
+    tools:context="com.example.vke.shop4stech.activity.AboutUsActivity"
+    android:id="@+id/sildingFinishLayout">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/tech_company_logo_image_view"
+        android:contentDescription="@string/disp_null"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/logo_hsae"/>
+
+    <TextView
+        android:id="@+id/tech_company_description_text_view"
+        android:layout_below="@id/tech_company_logo_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColor="@color/colorBlack"
+        android:text="@string/tech_company_descriptioin"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:layout_below="@id/tech_company_description_text_view">
+    <TextView
+        android:id="@+id/tech_address_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:text="@string/tech_company_address"
+        android:layout_marginTop="60dp"/>
+
+    <TextView
+        android:id="@+id/tech_phone_text_view"
+        android:layout_below="@id/tech_address_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:text="@string/tech_company_phone"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tech_fax_text_view"
+        android:layout_below="@id/tech_phone_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:text="@string/tech_company_fax"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tech_email_text_view"
+        android:layout_below="@id/tech_fax_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:text="@string/tech_company_email"
+        android:layout_marginTop="5dp"/>
+    </RelativeLayout>
 </RelativeLayout>
+
+</com.example.vke.shop4stech.customLayout.SildingFinishLayout>

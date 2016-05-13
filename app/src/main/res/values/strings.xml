@@ -24,8 +24,11 @@
     <string name="tech_user_manual">使用帮助</string>
     <string name="tech_about_us">关于我们</string>
     <string name="tech_sign_out">退出登录</string>
-
-    
+    <string name="tech_company_descriptioin">深圳市航盛电子股份有限公司成立于1993年，是一家集成研发、制造、营销、售后服务于一体，为汽车整车企业开发生产智能网联汽车信息系统、智能驾驶辅助系统、新能源汽车控制系统等产品的高新技术企业公司</string>
+    <string name="tech_company_address">地址:       深圳市宝安区福永镇和平村福园一路航盛工业园</string>
+    <string name="tech_company_phone">电话:       0755&#8211;297766666</string>
+    <string name="tech_company_fax">传真:       0755&#8211;27396568</string>
+    <string name="tech_company_email">E-Mail:     hshr@hangsheng.com.cn</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
