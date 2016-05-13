@@ -76,17 +76,15 @@ public class SignInFragment extends Fragment {
                     saveUserData(getActivity(),mAccessToken);
                     if (mRememberPasswordToggleButton.isChecked()){
                         saveUiAccountInfoData(getActivity(),true);
-
                     }
                     else{
                         saveUiAccountInfoData(getActivity(),false);
                     }
+
                 case TOKEN_OK:
                     Log.i(mTag,"User already login,so start home activity directly");
                     final Activity activity = getActivity();
                     HomeActivity.start(activity, mUser);
-                    //ActivityCompat.finishAfterTransition(getActivity());
-                    activity.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
                     activity.finish();
                     break;
                 case LOGIN_SERVICE_ERR:
