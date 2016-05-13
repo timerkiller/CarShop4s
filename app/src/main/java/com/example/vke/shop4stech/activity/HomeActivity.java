@@ -168,8 +168,7 @@ implements View.OnClickListener{
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.addOnPageChangeListener(new TabOnPageChangeListener());
 
-
-        mActionBar.setTitle("4s技师端");
+        mActionBar.setTitle("4S技师端");
         mActionBar.setDisplayShowHomeEnabled(false);
         Resources resources = getResources();
         Drawable  drawable = resources.getDrawable(R.drawable.actionbar_background,null);
@@ -307,7 +306,6 @@ implements View.OnClickListener{
         SignInActivity.startWithNoAnimate(this);
         ActivityCompat.finishAfterTransition(this);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

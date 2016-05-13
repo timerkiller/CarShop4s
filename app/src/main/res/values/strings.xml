@@ -17,7 +17,15 @@
     <string name="tech_user_login_error">登陆失败，请重新输入用户名密码</string>
     <string name="tech_account_info_not_null">用户名和密码不能为空</string>
     <string name="tech_pls_input_account_info">请输入用户名和密码</string>
+    <string name="tech_type">技师种类</string>
+    <string name="tech_station">所属工位</string>
+    <string name="tech_team">所属班种</string>
+    <string name="tech_modify_password">修改密码</string>
+    <string name="tech_user_manual">使用帮助</string>
+    <string name="tech_about_us">关于我们</string>
+    <string name="tech_sign_out">退出登录</string>
 
+    
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

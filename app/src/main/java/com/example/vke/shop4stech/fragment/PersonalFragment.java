@@ -4,6 +4,7 @@ package com.example.vke.shop4stech.fragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.example.vke.shop4stech.R;
  */
 public class PersonalFragment extends Fragment{
 
+    private static final String mTag = "PersonalFragment";
+
     public static PersonalFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -23,7 +26,6 @@ public class PersonalFragment extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class PersonalFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
+        Log.i(mTag,"in function onCreateView");
         return inflater.inflate(R.layout.fragment_personal_info,container,false);
     }
 }

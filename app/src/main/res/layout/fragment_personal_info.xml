@@ -1,12 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightGray">
 
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/tech_relative_layout_personal_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="personalFragment"
-        android:textColor="@color/colorLightBlue"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_mine_card">
+
+        <TextView
+            android:id="@+id/tech_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorLightBlue"
+            android:text="VV"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"/>
+        <TextView
+            android:id="@+id/tech_job_id_text_view"
+            android:layout_below="@id/tech_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorLightBlue"
+            android:textSize="15sp"
+            android:layout_centerInParent="true"
+            android:text="工作证号:5969494"
+            android:textAlignment="center"
+            android:layout_marginTop="20dp"/>
+
+        <LinearLayout
+            android:baselineAligned="false"
+            android:layout_below="@id/tech_job_id_text_view"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="高级工程师"
+                    android:textSize="15sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/tech_type"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="美容"
+                    android:textSize="15sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/tech_station"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="早班"
+                    android:textSize="15sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/tech_team"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tech_relative_layout_operation"
+        android:layout_below="@id/tech_relative_layout_personal_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/tech_modify_password"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/tech_pic_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_mine_change"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/disp_null"
+                android:layout_marginStart="13dp"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tech_pic_password"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:textColor="@color/colorBlack"
+                android:text="@string/tech_modify_password"/>
+            <Button
+                android:id="@+id/tech_get_into_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_mine_next"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentEnd="true"
+                android:clickable="false"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/tech_line1"
+            android:layout_below="@+id/tech_modify_password"
+            android:contentDescription="@string/disp_null"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:src="#f0f0f0" />
+
+        <RelativeLayout
+            android:id="@+id/tech_help"
+            android:layout_below="@id/tech_line1"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/tech_user_manual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_mine_help"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/disp_null"
+                android:layout_marginStart="13dp"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tech_user_manual"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:textColor="@color/colorBlack"
+                android:text="@string/tech_user_manual"/>
+            <Button
+                android:id="@+id/tech_user_manual_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_mine_next"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentEnd="true"
+                android:clickable="false"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/tech_line2"
+            android:layout_below="@+id/tech_help"
+            android:contentDescription="@string/disp_null"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:src="#f0f0f0" />
+
+        <RelativeLayout
+            android:id="@+id/tech_about_us"
+            android:layout_below="@id/tech_line2"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/tech_about_us_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_mine_about"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/disp_null"
+                android:layout_marginStart="13dp"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tech_about_us_image_view"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:textColor="@color/colorBlack"
+                android:text="@string/tech_about_us"/>
+            <Button
+                android:id="@+id/tech_user_about_us_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_mine_next"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentEnd="true"
+                android:clickable="false"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tech_sign_out_relative_layout"
+        android:layout_below="@id/tech_relative_layout_operation"
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/tech_sign_out_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_mine_exit"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/disp_null"
+            android:layout_marginStart="13dp"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tech_sign_out_image_view"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:textSize="15sp"
+            android:textColor="@color/colorBlack"
+            android:text="@string/tech_sign_out"/>
+        <Button
+            android:id="@+id/tech_sign_out_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/icon_mine_next"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentEnd="true"
+            android:clickable="false"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

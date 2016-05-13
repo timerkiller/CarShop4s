@@ -76,6 +76,7 @@ public class SignInFragment extends Fragment {
                     saveUserData(getActivity(),mAccessToken);
                     if (mRememberPasswordToggleButton.isChecked()){
                         saveUiAccountInfoData(getActivity(),true);
+
                     }
                     else{
                         saveUiAccountInfoData(getActivity(),false);
@@ -284,7 +285,6 @@ public class SignInFragment extends Fragment {
             Log.i(mTag,"mUIAccountInfo is null");
         }
     }
-
 
     private void assureUserInit() {
         if (mUser == null) {
