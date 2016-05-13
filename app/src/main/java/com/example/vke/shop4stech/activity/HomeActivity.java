@@ -66,6 +66,7 @@ implements View.OnClickListener{
     private final static int FRAGMENT_ID_TASK_LIST = 0;
     private final static int FRAGMENT_ID_MESSAGE = 1;
     private final static int FRAGMENT_ID_PERSONAL_INFO =2;
+    private static Boolean isExit = false;
 
 
     public static void start(Activity activity, User user, ActivityOptionsCompat options) {
@@ -104,8 +105,6 @@ implements View.OnClickListener{
         return false;
     }
 
-    private static Boolean isExit = false;
-
     private void exitBy2Click() {
         Timer exitTimer= null;
         if (!isExit) {
@@ -120,8 +119,7 @@ implements View.OnClickListener{
             }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
 
         } else {
-            finish();
-            System.exit(0);
+            ActivityCompat.finishAfterTransition(this);
         }
     }
     public static class FragmentAdapter extends FragmentPagerAdapter {
@@ -326,6 +324,4 @@ implements View.OnClickListener{
         menuInflater.inflate(R.menu.menu_home,menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-
 }
