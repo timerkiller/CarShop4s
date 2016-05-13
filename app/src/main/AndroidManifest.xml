@@ -25,7 +25,8 @@
         </activity>
         <activity
             android:name=".activity.HomeActivity"
-            android:theme="@style/CustomActionBarTheme">
+            android:theme="@style/CustomActionBarTheme"
+            android:screenOrientation="portrait">
             <intent-filter android:label="HomeActivity">
                 <action android:name="android.intent.action.VIEW" />
 

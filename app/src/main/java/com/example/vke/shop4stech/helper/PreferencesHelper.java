@@ -91,6 +91,21 @@ public class PreferencesHelper {
         return new User(username, password,accessToken);
     }
 
+    /**
+     * Retrieves a {@link com.example.vke.shop4stech.model.User} from preferences.
+     *
+     * @param context The Context which to obtain the SharedPreferences from.
+     * @return 1.accessToken,2,null
+     */
+    public static String getPreferenceAccessToken(Context context){
+        SharedPreferences preferences = getSharedPreferences(context,PLAYER_PREFERENCES);
+        final String accessToken = preferences.getString(PREFERENCE_ACCESS_TOKEN,null);
+        if (accessToken == null){
+            return null;
+        }
+        return accessToken;
+    }
+
     public static LoginUIAccountInfo getUIAccountInfo(Context context){
         SharedPreferences preferences = getSharedPreferences(context,UI_ACCOUNT_INFO_PREFERENCES);
         final String username = preferences.getString(PREFERENCE_UI_USER_NAME, null);

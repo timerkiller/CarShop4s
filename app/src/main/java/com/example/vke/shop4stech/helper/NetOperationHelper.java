@@ -3,6 +3,7 @@ package com.example.vke.shop4stech.helper;
 import android.util.Log;
 
 import com.example.vke.shop4stech.constant.URL;
+import com.example.vke.shop4stech.model.PersonalInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +77,30 @@ public class NetOperationHelper {
 
     }
 
-    public static void getPersnoalInfo(){
+    public static PersonalInfo getPersnoalInfo(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if (respData == null)
+        {
+            Log.i(mTag,"get personal info null");
+            return null;
+        }
 
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                String username=respData.getString("userName");
+                String staffID=respData.getString("staffID");
+                String jobType=respData.getString("jobType");
+                String station=respData.getString("station");
+                String team=respData.getString("team");
+
+                return new PersonalInfo(username,staffID,jobType,station,team);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

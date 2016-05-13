@@ -17,7 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorLightBlue"
-            android:text="VV"
             android:textSize="20sp"
             android:textAlignment="center"
             android:layout_alignParentTop="true"
@@ -32,7 +31,6 @@
             android:textColor="@color/colorLightBlue"
             android:textSize="15sp"
             android:layout_centerInParent="true"
-            android:text="工作证号:5969494"
             android:textAlignment="center"
             android:layout_marginTop="20dp"/>
 
@@ -50,7 +48,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="高级工程师"
+                    android:id="@+id/tech_job_type_text_view"
                     android:textSize="15sp"
                     android:textAlignment="center"
                     android:layout_width="match_parent"
@@ -70,7 +68,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="美容"
+                    android:id="@+id/tech_station_text_view"
                     android:textSize="15sp"
                     android:textAlignment="center"
                     android:layout_width="match_parent"
@@ -91,7 +89,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="早班"
+                    android:id="@+id/tech_team_text_view"
                     android:textSize="15sp"
                     android:textAlignment="center"
                     android:layout_width="match_parent"
@@ -114,7 +112,7 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/tech_modify_password"
+            android:id="@+id/tech_modify_password_relative_layout"
             android:background="@color/colorWhite"
             android:layout_width="match_parent"
             android:layout_height="50dp">
@@ -151,7 +149,7 @@
 
         <ImageView
             android:id="@+id/tech_line1"
-            android:layout_below="@+id/tech_modify_password"
+            android:layout_below="@+id/tech_modify_password_relative_layout"
             android:contentDescription="@string/disp_null"
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -160,7 +158,7 @@
             android:src="#f0f0f0" />
 
         <RelativeLayout
-            android:id="@+id/tech_help"
+            android:id="@+id/tech_help_relative_layout"
             android:layout_below="@id/tech_line1"
             android:background="@color/colorWhite"
             android:layout_width="match_parent"
@@ -197,7 +195,7 @@
 
         <ImageView
             android:id="@+id/tech_line2"
-            android:layout_below="@+id/tech_help"
+            android:layout_below="@+id/tech_help_relative_layout"
             android:contentDescription="@string/disp_null"
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -206,7 +204,7 @@
             android:src="#f0f0f0" />
 
         <RelativeLayout
-            android:id="@+id/tech_about_us"
+            android:id="@+id/tech_about_us_relative_layout"
             android:layout_below="@id/tech_line2"
             android:background="@color/colorWhite"
             android:layout_width="match_parent"
