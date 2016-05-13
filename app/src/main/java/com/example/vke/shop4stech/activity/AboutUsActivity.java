@@ -23,6 +23,7 @@ public class AboutUsActivity extends AppCompatActivity {
         activty.startActivity(starter);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

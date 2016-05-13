@@ -3,6 +3,8 @@ package com.example.vke.shop4stech.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +42,8 @@ import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.helper.TransitionHelper;
 import com.example.vke.shop4stech.model.LoginUIAccountInfo;
 import com.example.vke.shop4stech.model.User;
+
+import org.apache.commons.codec.binary.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -119,6 +123,47 @@ public class SignInFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    /**
+     * 检测网络是否可用
+     * @return
+     */
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isConnectedOrConnecting();
+    }
+
+//    /**
+//     * 获取当前网络类型
+//     * @return 0：没有网络   1：WIFI网络   2：WAP网络    3：NET网络
+//     */
+//
+//    public static final int NETTYPE_WIFI = 0x01;
+//    public static final int NETTYPE_CMWAP = 0x02;
+//    public static final int NETTYPE_CMNET = 0x03;
+//    public int getNetworkType() {
+//        int netType = 0;
+//        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        if (networkInfo == null) {
+//            return netType;
+//        }
+//        int nType = networkInfo.getType();
+//        if (nType == ConnectivityManager.TYPE_MOBILE) {
+//            String extraInfo = networkInfo.getExtraInfo();
+//            if(!StringUtils.isEmpty(extraInfo)){
+//                if (extraInfo.toLowerCase().equals("cmnet")) {
+//                    netType = NETTYPE_CMNET;
+//                } else {
+//                    netType = NETTYPE_CMWAP;
+//                }
+//            }
+//        } else if (nType == ConnectivityManager.TYPE_WIFI) {
+//            netType = NETTYPE_WIFI;
+//        }
+//        return netType;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -225,6 +270,10 @@ public class SignInFragment extends Fragment {
                         Log.d(mTag,"mUserName:"+mUserName.getText().toString().equals("") + " mPassword:"+mPassword.getText().toString().equals(""));
                         if (mUserName.getText().toString().equals("") || mPassword.getText().toString().equals("")){
                             Toast.makeText(getActivity().getApplicationContext(),R.string.tech_account_info_not_null,Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        if (!isNetworkConnected()){
+                            Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
                             break;
                         }
 

@@ -1,16 +1,21 @@
 package com.example.vke.shop4stech.fragment;
 
 //import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -180,7 +185,38 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                 AboutUsActivity.start(getActivity());
                 break;
             case R.id.tech_sign_out_relative_layout:
-                signOut();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("确认退出吗?");
+
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        signOut();
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+
+//                AlertDialog alertDialog = builder.create();
+//
+//                alertDialog.setCancelable(false);
+//                alertDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event)
+//                    {
+//                        return keyCode == KeyEvent.KEYCODE_SEARCH;
+//                    }
+//                });
+//
+//                alertDialog.show();
+
+                //signOut();
                 break;
             default:
                 Log.i(mTag,"Unknow button on click");

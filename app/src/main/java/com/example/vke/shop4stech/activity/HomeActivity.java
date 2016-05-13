@@ -77,6 +77,7 @@ implements View.OnClickListener{
     public static void start(Context context, User user) {
         Intent starter = getStartIntent(context, user);
         context.startActivity(starter);
+
     }
 
     @NonNull
@@ -141,8 +142,6 @@ implements View.OnClickListener{
     }
 
     private void initContentViews(){
-
-
         mTaskButton = (Button)this.findViewById(R.id.tech_task_list_btn);
         mMessageButton = (Button)this.findViewById(R.id.tech_message_btn);
         mPersonalInfoButton=(Button)this.findViewById(R.id.tech_personal_info_btn);
@@ -223,8 +222,6 @@ implements View.OnClickListener{
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             Log.i(m_Tag,"position:" + position+" positionOffset:"+positionOffset + " positionOffsetPixels" + positionOffsetPixels);
-
-
 //            if (position == FRAGMENT_ID_TASK_LIST) {
 //                mMessageButton.setBackgroundResource(R.drawable.icon_bottom_msg_green);
 //                mMessageTextView.setTextColor(Color.parseColor("#05C0AB"));
@@ -248,8 +245,6 @@ implements View.OnClickListener{
 //                mPersonalInfoButton.setAlpha(1-positionOffset);
 //                mPersonalInfoTextView.setAlpha(1-positionOffset);
 //            }
-
-
         }
 
         @Override
@@ -312,7 +307,6 @@ implements View.OnClickListener{
             case R.id.action_sign_out:
                 signOut();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
