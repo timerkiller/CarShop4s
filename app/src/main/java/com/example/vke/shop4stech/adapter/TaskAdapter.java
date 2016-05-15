@@ -30,12 +30,19 @@ public class TaskAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return mTaskList.size();
+        if(mTaskList != null) {
+            return mTaskList.size();
+        }
+
+        return 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return mTaskList.get(position);
+        if(mTaskList!= null){
+            return mTaskList.get(position);
+        }
+        return null;
     }
 
     @Override
@@ -50,43 +57,52 @@ public class TaskAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View view;
+        ViewHolder viewHolder;
         if(convertView == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.task_list_item, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.task_list_item, null);
+            viewHolder = new ViewHolder();
+            viewHolder.mOrderSerialNumTV = (TextView)convertView.findViewById(R.id.tech_order_serial_num_text_view);
+            viewHolder.mTaskContentTextTV = (TextView)convertView.findViewById(R.id.tech_task_content_text_view);
+            viewHolder.mCurrentExecutingManTV = (TextView)convertView.findViewById(R.id.tech_task_execute_man_text_view);
+            viewHolder.mTaskStateImgV = (ImageView)convertView.findViewById(R.id.tech_task_state_image_view);
+            viewHolder.mTaskStateTV = (TextView)convertView.findViewById(R.id.tech_task_state_text_view);
+
+            convertView.setTag(viewHolder);
         }
         else{
-            view = convertView;
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        TextView orderSerialNumTV = (TextView)view.findViewById(R.id.tech_order_serial_num_text_view);
-        TextView taskContentTextTV = (TextView)view.findViewById(R.id.tech_task_content_text_view);
-        TextView currentExecutingManTV = (TextView)view.findViewById(R.id.tech_task_execute_man_text_view);
-        ImageView taskStateImgV = (ImageView)view.findViewById(R.id.tech_task_state_image_view);
-        TextView taskStateTV = (TextView)view.findViewById(R.id.tech_task_state_text_view);
-
         Task task = mTaskList.get(position);
-        orderSerialNumTV.setText(task.getOrderSerialNum());
-        taskContentTextTV.setText(task.getOrderType());
-        currentExecutingManTV.setText(task.getCurrentExecutingMan());
+        viewHolder.mOrderSerialNumTV.setText(task.getOrderSerialNum());
+        viewHolder.mTaskContentTextTV.setText(task.getOrderType());
+        viewHolder.mCurrentExecutingManTV.setText(task.getCurrentExecutingMan());
 
         switch (task.getOrderState()){
             case "暂停":
-                taskStateImgV.setBackgroundResource(R.drawable.icon_running);
+                viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_running);
                 break;
             case "已完成":
-                taskStateImgV.setBackgroundResource(R.drawable.icon_complete);
+                viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_complete);
                 break;
             case "执行中":
-                taskStateImgV.setBackgroundResource(R.drawable.icon_running);
+                viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_running);
                 break;
             case "未开始":
-                taskStateImgV.setBackgroundResource(R.drawable.icon_prestart);
+                viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_prestart);
                 break;
         }
-        taskStateTV.setText(task.getOrderState());
+        viewHolder.mTaskStateTV.setText(task.getOrderState());
 
-        return view;
+        return convertView;
     }
 
+    public static class ViewHolder{
+        TextView mOrderSerialNumTV;
+        TextView mTaskContentTextTV;
+        TextView mCurrentExecutingManTV;
+        ImageView mTaskStateImgV;
+        TextView mTaskStateTV;
+    }
 
 }

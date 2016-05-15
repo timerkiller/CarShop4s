@@ -115,7 +115,7 @@ public class XListView extends ListView implements OnScrollListener {
 	@Override
 	public void setAdapter(ListAdapter adapter) {
 		// make sure XListViewFooter is the last footer view, and only add once.
-		if (mIsFooterReady == false) {
+		if (!mIsFooterReady) {
 			mIsFooterReady = true;
 			addFooterView(mFooterView);
 		}
@@ -168,7 +168,7 @@ public class XListView extends ListView implements OnScrollListener {
 	 * stop refresh, reset header view.
 	 */
 	public void stopRefresh() {
-		if (mPullRefreshing == true) {
+		if (mPullRefreshing) {
 			mPullRefreshing = false;
 			resetHeaderHeight();
 		}
@@ -178,7 +178,7 @@ public class XListView extends ListView implements OnScrollListener {
 	 * stop load more, reset footer view.
 	 */
 	public void stopLoadMore() {
-		if (mPullLoading == true) {
+		if (mPullLoading) {
 			mPullLoading = false;
 			mFooterView.setState(XListViewFooter.STATE_NORMAL);
 		}

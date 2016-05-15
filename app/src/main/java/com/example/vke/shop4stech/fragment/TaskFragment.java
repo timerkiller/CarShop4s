@@ -45,9 +45,6 @@ public class TaskFragment extends ListFragment
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case MessageType.TYPE_GET_TASK_SUCCESS:
-                    //mTotalTaskList = (List<Task>) msg.obj;
-                    mTaskAdapter = new TaskAdapter(getActivity(),mTotalTaskList);
-                    setListAdapter(mTaskAdapter);
                     mTaskAdapter.bindData(mTotalTaskList);
                     mTaskAdapter.notifyDataSetChanged();
                     mPageId++;
@@ -80,29 +77,30 @@ public class TaskFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mTaskAdapter = new TaskAdapter(getActivity());
-        //setListAdapter(mTaskAdapter);
+        mTaskAdapter = new TaskAdapter(getActivity(),mTotalTaskList);
+        setListAdapter(mTaskAdapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_task_list,container,false);
+    }
 
-        View view =  inflater.inflate(R.layout.fragment_task_list,container,false);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        XListView xListView  = (XListView)getListView();
+        xListView.setXListViewListener(this);
+        xListView.setPullLoadEnable(true);
+        xListView.setPullRefreshEnable(true);
+
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 // TODO Auto-generated method stub
                 getTask();
             }
         }).start();
-
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -112,14 +110,9 @@ public class TaskFragment extends ListFragment
         super.onPause();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-        XListView view  = (XListView)getListView();
-        view.setXListViewListener(this);
-        view.setPullLoadEnable(true);
-        view.setPullRefreshEnable(true);
 //        getListView().setOnScrollListener(this);
     }
 
@@ -149,8 +142,8 @@ public class TaskFragment extends ListFragment
         map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
         map.put("info", "list");
         map.put("type", "all");
-        map.put("page", "1");//Integer.toString(mPageId));
-        map.put("perPage", "10");
+        map.put("page", Integer.toString(mPageId));
+        map.put("perPage", "2");
 
 
         List<Task> tasks = NetOperationHelper.getTaskList(map);

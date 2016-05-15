@@ -31,7 +31,7 @@ public class XListViewHeader extends LinearLayout {
 	private Animation mRotateUpAnim;
 	private Animation mRotateDownAnim;
 	
-	private final int ROTATE_ANIM_DURATION = 180;
+	private final int ROTATE_ANIM_DURATION = 250;
 	
 	public final static int STATE_NORMAL = 0;
 	public final static int STATE_READY = 1;
@@ -54,7 +54,7 @@ public class XListViewHeader extends LinearLayout {
 	private void initView(Context context) {
 		// 初始情况，设置下拉刷新view高度为0
 		LayoutParams lp = new LayoutParams(
-				LayoutParams.FILL_PARENT, 0);
+				LayoutParams.MATCH_PARENT, 0);
 		mContainer = (LinearLayout) LayoutInflater.from(context).inflate(
 				R.layout.xlistview_header, null);
 		addView(mContainer, lp);
