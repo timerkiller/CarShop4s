@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.AboutUsActivity;
 import com.example.vke.shop4stech.activity.SignInActivity;
+import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
@@ -64,13 +65,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
-    static class MessageType{
-        public static final int TYPE_GET_PERSONAL_INFO_OK = 0x1001;
-        public static final int TYPE_GET_PERSONAL_INFO_ERROR = 0x1002;
-        public static final int TYPE_SIGN_OUT_OK = 0x1003;
-        public static final int TYPE_SIGN_OUT_ERROR = 0x1004;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +86,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                         break;
                     case MessageType.TYPE_SIGN_OUT_ERROR:
                         break;
-                    default:
 
+                    case MessageType.TYPE_NETWORK_DISABLE:
+                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Log.e(mTag,"Unknow message type: " + msg.what);
                 }
             }
         };
@@ -135,7 +133,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
+                if(!NetOperationHelper.isNetworkConnected(getActivity())){
+                    mUpdatePersonalInfoHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
+                    return;
+                }
+
+                String accessToken = getValidAccessToken();
                 if (accessToken == null){
                     Message msg = mUpdatePersonalInfoHandler.obtainMessage();
                     msg.obj = "AccessToken失效，请重新登陆";
@@ -164,6 +167,16 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         }).start();
 
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    //获取有效的accessToken，这里会进行一个网络操作判断
+    private String getValidAccessToken(){
+        String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
+        if(NetOperationHelper.checkAccessTokenInvalid(accessToken)){
+            return accessToken;
+        }
+
+        return null;
     }
 
     private void updateContentView(PersonalInfo personalInfo){
