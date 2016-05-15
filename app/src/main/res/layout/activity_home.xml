@@ -2,30 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
 
     tools:context="com.example.vke.shop4stech.activity.HomeActivity">
 
-    <FrameLayout
-        android:id="@+id/home_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLightGray">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/home_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/tech_view_pager"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent">
 
-        </android.support.v4.view.ViewPager>
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
 
     <LinearLayout
+        android:id="@+id/tech_bottom_nav_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:baselineAligned="false"
+        android:baselineAligned="true"
         android:layout_alignParentBottom="true"
         android:background="@color/colorWhite">
         <LinearLayout
@@ -101,4 +96,12 @@
         </LinearLayout>
     </LinearLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tech_view_pager"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorLightGray"
+        android:layout_above="@id/tech_bottom_nav_button">
+
+    </android.support.v4.view.ViewPager>
 </RelativeLayout>

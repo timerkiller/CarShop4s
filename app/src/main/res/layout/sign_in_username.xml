@@ -16,6 +16,7 @@
         android:contentDescription="@string/login_logo"
         android:src="@drawable/logo"
         android:layout_above="@+id/linearLayout"
+        android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/linearLayout">
 
         <LinearLayout

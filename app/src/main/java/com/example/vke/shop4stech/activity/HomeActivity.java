@@ -68,7 +68,6 @@ implements View.OnClickListener{
     private final static int FRAGMENT_ID_PERSONAL_INFO =2;
     private static Boolean isExit = false;
 
-
     public static void start(Activity activity, User user, ActivityOptionsCompat options) {
         Intent starter = getStartIntent(activity, user);
         ActivityCompat.startActivity(activity, starter, options.toBundle());
@@ -123,6 +122,7 @@ implements View.OnClickListener{
             ActivityCompat.finishAfterTransition(this);
         }
     }
+
     public static class FragmentAdapter extends FragmentPagerAdapter {
         private List<Fragment> mFragments;
         public FragmentAdapter(FragmentManager fm,List<Fragment> fragments) {

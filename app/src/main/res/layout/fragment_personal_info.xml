@@ -115,9 +115,11 @@
 
         <RelativeLayout
             android:id="@+id/tech_modify_password_relative_layout"
-            android:background="@color/colorWhite"
+            android:background="@drawable/tech_btn_default"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="true">
             <ImageView
                 android:id="@+id/tech_pic_password"
                 android:layout_width="wrap_content"
@@ -162,9 +164,11 @@
         <RelativeLayout
             android:id="@+id/tech_help_relative_layout"
             android:layout_below="@id/tech_line1"
-            android:background="@color/colorWhite"
+            android:background="@drawable/tech_btn_default"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="true">
             <ImageView
                 android:id="@+id/tech_user_manual"
                 android:layout_width="wrap_content"
@@ -208,9 +212,11 @@
         <RelativeLayout
             android:id="@+id/tech_about_us_relative_layout"
             android:layout_below="@id/tech_line2"
-            android:background="@color/colorWhite"
+            android:background="@drawable/tech_btn_default"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="true">
             <ImageView
                 android:id="@+id/tech_about_us_image_view"
                 android:layout_width="wrap_content"
@@ -247,7 +253,7 @@
     <RelativeLayout
         android:id="@+id/tech_sign_out_relative_layout"
         android:layout_below="@id/tech_relative_layout_operation"
-        android:background="@color/colorWhite"
+        android:background="@drawable/tech_btn_default"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="50dp">

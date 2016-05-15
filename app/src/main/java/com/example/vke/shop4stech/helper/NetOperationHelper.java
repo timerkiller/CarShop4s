@@ -1,15 +1,24 @@
 package com.example.vke.shop4stech.helper;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.example.vke.shop4stech.adapter.TaskAdapter;
 import com.example.vke.shop4stech.constant.URL;
 import com.example.vke.shop4stech.model.PersonalInfo;
+import com.example.vke.shop4stech.model.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by vke on 2016/5/8.
@@ -61,20 +70,64 @@ public class NetOperationHelper {
         return null;
     }
 
-    public static void register(){
-
+    public static void register(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"register failed");
+        }
     }
 
-    public static void forgetPassword(){
-
+    public static void forgetPassword(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"modify password failed");
+        }
     }
 
-    public static void getTaskList(){
+    public static List<Task> getTaskList(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"get task list is null");
+            return null;
+        }
 
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                List<Task> tasks = new ArrayList<Task>();
+                JSONArray taskList = respData.getJSONArray("listItems");
+                for(int i =0; i<taskList.length();i++){
+                    JSONObject taskObject = taskList.getJSONObject(i);
+                    Task task = new Task();
+                    task.setCurrentExecutingMan(taskObject.getString("userName"));
+                    task.setCurrentStep(taskObject.getString("currentStep"));
+                    task.setIndex(taskObject.getString("index"));
+                    task.setOrderSerialNum(taskObject.getString("serialNum"));
+                    task.setOrderDate(taskObject.getString("orderTime"));
+                    task.setOrderState(taskObject.getString("state"));
+                    task.setOrderType(taskObject.getString("type"));
+                    task.setTaskContent(taskObject.getString("type"));
+
+                    tasks.add(task);
+                }
+                return tasks;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
-    public static void getUserMessage(){
-
+    public static void getUserMessage(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"get user message is null");
+        }
     }
 
     public static PersonalInfo getPersnoalInfo(HashMap<String,Object> map){
@@ -82,7 +135,7 @@ public class NetOperationHelper {
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if (respData == null)
         {
-            Log.i(mTag,"get personal info null");
+            Log.e(mTag,"get personal info null");
             return null;
         }
 
