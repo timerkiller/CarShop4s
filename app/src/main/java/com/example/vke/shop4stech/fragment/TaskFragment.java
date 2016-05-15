@@ -157,7 +157,7 @@ public class TaskFragment extends ListFragment
         view.stopRefresh();
         view.stopLoadMore();
         if (updateTime){
-            SimpleDateFormat sDateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA);
+            SimpleDateFormat sDateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
             String date = sDateFormat.format(new java.util.Date());
             view.setRefreshTime(date);
         }
