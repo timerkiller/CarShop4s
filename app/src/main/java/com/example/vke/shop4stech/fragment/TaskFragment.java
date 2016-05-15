@@ -43,7 +43,7 @@ public class TaskFragment extends ListFragment
     private static final String mTag = "TaskFragment";
 
     private TaskAdapter mTaskAdapter;
-    private static List<Task> mTotalTaskList;
+    private  List<Task> mTotalTaskList;
     private int mPageId = 1;
     private int mTotalPage = 0;
     private Handler mGetTaskHandler = new Handler(){
@@ -185,6 +185,7 @@ public class TaskFragment extends ListFragment
         map.put("page", Integer.toString(pageId));
         map.put("perPage", "4");
 
+
         //从服务器获取任务数据
         HashMap<String,Object> dataMap = NetOperationHelper.getTaskList(map);
         try{
@@ -244,6 +245,8 @@ public class TaskFragment extends ListFragment
 
     private void signOut(){
         Log.i(mTag,"signOut");
+
+        mTotalTaskList.clear();
         PreferencesHelper.signOut(getActivity());
         SignInActivity.startWithNoAnimate(getActivity());
         ActivityCompat.finishAfterTransition(getActivity());
