@@ -135,7 +135,6 @@ public class TaskFragment extends ListFragment
                             String tip = (String)msg.obj;
                             Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
                             signOut();
-
                             break;
                         case MessageType.TYPE_UPDATE_FAILED:
                         case MessageType.TYPE_LOAD_MORE_FAILED:

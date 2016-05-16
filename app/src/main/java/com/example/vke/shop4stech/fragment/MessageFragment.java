@@ -313,4 +313,5 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         super.onDestroyView();
         mUserMessageHandler = null;
     }
+
 }

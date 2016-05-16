@@ -47,8 +47,8 @@ public class AboutUsActivity extends AppCompatActivity {
         mActionBar.setTitle("关于我们");
         mActionBar.setDisplayShowHomeEnabled(false);
         Resources resources = getResources();
-        Drawable drawable = resources.getDrawable(R.drawable.actionbar_background,null);
-        mActionBar.setBackgroundDrawable(drawable);
+        //Drawable drawable = resources.getDrawable(R.drawable.actionbar_background,null);
+        //mActionBar.setBackgroundDrawable(drawable);
     }
 
     @Override

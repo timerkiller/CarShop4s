@@ -11,7 +11,16 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"/>
 
+    <CheckBox
+        android:id="@+id/tech_message_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"/>
+
     <ImageView
+        android:layout_toEndOf="@id/tech_message_check_box"
         android:id="@+id/tech_message_image_view"
         android:contentDescription="@string/description_null"
         android:layout_width="wrap_content"
@@ -65,11 +74,6 @@
             android:textSize="14sp"
             android:textColor="@color/colorBlack"/>
     </RelativeLayout>
-
-    <CheckBox
-        android:layout_toEndOf="@id/tech_message_content_relative_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <ImageView
         android:layout_below="@id/tech_message_content_relative_layout"
