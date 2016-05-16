@@ -11,6 +11,7 @@ package com.example.vke.shop4stech.customLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -27,6 +28,7 @@ import com.example.vke.shop4stech.R;
 
 public class XListView extends ListView implements OnScrollListener {
 
+    private static final String mTag = "XListView";
 	private float mLastY = -1; // save event y
 	private Scroller mScroller; // used for scroll back
 	private OnScrollListener mScrollListener; // user's scroll listener
@@ -142,6 +144,12 @@ public class XListView extends ListView implements OnScrollListener {
 	 * @param enable
 	 */
 	public void setPullLoadEnable(boolean enable) {
+        if (mEnablePullLoad == enable)
+        {
+            Log.d(mTag,"setPullLoadEnable already set");
+            return;
+        }
+
 		mEnablePullLoad = enable;
 		if (!mEnablePullLoad) {
 			mFooterView.hide();

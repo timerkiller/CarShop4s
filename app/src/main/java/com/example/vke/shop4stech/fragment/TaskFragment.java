@@ -104,52 +104,59 @@ public class TaskFragment extends ListFragment
         mGetTaskHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-
-                //只有一页数据的时候，不显示下拉框
-                if(mTotalPage == 1){
+                try{
                     XListView xListView = (XListView)getListView();
-                    xListView.setPullLoadEnable(false);
-                }
+                    //只有一页数据的时候，不显示下拉框
+                    if(mTotalPage == 1){
+                        xListView.setPullLoadEnable(false);
+                    }
+                    else if(mTotalPage > 1){
+                        xListView.setPullLoadEnable(true);
+                    }
 
-                TextView textView = (TextView)getListView().findViewById(R.id.xlistview_footer_hint_textview);
-                switch (msg.what){
-                    case MessageType.TYPE_LOAD_MORE_SUCCESS:
-                        mPageId++;
+                    TextView textView = (TextView)xListView.findViewById(R.id.xlistview_footer_hint_textview);
+                    switch (msg.what){
+                        case MessageType.TYPE_LOAD_MORE_SUCCESS:
+                            mPageId++;
 
-                    case MessageType.TYPE_UPDATE_SUCCESS:
-                        mTaskAdapter.bindData(mTotalTaskList);
-                        mTaskAdapter.notifyDataSetChanged();
-                        onLoadFinish(true);
-                        if(mTotalTaskList != null && mTotalTaskList.size() != 0 ){
-                            textView.setText(R.string.tech_load_more_data);
-                        }
-                        else{
+                        case MessageType.TYPE_UPDATE_SUCCESS:
+                            mTaskAdapter.bindData(mTotalTaskList);
+                            mTaskAdapter.notifyDataSetChanged();
+                            onLoadFinish(true);
+                            if(mTotalTaskList != null && mTotalTaskList.size() != 0 ){
+                                textView.setText(R.string.tech_load_more_data);
+                            }
+                            else{
+                                textView.setText(R.string.tech_no_data);
+                            }
+
+                            break;
+                        case MessageType.TYPE_ACCESS_TOKEN_INVALID:
+                            String tip = (String)msg.obj;
+                            Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
+                            signOut();
+
+                            break;
+                        case MessageType.TYPE_UPDATE_FAILED:
+                        case MessageType.TYPE_LOAD_MORE_FAILED:
+                            Toast.makeText(getActivity().getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        case MessageType.TYPE_NETWORK_DISABLE:
+                            Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        case MessageType.TYPE_NO_DATA_FOUND:
                             textView.setText(R.string.tech_no_data);
-                        }
-
-                        break;
-                    case MessageType.TYPE_ACCESS_TOKEN_INVALID:
-                        String tip = (String)msg.obj;
-                        Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
-                        signOut();
-
-                        break;
-                    case MessageType.TYPE_UPDATE_FAILED:
-                    case MessageType.TYPE_LOAD_MORE_FAILED:
-                        Toast.makeText(getActivity().getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    case MessageType.TYPE_NETWORK_DISABLE:
-                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    case MessageType.TYPE_NO_DATA_FOUND:
-                        textView.setText(R.string.tech_no_data);
-                        //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    default:
-                        Log.e(mTag,"Unknow message type: " + msg.what);
+                            //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        default:
+                            Log.e(mTag,"Unknow message type: " + msg.what);
+                    }
+                }
+                catch (Exception e){
+                    Log.e(mTag,e.toString());
                 }
             }
         };

@@ -65,6 +65,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

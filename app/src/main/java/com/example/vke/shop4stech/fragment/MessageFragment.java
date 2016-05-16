@@ -196,13 +196,17 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
             @Override
             public void handleMessage(Message msg) {
 
+                XListView xListView = (XListView)getListView();
                 //只有一页数据的时候，不显示下拉框
                 if(mTotalPage == 1){
-                    XListView xListView = (XListView)getListView();
+
                     xListView.setPullLoadEnable(false);
                 }
+                else if(mTotalPage > 1){
+                    xListView.setPullLoadEnable(true);
+                }
 
-                TextView textView = (TextView)getListView().findViewById(R.id.xlistview_footer_hint_textview);
+                TextView textView = (TextView)xListView.findViewById(R.id.xlistview_footer_hint_textview);
                 switch (msg.what){
                     case MessageType.TYPE_LOAD_MORE_SUCCESS:
                         mPageId++;
