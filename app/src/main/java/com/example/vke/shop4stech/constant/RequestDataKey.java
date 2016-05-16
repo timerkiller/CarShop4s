@@ -14,5 +14,8 @@ public class RequestDataKey {
     public static final String JPUSH_ID = "jpushId";
     public static final String TYPE = "type";
     public static final String ACCESS_TOKEN = "accessToken";
+    public static final String INFO = "info";
+    public static final String PAGE = "page";
+    public static final String PER_PAGE = "perPage";
 
 }

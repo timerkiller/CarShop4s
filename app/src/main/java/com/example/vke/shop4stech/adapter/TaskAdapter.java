@@ -1,7 +1,12 @@
 package com.example.vke.shop4stech.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.helper.DateTimeHelper;
 import com.example.vke.shop4stech.model.Task;
 
 import org.w3c.dom.Text;
@@ -66,7 +72,7 @@ public class TaskAdapter extends BaseAdapter{
             viewHolder.mCurrentExecutingManTV = (TextView)convertView.findViewById(R.id.tech_task_execute_man_text_view);
             viewHolder.mTaskStateImgV = (ImageView)convertView.findViewById(R.id.tech_task_state_image_view);
             viewHolder.mTaskStateTV = (TextView)convertView.findViewById(R.id.tech_task_state_text_view);
-
+            viewHolder.mDateTV = (TextView)convertView.findViewById(R.id.tech_task_date_text_view);
             convertView.setTag(viewHolder);
         }
         else{
@@ -77,6 +83,22 @@ public class TaskAdapter extends BaseAdapter{
         viewHolder.mOrderSerialNumTV.setText(task.getOrderSerialNum());
         viewHolder.mTaskContentTextTV.setText(task.getOrderType());
         viewHolder.mCurrentExecutingManTV.setText(task.getCurrentExecutingMan());
+
+        String DateTime = DateTimeHelper.timeStamp2Date(task.getOrderDate(),null);
+        String Date = DateTime.split(" ")[0];
+        String month = Date.split("-")[1];
+        String day = Date.split("-")[2];
+
+        String displayStr = day+" "+month+"月";
+        final SpannableStringBuilder sb = new SpannableStringBuilder(displayStr);
+        final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(37, 37, 37)); // Span to set text color to some RGB value
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD); // Span to make text bold
+        sb.setSpan(fcs, 0, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // Set the text color for first 4 characters
+        sb.setSpan(bss, 0, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // make them also bold
+//        Spannable WordtoSpan = new SpannableString("大字小字");
+//        WordtoSpan.setSpan(new AbsoluteSizeSpan(20), 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        WordtoSpan.setSpan(new AbsoluteSizeSpan(14), 2, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        viewHolder.mDateTV.setText(sb);
 
         switch (task.getOrderState()){
             case "暂停":
@@ -103,6 +125,7 @@ public class TaskAdapter extends BaseAdapter{
         TextView mCurrentExecutingManTV;
         ImageView mTaskStateImgV;
         TextView mTaskStateTV;
+        TextView mDateTV;
     }
 
 }

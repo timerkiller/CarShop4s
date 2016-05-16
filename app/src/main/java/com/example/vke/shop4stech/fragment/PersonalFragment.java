@@ -69,32 +69,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUpdatePersonalInfoHandler= new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what){
-                    case MessageType.TYPE_GET_PERSONAL_INFO_OK:
-                        PersonalInfo personalInfo =(PersonalInfo) msg.obj;
-                        updateContentView(personalInfo);
-                        break;
-                    case MessageType.TYPE_GET_PERSONAL_INFO_ERROR:
-                        String tip = (String)msg.obj;
-                        Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
-                        signOut();
-                        break;
-                    case MessageType.TYPE_SIGN_OUT_OK:
-                        break;
-                    case MessageType.TYPE_SIGN_OUT_ERROR:
-                        break;
-
-                    case MessageType.TYPE_NETWORK_DISABLE:
-                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Log.e(mTag,"Unknow message type: " + msg.what);
-                }
-            }
-        };
+        Log.i(mTag,"on Create in personal fragment");
     }
 
     @Nullable
@@ -133,40 +108,78 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(!NetOperationHelper.isNetworkConnected(getActivity())){
-                    mUpdatePersonalInfoHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
-                    return;
-                }
 
-                String accessToken = getValidAccessToken();
-                if (accessToken == null){
-                    Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                    msg.obj = "AccessToken失效，请重新登陆";
-                    msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
-                    mUpdatePersonalInfoHandler.sendMessage(msg);;
-                }
+                try {
+                    if (!NetOperationHelper.isNetworkConnected(getActivity())) {
+                        mUpdatePersonalInfoHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
+                        return;
+                    }
 
-                HashMap<String, Object> map = new HashMap<String, Object>();
-                map.put(RequestDataKey.LOGIN_MODE, "userInfo");
-                map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
+                    String accessToken = getValidAccessToken();
+                    if (accessToken == null) {
+                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                        msg.obj = "AccessToken失效，请重新登陆";
+                        msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
+                        mUpdatePersonalInfoHandler.sendMessage(msg);
+                        ;
+                    }
 
-                PersonalInfo personalInfo = NetOperationHelper.getPersnoalInfo(map);
-                if (personalInfo != null) {
-                    Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                    msg.obj = personalInfo;
-                    msg.what = MessageType.TYPE_GET_PERSONAL_INFO_OK;
-                    mUpdatePersonalInfoHandler.sendMessage(msg);
+                    HashMap<String, Object> map = new HashMap<String, Object>();
+                    map.put(RequestDataKey.LOGIN_MODE, "userInfo");
+                    map.put(RequestDataKey.ACCESS_TOKEN, accessToken);
+
+                    PersonalInfo personalInfo = NetOperationHelper.getPersnoalInfo(map);
+                    if (personalInfo != null) {
+                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                        msg.obj = personalInfo;
+                        msg.what = MessageType.TYPE_GET_PERSONAL_INFO_OK;
+                        mUpdatePersonalInfoHandler.sendMessage(msg);
+                    } else {
+                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                        msg.obj = "AccessToken失效，请重新登陆";
+                        msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
+                        mUpdatePersonalInfoHandler.sendMessage(msg);
+                    }
                 }
-                else {
-                    Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                    msg.obj = "AccessToken失效，请重新登陆";
-                    msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
-                    mUpdatePersonalInfoHandler.sendMessage(msg);
+                catch(Exception e){
+                    Log.w(mTag,e.toString());
                 }
             }
         }).start();
 
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        Log.i(mTag,"onResume");
+        super.onResume();
+        mUpdatePersonalInfoHandler= new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case MessageType.TYPE_GET_PERSONAL_INFO_OK:
+                        PersonalInfo personalInfo =(PersonalInfo) msg.obj;
+                        updateContentView(personalInfo);
+                        break;
+                    case MessageType.TYPE_GET_PERSONAL_INFO_ERROR:
+                        String tip = (String)msg.obj;
+                        Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
+                        signOut();
+                        break;
+                    case MessageType.TYPE_SIGN_OUT_OK:
+                        break;
+                    case MessageType.TYPE_SIGN_OUT_ERROR:
+                        break;
+
+                    case MessageType.TYPE_NETWORK_DISABLE:
+                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Log.e(mTag,"Unknow message type: " + msg.what);
+                }
+            }
+        };
     }
 
     //获取有效的accessToken，这里会进行一个网络操作判断
@@ -216,20 +229,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                     }
                 }).show();
 
-//                AlertDialog alertDialog = builder.create();
-//
-//                alertDialog.setCancelable(false);
-//                alertDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//                    @Override
-//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event)
-//                    {
-//                        return keyCode == KeyEvent.KEYCODE_SEARCH;
-//                    }
-//                });
-//
-//                alertDialog.show();
 
-                //signOut();
                 break;
             default:
                 Log.i(mTag,"Unknow button on click");
@@ -241,6 +241,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         PreferencesHelper.signOut(getActivity());
         SignInActivity.startWithNoAnimate(getActivity());
         ActivityCompat.finishAfterTransition(getActivity());
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(mTag,"onDestroyView");
+        super.onDestroyView();
+        mUpdatePersonalInfoHandler = null;
     }
 
 }

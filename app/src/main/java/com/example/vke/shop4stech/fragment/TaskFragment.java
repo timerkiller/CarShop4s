@@ -46,52 +46,7 @@ public class TaskFragment extends ListFragment
     private  List<Task> mTotalTaskList;
     private int mPageId = 1;
     private int mTotalPage = 0;
-    private Handler mGetTaskHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            TextView textView = (TextView)getListView().findViewById(R.id.xlistview_footer_hint_textview);
-            switch (msg.what){
-                case MessageType.TYPE_GET_TASK_LOAD_MORE_SUCCESS:
-                    mPageId++;
-
-                case MessageType.TYPE_GET_TASK_UPDATE_SUCCESS:
-                    mTaskAdapter.bindData(mTotalTaskList);
-                    mTaskAdapter.notifyDataSetChanged();
-                    onLoadFinish(true);
-                    if(mTotalTaskList != null && mTotalTaskList.size() != 0 ){
-                        textView.setText(R.string.tech_load_more_data);
-                    }
-                    else{
-                        textView.setText(R.string.tech_no_data);
-                    }
-
-                    break;
-                case MessageType.TYPE_ACCESS_TOKEN_INVALID:
-                    String tip = (String)msg.obj;
-                    Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
-                    signOut();
-
-                    break;
-                case MessageType.TYPE_GET_TASK_UPDATE_FAILED:
-                case MessageType.TYPE_GET_TASK_LOAD_MORE_FAILED:
-                    Toast.makeText(getActivity().getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
-                    onLoadFinish(false);
-                    break;
-                case MessageType.TYPE_NETWORK_DISABLE:
-                    Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
-                    onLoadFinish(false);
-                    break;
-                case MessageType.TYPE_NO_DATA_FOUND:
-                    textView.setText(R.string.tech_no_data);
-                    //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
-                    onLoadFinish(false);
-                    break;
-                default:
-                    Log.e(mTag,"Unknow message type: " + msg.what);
-            }
-        }
-    };
-
+    private Handler mGetTaskHandler ;
     class OPERATION_TYPE{
         public static final int TYPE_UPDATE = 0x100;
         public static final int TYPE_LOAD_MORE = 0x101;
@@ -121,11 +76,12 @@ public class TaskFragment extends ListFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        XListView xListView  = (XListView)getListView();
-        xListView.setXListViewListener(this);
-        xListView.setPullLoadEnable(true);
-        xListView.setPullRefreshEnable(true);
-
+        if(getListView() != null) {
+            XListView xListView = (XListView) getListView();
+            xListView.setXListViewListener(this);
+            xListView.setPullLoadEnable(true);
+            xListView.setPullRefreshEnable(true);
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -145,6 +101,58 @@ public class TaskFragment extends ListFragment
     @Override
     public void onResume() {
         super.onResume();
+        mGetTaskHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+
+                //只有一页数据的时候，不显示下拉框
+                if(mTotalPage == 1){
+                    XListView xListView = (XListView)getListView();
+                    xListView.setPullLoadEnable(false);
+                }
+
+                TextView textView = (TextView)getListView().findViewById(R.id.xlistview_footer_hint_textview);
+                switch (msg.what){
+                    case MessageType.TYPE_LOAD_MORE_SUCCESS:
+                        mPageId++;
+
+                    case MessageType.TYPE_UPDATE_SUCCESS:
+                        mTaskAdapter.bindData(mTotalTaskList);
+                        mTaskAdapter.notifyDataSetChanged();
+                        onLoadFinish(true);
+                        if(mTotalTaskList != null && mTotalTaskList.size() != 0 ){
+                            textView.setText(R.string.tech_load_more_data);
+                        }
+                        else{
+                            textView.setText(R.string.tech_no_data);
+                        }
+
+                        break;
+                    case MessageType.TYPE_ACCESS_TOKEN_INVALID:
+                        String tip = (String)msg.obj;
+                        Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
+                        signOut();
+
+                        break;
+                    case MessageType.TYPE_UPDATE_FAILED:
+                    case MessageType.TYPE_LOAD_MORE_FAILED:
+                        Toast.makeText(getActivity().getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                        onLoadFinish(false);
+                        break;
+                    case MessageType.TYPE_NETWORK_DISABLE:
+                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
+                        onLoadFinish(false);
+                        break;
+                    case MessageType.TYPE_NO_DATA_FOUND:
+                        textView.setText(R.string.tech_no_data);
+                        //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
+                        onLoadFinish(false);
+                        break;
+                    default:
+                        Log.e(mTag,"Unknow message type: " + msg.what);
+                }
+            }
+        };
     }
 
     @Override
@@ -154,6 +162,9 @@ public class TaskFragment extends ListFragment
 
     private void onLoadFinish(boolean updateTime) {
         XListView view = (XListView)getListView();
+        if(view == null){
+            return;
+        }
         view.stopRefresh();
         view.stopLoadMore();
         if (updateTime){
@@ -196,11 +207,11 @@ public class TaskFragment extends ListFragment
                     Message msg = mGetTaskHandler.obtainMessage();
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
                         mTotalTaskList = tasks;
-                        msg.what = MessageType.TYPE_GET_TASK_UPDATE_SUCCESS;
+                        msg.what = MessageType.TYPE_UPDATE_SUCCESS;
                     }
                     else {
                         mergeTasksToTotalList(tasks);
-                        msg.what = MessageType.TYPE_GET_TASK_LOAD_MORE_SUCCESS;
+                        msg.what = MessageType.TYPE_LOAD_MORE_SUCCESS;
                     }
 
                     mGetTaskHandler.sendMessage(msg);
@@ -213,10 +224,10 @@ public class TaskFragment extends ListFragment
 
                     //这里还需要考虑，有可能是ACCESSToken失效，还有其他failed的情况
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
-                        mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_GET_TASK_UPDATE_FAILED);
+                        mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_UPDATE_FAILED);
                     }
                     else {
-                        mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_GET_TASK_LOAD_MORE_FAILED);
+                        mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_LOAD_MORE_FAILED);
                     }
                 }
             }
@@ -224,7 +235,7 @@ public class TaskFragment extends ListFragment
                 mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_NO_DATA_FOUND);
             }
         }catch (Exception e){
-            Log.e(mTag,e.toString());
+            Log.w(mTag,e.toString());
         }
     }
 
@@ -246,7 +257,10 @@ public class TaskFragment extends ListFragment
     private void signOut(){
         Log.i(mTag,"signOut");
 
-        mTotalTaskList.clear();
+        if(mTotalTaskList != null){
+            mTotalTaskList.clear();
+        }
+
         PreferencesHelper.signOut(getActivity());
         SignInActivity.startWithNoAnimate(getActivity());
         ActivityCompat.finishAfterTransition(getActivity());
@@ -280,5 +294,13 @@ public class TaskFragment extends ListFragment
                 getTask(OPERATION_TYPE.TYPE_LOAD_MORE,mPageId);
             }
         }).start();
+    }
+
+    //这里需要
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(mTag,"onDestroyView invoked");
+        mGetTaskHandler = null;
     }
 }

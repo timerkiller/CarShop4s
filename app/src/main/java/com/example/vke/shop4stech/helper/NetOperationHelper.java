@@ -13,6 +13,7 @@ import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.constant.URL;
 import com.example.vke.shop4stech.model.PersonalInfo;
 import com.example.vke.shop4stech.model.Task;
+import com.example.vke.shop4stech.model.UserMessage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,44 +127,6 @@ public class NetOperationHelper {
         return ni != null && ni.isConnectedOrConnecting();
     }
 
-//    public static List<Task> getTaskList(HashMap<String,Object> map){
-//        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
-//        JSONObject respData = httpJsonHelper.httpPostJsonData();
-//        if(respData == null){
-//            Log.e(mTag,"get task list is null");
-//            return null;
-//        }
-//
-//        try {
-//            String result = respData.getString("result");
-//            if (result.equals("ok")) {
-//                List<Task> tasks = new ArrayList<Task>();
-//                JSONArray taskList = respData.getJSONArray("listItems");
-//                String pageAll = respData.getString("pageAll");
-//
-//                for(int i =0; i<taskList.length();i++){
-//                    JSONObject taskObject = taskList.getJSONObject(i);
-//                    Task task = new Task();
-//                    task.setCurrentExecutingMan(taskObject.getString("userName"));
-//                    task.setCurrentStep(taskObject.getString("currentStep"));
-//                    task.setIndex(taskObject.getString("index"));
-//                    task.setOrderSerialNum(taskObject.getString("serialNum"));
-//                    task.setOrderDate(taskObject.getString("orderTime"));
-//                    task.setOrderState(taskObject.getString("state"));
-//                    task.setOrderType(taskObject.getString("type"));
-//                    task.setTaskContent(taskObject.getString("type"));
-//
-//                    tasks.add(task);
-//                }
-//                return tasks;
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-
     public static HashMap<String,Object> getTaskList(HashMap<String,Object> map){
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
@@ -209,12 +172,44 @@ public class NetOperationHelper {
         return null;
     }
 
-    public static void getUserMessage(HashMap<String,Object> map){
-        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
+    public static HashMap<String,Object> getUserMessage(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.USER_MESSAGE,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if(respData == null){
             Log.e(mTag,"get user message is null");
+            return null;
         }
+
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                List<UserMessage> messages = new ArrayList<>();
+                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+                String pageAll = respData.getString("pageAll");
+                JSONArray messageList = respData.getJSONArray("listItems");
+
+                for(int i=0; i<messageList.length(); i++){
+                    JSONObject messageObj = messageList.getJSONObject(i);
+                    UserMessage message = new UserMessage();
+                    message.setAuthor(messageObj.getString("author"));
+                    message.setContent(messageObj.getString("content"));
+                    message.setIndex(messageObj.getString("index"));
+                    message.setTimeStamp(messageObj.getString("timestamp"));
+                    messages.add(message);
+                }
+                respDataMap.put("messages",messages);
+                respDataMap.put("pageAll",Integer.parseInt(pageAll));
+                return respDataMap;
+            }
+            else if(result.equals("error")){
+                //need handle errors operation
+                return null;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static PersonalInfo getPersnoalInfo(HashMap<String,Object> map){
