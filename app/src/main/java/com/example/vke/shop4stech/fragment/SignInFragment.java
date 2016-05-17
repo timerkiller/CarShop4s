@@ -86,6 +86,8 @@ public class SignInFragment extends Fragment {
                     }
 
                 case TOKEN_OK:
+                    //登陆成功后，才能设置button重新可以登陆
+                    mLoginButton.setClickable(true);
                     Log.i(mTag,"User already login,so start home activity directly");
                     final Activity activity = getActivity();
                     HomeActivity.start(activity, mUser);
@@ -277,6 +279,7 @@ public class SignInFragment extends Fragment {
                             break;
                         }
 
+                        mLoginButton.setClickable(false);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
