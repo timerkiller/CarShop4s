@@ -230,7 +230,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                     }
                 }).show();
 
-
                 break;
             default:
                 Log.i(mTag,"Unknow button on click");

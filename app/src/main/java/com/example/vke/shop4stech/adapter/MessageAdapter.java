@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.activity.HomeActivity;
+import com.example.vke.shop4stech.fragment.MessageFragment;
 import com.example.vke.shop4stech.helper.DateTimeHelper;
 import com.example.vke.shop4stech.model.UserMessage;
 
@@ -18,12 +21,14 @@ import java.util.List;
  */
 public class MessageAdapter extends BaseAdapter {
 
-    List<UserMessage> mMessageList;
-    Context mContext;
+    private boolean mShowMultSelectState;
+    private List<UserMessage> mMessageList;
+    private Context mContext;
 
     public MessageAdapter(Context context, List<UserMessage> messageList){
         this.mContext = context;
         mMessageList = messageList;
+        mShowMultSelectState = false;
     }
 
     public void bindData(List<UserMessage> list){
@@ -62,6 +67,11 @@ public class MessageAdapter extends BaseAdapter {
             viewHolder.mContent = (TextView)convertView.findViewById(R.id.tech_message_content_text_view);
             viewHolder.mTimeStamp = (TextView)convertView.findViewById(R.id.tech_message_date_time_text_view);
             viewHolder.mIndex = (TextView)convertView.findViewById(R.id.tech_message_index_text_view);
+            viewHolder.mSelector =(CheckBox)convertView.findViewById(R.id.tech_message_check_box);
+
+//            HomeActivity activity = (HomeActivity)mContext;
+//            convertView.setOnLongClickListener(activity);
+
             convertView.setTag(viewHolder);
         }
         else
@@ -71,7 +81,7 @@ public class MessageAdapter extends BaseAdapter {
 
         UserMessage message = mMessageList.get(position);
         viewHolder.mAuthor.setText(message.getAuthor());
-        viewHolder.mContent.setText(message.getContent().substring(0,18)+"...");
+        viewHolder.mContent.setText(message.getContent());
         viewHolder.mIndex.setText(message.getIndex());
 
         String date = DateTimeHelper.timeStamp2Date(message.getTimeStamp(),"yyyy-MM-dd HH:mm:ss");
@@ -85,5 +95,7 @@ public class MessageAdapter extends BaseAdapter {
         TextView mAuthor;
         TextView mTimeStamp;
         TextView mIndex;
+
+        CheckBox mSelector;
     }
 }

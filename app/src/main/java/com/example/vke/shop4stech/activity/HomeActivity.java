@@ -44,7 +44,7 @@ import java.util.TimerTask;
 import java.util.zip.Inflater;
 
 public class HomeActivity extends AppCompatActivity
-implements View.OnClickListener{
+implements View.OnClickListener,View.OnLongClickListener{
 
     private final static String m_Tag = "HomeActivity";
     private final static String EXTRA_USER_INFO = "UserInfomation";
@@ -121,6 +121,13 @@ implements View.OnClickListener{
         } else {
             ActivityCompat.finishAfterTransition(this);
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        Log.i(m_Tag,"on fragement long click ");
+        return true;
     }
 
     public static class FragmentAdapter extends FragmentPagerAdapter {

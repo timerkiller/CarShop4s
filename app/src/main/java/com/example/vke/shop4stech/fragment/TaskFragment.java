@@ -1,11 +1,13 @@
 package com.example.vke.shop4stech.fragment;
 
 //import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +46,7 @@ public class TaskFragment extends ListFragment
 
     private TaskAdapter mTaskAdapter;
     private  List<Task> mTotalTaskList;
-    private int mPageId = 1;
+    private int mPageId = 2;
     private int mTotalPage = 0;
     private Handler mGetTaskHandler ;
     class OPERATION_TYPE{
@@ -94,7 +96,7 @@ public class TaskFragment extends ListFragment
     @Override
     public void onPause() {
         Log.i(mTag,"onPause Enter");
-        mPageId = 1;
+        mPageId = 2;
         super.onPause();
     }
 
@@ -163,6 +165,7 @@ public class TaskFragment extends ListFragment
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        Log.i(mTag,">>>>>>>>>on list item click");
         super.onListItemClick(l, v, position, id);
     }
 
@@ -279,7 +282,7 @@ public class TaskFragment extends ListFragment
             @Override
             public void run() {
                 getTask(OPERATION_TYPE.TYPE_UPDATE,FIRST_PAGE);
-                mPageId = 1;//刷新后需要重置mPageID
+                mPageId = 2;//刷新后需要重置mPageID
             }
         }).start();
 
@@ -288,7 +291,7 @@ public class TaskFragment extends ListFragment
     @Override
     public void onLoadMore() {
         //判断当前加载的页数是否和服务器上的总页数相等，若相等了就不进行加载了，提示没有数据了
-        if(mPageId == mTotalPage)
+        if(mPageId >= mTotalPage)
         {
             Toast.makeText(getActivity().getApplicationContext(),"没有更多了",Toast.LENGTH_SHORT).show();
             onLoadFinish(false);

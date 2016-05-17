@@ -72,7 +72,9 @@
             android:layout_marginTop="3dp"
             android:text="您好，您有订单已经分配，请进行执行..."
             android:textSize="14sp"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/colorBlack"
+            android:singleLine="true"
+            android:ellipsize="end"/>
     </RelativeLayout>
 
     <ImageView

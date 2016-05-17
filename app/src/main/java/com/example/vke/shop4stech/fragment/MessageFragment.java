@@ -1,11 +1,13 @@
 package com.example.vke.shop4stech.fragment;
 
 //import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +43,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     private MessageAdapter mMessageAdapter;
     private static final int FIRST_PAGE =1;
     private static final int PER_PAGE = 10;
-    private int mPageId = 1;
+    private int mPageId = 2;
     private int mTotalPage;
 
     @Override
@@ -252,7 +254,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     @Override
     public void onPause() {
         super.onPause();
-        mPageId = 1;
+        mPageId = 2;
     }
 
     //获取有效的accessToken，这里会进行一个网络操作判断
@@ -272,9 +274,22 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        Log.i(mTag,">>>>>>onListItemClick");
         super.onListItemClick(l, v, position, id);
-    }
 
+        Log.i(mTag,"after super invoked");
+        TextView contentView = (TextView)v.findViewById(R.id.tech_message_content_text_view);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("消息");
+        builder.setMessage(contentView.getText().toString());
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+            }
+        }).show();
+
+    }
 
     @Override
     public void onRefresh() {
@@ -283,7 +298,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
             public void run() {
                 // TODO Auto-generated method stub
                 getMessage(OPERATION_TYPE.TYPE_UPDATE,FIRST_PAGE);
-                mPageId = 1;
+                mPageId = 2;
             }
         }).start();
     }
@@ -292,7 +307,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     public void onLoadMore() {
 
         //判断当前加载的页数是否和服务器上的总页数相等，若相等了就不进行加载了，提示没有数据了
-        if(mPageId == mTotalPage)
+        if(mPageId >= mTotalPage)
         {
             Toast.makeText(getActivity().getApplicationContext(),"没有更多了",Toast.LENGTH_SHORT).show();
             onLoadFinish(false);
