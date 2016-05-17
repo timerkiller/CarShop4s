@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,8 +30,10 @@ public class AboutUsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
 
-        mActionBar = getSupportActionBar();
+        Toolbar mToolbar = (Toolbar)this.findViewById(R.id.tech_tool_bar);
+        this.setSupportActionBar(mToolbar);
 
+        mActionBar = getSupportActionBar();
         mSildingFinishLayout = (SildingFinishLayout) findViewById(R.id.sildingFinishLayout);
         mSildingFinishLayout.setOnSildingFinishListener(new SildingFinishLayout.OnSildingFinishListener() {
                     @Override
@@ -46,6 +49,9 @@ public class AboutUsActivity extends AppCompatActivity {
     private void initActionBarView(){
         mActionBar.setTitle("关于我们");
         mActionBar.setDisplayShowHomeEnabled(false);
+
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+
         Resources resources = getResources();
         //Drawable drawable = resources.getDrawable(R.drawable.actionbar_background,null);
         //mActionBar.setBackgroundDrawable(drawable);

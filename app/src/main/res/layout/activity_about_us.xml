@@ -7,9 +7,16 @@
     tools:context="com.example.vke.shop4stech.activity.AboutUsActivity"
     android:id="@+id/sildingFinishLayout">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tech_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightBlue" />
+
+    <RelativeLayout
+        android:layout_below="@id/tech_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/tech_company_logo_image_view"
