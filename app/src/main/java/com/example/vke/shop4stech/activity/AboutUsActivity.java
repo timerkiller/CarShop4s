@@ -16,9 +16,9 @@ import android.view.MenuItem;
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.customLayout.SildingFinishLayout;
 
-public class AboutUsActivity extends AppCompatActivity {
+public class AboutUsActivity extends BaseSwipeBackActivity {
     ActionBar mActionBar;
-    SildingFinishLayout mSildingFinishLayout;
+//    SildingFinishLayout mSildingFinishLayout;
     public static void start(Activity activty) {
         Intent starter = new Intent(activty, AboutUsActivity.class);
         activty.startActivity(starter);
@@ -34,14 +34,14 @@ public class AboutUsActivity extends AppCompatActivity {
         this.setSupportActionBar(mToolbar);
 
         mActionBar = getSupportActionBar();
-        mSildingFinishLayout = (SildingFinishLayout) findViewById(R.id.sildingFinishLayout);
-        mSildingFinishLayout.setOnSildingFinishListener(new SildingFinishLayout.OnSildingFinishListener() {
-                    @Override
-                    public void onSildingFinish() {
-                        AboutUsActivity.this.finish();
-                    }
-                });
-        mSildingFinishLayout.setTouchView(mSildingFinishLayout);
+//        mSildingFinishLayout = (SildingFinishLayout) findViewById(R.id.sildingFinishLayout);
+//        mSildingFinishLayout.setOnSildingFinishListener(new SildingFinishLayout.OnSildingFinishListener() {
+//                    @Override
+//                    public void onSildingFinish() {
+//                        AboutUsActivity.this.finish();
+//                    }
+//                });
+//        mSildingFinishLayout.setTouchView(mSildingFinishLayout);
         initActionBarView();
 
     }

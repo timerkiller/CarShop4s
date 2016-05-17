@@ -65,11 +65,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.i(mTag,"on Create in personal fragment");
     }
 
@@ -147,6 +145,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                 }
             }
         }).start();
+
 
         super.onViewCreated(view, savedInstanceState);
     }

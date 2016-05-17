@@ -49,6 +49,8 @@ public class TaskFragment extends ListFragment
     private int mPageId = 2;
     private int mTotalPage = 0;
     private Handler mGetTaskHandler ;
+    private boolean mIsUpdateOngoing = false;
+
     class OPERATION_TYPE{
         public static final int TYPE_UPDATE = 0x100;
         public static final int TYPE_LOAD_MORE = 0x101;
@@ -85,6 +87,7 @@ public class TaskFragment extends ListFragment
             xListView.setPullLoadEnable(true);
             xListView.setPullRefreshEnable(true);
         }
+        mIsUpdateOngoing = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -108,6 +111,8 @@ public class TaskFragment extends ListFragment
             @Override
             public void handleMessage(Message msg) {
                 try{
+
+                    mIsUpdateOngoing = false;
                     XListView xListView = (XListView)getListView();
                     //只有一页数据的时候，不显示下拉框
                     if(mTotalPage == 1){
@@ -116,6 +121,7 @@ public class TaskFragment extends ListFragment
                     else if(mTotalPage > 1){
                         xListView.setPullLoadEnable(true);
                     }
+
 
                     TextView textView = (TextView)xListView.findViewById(R.id.xlistview_footer_hint_textview);
                     switch (msg.what){
@@ -258,6 +264,7 @@ public class TaskFragment extends ListFragment
         return null;
     }
 
+
     private void mergeTasksToTotalList(List<Task> tasksList){
         for(int i = 0; i<tasksList.size();i++) {
             mTotalTaskList.add(tasksList.get(i));
@@ -279,6 +286,10 @@ public class TaskFragment extends ListFragment
     //更新数据
     @Override
     public void onRefresh() {
+        if(mIsUpdateOngoing){
+            return;
+        }
+        mIsUpdateOngoing = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -298,6 +309,12 @@ public class TaskFragment extends ListFragment
             onLoadFinish(false);
             return;
         }
+
+        if(mIsUpdateOngoing){
+            return;
+        }
+
+        mIsUpdateOngoing = true;
         new Thread(new Runnable() {
             @Override
             public void run() {

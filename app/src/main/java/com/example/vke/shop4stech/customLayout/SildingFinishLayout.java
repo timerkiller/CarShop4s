@@ -134,15 +134,23 @@ public class SildingFinishLayout extends RelativeLayout implements
 			}
 			break;
 		case MotionEvent.ACTION_UP:
+			int doneX = (int)event.getRawY();
             int xSpeed = getScrollVelocity();
             isSilding = false;
-			if (mParentView.getScrollX() <= -viewWidth / 2 || xSpeed > XSPEED_MIN) {
-				isFinish = true;
-				scrollRight();
+			if (mParentView.getScrollX() <= -viewWidth / 2 ) {
+                if((xSpeed > XSPEED_MIN && doneX > downX)){
+                    isFinish = true;
+                    scrollRight();
+                }
+                else{
+                    scrollOrigin();
+                    isFinish = false;
+                }
 			} else {
 				scrollOrigin();
 				isFinish = false;
 			}
+
 			break;
 		}
 
