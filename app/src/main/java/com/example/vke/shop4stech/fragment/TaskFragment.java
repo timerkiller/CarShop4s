@@ -75,6 +75,7 @@ public class TaskFragment extends ListFragment
         return inflater.inflate(R.layout.fragment_task_list,container,false);
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
