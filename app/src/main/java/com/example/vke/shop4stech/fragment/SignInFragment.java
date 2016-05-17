@@ -31,11 +31,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.HomeActivity;
+import com.example.vke.shop4stech.activity.RegisterStep01Activity;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
@@ -52,7 +54,7 @@ import java.util.Map;
 /**
  * Enable selection of user name.
  */
-public class SignInFragment extends Fragment {
+public class SignInFragment extends Fragment implements View.OnClickListener{
 
     private static final String ARG_EDIT = "EDIT";
     private static final String mTag = "SignInFragment";
@@ -64,6 +66,9 @@ public class SignInFragment extends Fragment {
     private LinearLayout mContentLinear;
     private ToggleButton mShowPasswordToggleButton;
     private ToggleButton mRememberPasswordToggleButton;
+    private TextView mRegisterTextView;
+    private TextView mForgetTextView;
+
     private String mAccessToken;
     private static SignInFragment ourInstance = null;
     private OnFragmentInteractionListener mListener;
@@ -183,6 +188,7 @@ public class SignInFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_sign_in, container, false);
         mContentLinear = (LinearLayout) contentView.findViewById(R.id.tech_sign_in_content);
+
         return  contentView;
     }
 
@@ -262,6 +268,13 @@ public class SignInFragment extends Fragment {
         mRememberPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListeners());
         mShowPasswordToggleButton = (ToggleButton)view.findViewById(R.id.tech_toggle_show_password);
         mShowPasswordToggleButton.setOnCheckedChangeListener(new ToggleButtonListeners());
+
+
+        mRegisterTextView = (TextView)view.findViewById(R.id.tech_text_register);
+        mForgetTextView = (TextView)view.findViewById(R.id.tech_text_forget_password);
+        mRegisterTextView.setOnClickListener(this);
+        mForgetTextView.setOnClickListener(this);
+
 
         mLoginButton = (Button) view.findViewById(R.id.tech_button_login);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -374,6 +387,18 @@ public class SignInFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tech_text_register:
+                Log.i(mTag,"tech_text_register click");
+                RegisterStep01Activity.start(getActivity());
+                break;
+            case R.id.tech_text_forget_password:
+                break;
+        }
     }
 
     /**
