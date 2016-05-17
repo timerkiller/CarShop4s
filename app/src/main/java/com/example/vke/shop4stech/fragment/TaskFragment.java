@@ -101,6 +101,7 @@ public class TaskFragment extends ListFragment
     public void onPause() {
         Log.i(mTag,"onPause Enter");
         mPageId = 2;
+
         super.onPause();
     }
 
@@ -110,6 +111,8 @@ public class TaskFragment extends ListFragment
         mGetTaskHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+
+                Log.i(mTag,"Thread :ID:"+Thread.currentThread().getId() +" Thread Name: "+ Thread.currentThread().getName());
                 try{
 
                     mIsUpdateOngoing = false;
@@ -122,13 +125,24 @@ public class TaskFragment extends ListFragment
                         xListView.setPullLoadEnable(true);
                     }
 
-
                     TextView textView = (TextView)xListView.findViewById(R.id.xlistview_footer_hint_textview);
                     switch (msg.what){
                         case MessageType.TYPE_LOAD_MORE_SUCCESS:
+                            mergeTasksToTotalList((List<Task>)msg.obj);//loadmore需要将数据合并到list尾部
                             mPageId++;
+                            mTaskAdapter.bindData(mTotalTaskList);
+                            mTaskAdapter.notifyDataSetChanged();
+                            onLoadFinish(true);
+                            if(mTotalTaskList != null && mTotalTaskList.size() != 0 ){
+                                textView.setText(R.string.tech_load_more_data);
+                            }
+                            else{
+                                textView.setText(R.string.tech_no_data);
+                            }
 
+                            break;
                         case MessageType.TYPE_UPDATE_SUCCESS:
+                            mTotalTaskList = (List<Task>)msg.obj;//更新的话就直接替换
                             mTaskAdapter.bindData(mTotalTaskList);
                             mTaskAdapter.notifyDataSetChanged();
                             onLoadFinish(true);
@@ -222,14 +236,14 @@ public class TaskFragment extends ListFragment
                 if(tasks != null && tasks.size() !=0 ){
                     Message msg = mGetTaskHandler.obtainMessage();
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
-                        mTotalTaskList = tasks;
+                        //mTotalTaskList = tasks;
+                        msg.obj = tasks;
                         msg.what = MessageType.TYPE_UPDATE_SUCCESS;
                     }
                     else {
-                        mergeTasksToTotalList(tasks);
+                        msg.obj = tasks;//mergeTasksToTotalList(tasks);
                         msg.what = MessageType.TYPE_LOAD_MORE_SUCCESS;
                     }
-
                     mGetTaskHandler.sendMessage(msg);
                 }
                 else{
@@ -266,6 +280,7 @@ public class TaskFragment extends ListFragment
 
 
     private void mergeTasksToTotalList(List<Task> tasksList){
+
         for(int i = 0; i<tasksList.size();i++) {
             mTotalTaskList.add(tasksList.get(i));
         }
@@ -303,7 +318,7 @@ public class TaskFragment extends ListFragment
     @Override
     public void onLoadMore() {
         //判断当前加载的页数是否和服务器上的总页数相等，若相等了就不进行加载了，提示没有数据了
-        if(mPageId >= mTotalPage)
+        if(mPageId > mTotalPage)
         {
             Toast.makeText(getActivity().getApplicationContext(),"没有更多了",Toast.LENGTH_SHORT).show();
             onLoadFinish(false);

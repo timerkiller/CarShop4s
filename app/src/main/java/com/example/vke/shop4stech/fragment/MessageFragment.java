@@ -157,11 +157,11 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
                 if(messages != null && messages.size() !=0 ){
                     Message msg = mUserMessageHandler.obtainMessage();
                     if(operationType == OPERATION_TYPE.TYPE_UPDATE){
-                        mTotalMessageList = messages;
+                        msg.obj = messages;
                         msg.what = MessageType.TYPE_UPDATE_SUCCESS;
                     }
                     else {
-                        mergeToTotalList(messages);
+                        msg.obj = messages;//mergeToTotalList(messages);消息体更新需要放到主线程里，否则会引起多次loadmore的时候线程不同步，导致程序奔溃
                         msg.what = MessageType.TYPE_LOAD_MORE_SUCCESS;
                     }
 
@@ -211,9 +211,23 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
                 TextView textView = (TextView)xListView.findViewById(R.id.xlistview_footer_hint_textview);
                 switch (msg.what){
                     case MessageType.TYPE_LOAD_MORE_SUCCESS:
-                        mPageId++;
+                        //读取更多时，将数据merge到原来的list里
+                        mergeToTotalList((List<UserMessage>)msg.obj);
+                        mMessageAdapter.bindData(mTotalMessageList);
+                        mMessageAdapter.notifyDataSetChanged();
+                        onLoadFinish(true);
+                        if(mTotalMessageList != null && mTotalMessageList.size() != 0 ){
+                            textView.setText(R.string.tech_load_more_data);
+                        }
+                        else{
+                            textView.setText(R.string.tech_no_data);
+                        }
 
+                        mPageId++;
+                        break;
                     case MessageType.TYPE_UPDATE_SUCCESS:
+                        //更新时，直接替换数据
+                        mTotalMessageList = (List<UserMessage>)msg.obj;
                         mMessageAdapter.bindData(mTotalMessageList);
                         mMessageAdapter.notifyDataSetChanged();
                         onLoadFinish(true);
@@ -307,7 +321,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     public void onLoadMore() {
 
         //判断当前加载的页数是否和服务器上的总页数相等，若相等了就不进行加载了，提示没有数据了
-        if(mPageId >= mTotalPage)
+        if(mPageId > mTotalPage)
         {
             Toast.makeText(getActivity().getApplicationContext(),"没有更多了",Toast.LENGTH_SHORT).show();
             onLoadFinish(false);
