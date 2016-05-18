@@ -82,10 +82,37 @@ public class NetOperationHelper {
         if(respData == null){
             Log.e(mTag,"register failed");
         }
+
     }
 
+    public static HashMap<String,Object> getShopList(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.SHOP_4S,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"getShopList failed");
+            return null;
+        }
+
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                //return shop list;
+
+            }
+            else if(result.equals("error")){
+                return null;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
     public static void forgetPassword(HashMap<String,Object> map){
-        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if(respData == null){
             Log.e(mTag,"modify password failed");

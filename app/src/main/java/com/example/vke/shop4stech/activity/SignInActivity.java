@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.fragment.SignInFragment;
@@ -51,5 +53,16 @@ public class SignInActivity extends FragmentActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            this.finish();
+            this.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
+        }
+        return true;
     }
 }

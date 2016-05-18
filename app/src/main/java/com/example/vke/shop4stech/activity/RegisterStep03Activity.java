@@ -9,12 +9,13 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.ActionMenuView.OnMenuItemClickListener;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.vke.shop4stech.R;
 
-public class RegisterStep03Activity extends BaseSwipeBackActivity implements View.OnClickListener{
+public class RegisterStep03Activity extends BaseRegisterActivity {
 
     private static final String mTag = "RegisterStep03Activity";
     private Button mNextButton,mBackButton;
@@ -28,38 +29,21 @@ public class RegisterStep03Activity extends BaseSwipeBackActivity implements Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_step03);
-        Toolbar toolbar = (Toolbar)this.findViewById(R.id.tech_register_step_tool_bar);
-        this.setSupportActionBar(toolbar);
-
-        mBackButton = (Button)this.findViewById(R.id.tech_register_step_back_button);
-        mNextButton = (Button)this.findViewById(R.id.tech_register_step_next_button);
-        initClickListener();
-    }
-
-
-    private void initClickListener(){
-        mBackButton.setOnClickListener(this);
-        mNextButton.setOnClickListener(this);
+        initContentView(R.layout.activity_register_step03);
+        setToolBarTitle(getResources().getString(R.string.tech_register_step_03));
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.tech_register_step_next_button:
-                SignInActivity.startWithNoAnimate(this);
-                this.overridePendingTransition(R.anim.base_slide_right_in,R.anim.base_slide_right_out);
-                this.finish();
-                break;
-            case R.id.tech_register_step_back_button:
-                RegisterStep02Activity.start(this);
-                this.overridePendingTransition(R.anim.base_slide_right_in,R.anim.base_slide_right_out);
-                this.finish();
-                break;
-            default:
-                Log.i(mTag,"Unknow id click");
-        }
+    public void goNextPage() {
+        SignInActivity.startWithNoAnimate(this);
+        this.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
+        this.finish();
     }
 
+    @Override
+    public void goBackPage() {
+        RegisterStep02Activity.start(this);
+        this.overridePendingTransition(R.anim.base_slide_right_in,R.anim.base_slide_right_out);
+        this.finish();
+    }
 }

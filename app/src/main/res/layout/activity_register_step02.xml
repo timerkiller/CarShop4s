@@ -6,39 +6,125 @@
     tools:context="com.example.vke.shop4stech.activity.RegisterStep02Activity"
     android:background="@color/colorLightGray">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tech_register_step_tool_bar"
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/tech_register_step_tool_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorLightBlue" >-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--<Button-->
+                <!--android:id="@+id/tech_register_step_back_button"-->
+                <!--android:background="@drawable/icon_top_back"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp" />-->
+
+            <!--<TextView-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="18sp"-->
+                <!--android:textColor="@color/colorWhite"-->
+                <!--android:text="@string/tech_register_step_02"/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/tech_register_step_next_button"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:background="@drawable/icon_top_next"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_marginEnd="15dp"/>-->
+
+        <!--</RelativeLayout>-->
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <EditText
+        android:id="@+id/tech_user_name_edit_text"
+        android:layout_below="@id/tech_register_step_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLightBlue" >
+        android:hint="@string/tech_input_name"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"
+        android:paddingStart="15dp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/tech_register_step_back_button"
-                android:background="@drawable/icon_top_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+    <EditText
+        android:id="@+id/tech_phone_edit_text"
+        android:layout_below="@id/tech_user_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tech_input_phone"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:inputType="phone"
+        android:paddingStart="15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"/>
 
-            <TextView
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/colorWhite"
-                android:text="@string/tech_register_step_02"/>
+    <EditText
+        android:id="@+id/tech_job_id_edit_text"
+        android:layout_below="@id/tech_phone_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tech_input_job_id"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"/>
 
-            <Button
-                android:id="@+id/tech_register_step_next_button"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/icon_top_next"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"/>
+    <EditText
+        android:id="@+id/tech_job_type_edit_text"
+        android:layout_below="@id/tech_job_id_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tech_input_job_type"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"/>
 
-        </RelativeLayout>
+    <EditText
+        android:id="@+id/tech_job_team_edit_text"
+        android:layout_below="@id/tech_job_type_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tech_input_job_team"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"/>
 
-    </android.support.v7.widget.Toolbar>
+    <EditText
+        android:id="@+id/tech_job_station_edit_text"
+        android:layout_below="@id/tech_job_team_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tech_input_job_station"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"/>
+
 
 </RelativeLayout>

@@ -11,4 +11,6 @@
     <color name="colorLightGray">#E6EDF5</color>
     <color name="colorLightMoreGray">#E6EDF9</color>
     <color name="colorGreen">#05C043</color>
+    <color name="colorText">#333333</color>
+    <color name="colorTextHint">#BBBCCD</color>
 </resources>

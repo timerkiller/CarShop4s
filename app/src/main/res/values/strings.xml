@@ -38,6 +38,16 @@
     <string name="tech_register_step_03">注册信息(3 / 3)</string>
     <string name="tech_select_4s_shop">请选择4s店</string>
     <string name="tech_input_register_code">请输入您的注册码</string>
+    <string name="tech_input_name">请输入您的姓名</string>
+    <string name="tech_input_phone">请输入您的手机号</string>
+    <string name="tech_input_job_id">请输入您的工作证号</string>
+    <string name="tech_input_job_type">请输入您的技师种类</string>
+    <string name="tech_input_job_team">请输入您的所属班组</string>
+    <string name="tech_input_job_station">请输入您的所属工位</string>
+    <string name="tech_input_password_again">请再次输入密码</string>
+    <string name="tech_input_sms_code">请输入验证码</string>
+    <string name="tech_reset_password_step1">重置密码(1/2)</string>
+    <string name="tech_reset_password_step2">重置密码(2/2)</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

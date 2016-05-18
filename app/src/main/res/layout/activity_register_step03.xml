@@ -6,39 +6,70 @@
     tools:context="com.example.vke.shop4stech.activity.RegisterStep03Activity"
     android:background="@color/colorLightGray">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tech_register_step_tool_bar"
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/tech_register_step_tool_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorLightBlue" >-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--<Button-->
+                <!--android:id="@+id/tech_register_step_back_button"-->
+                <!--android:background="@drawable/icon_top_back"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp" />-->
+
+            <!--<TextView-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="18sp"-->
+                <!--android:textColor="@color/colorWhite"-->
+                <!--android:text="@string/tech_register_step_03"/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/tech_register_step_next_button"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:background="@drawable/icon_top_ok"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_marginEnd="15dp"/>-->
+
+        <!--</RelativeLayout>-->
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+
+    <EditText
+        android:id="@+id/tech_set_password_edit_text"
+        android:layout_below="@id/tech_register_step_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLightBlue" >
+        android:hint="@string/tech_input_name"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"
+        android:inputType="textPassword"
+        android:paddingStart="15dp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/tech_register_step_back_button"
-                android:background="@drawable/icon_top_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-
-            <TextView
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/colorWhite"
-                android:text="@string/tech_register_step_03"/>
-
-            <Button
-                android:id="@+id/tech_register_step_next_button"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/icon_top_next"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"/>
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
+    <EditText
+        android:id="@+id/tech_confirm_password_edit_text"
+        android:layout_below="@id/tech_set_password_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tech_input_phone"
+        android:background="@drawable/bg_load_input"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd = "15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/colorText"
+        android:inputType="textPassword"
+        android:textColorHint="@color/colorTextHint"/>
 
 </RelativeLayout>

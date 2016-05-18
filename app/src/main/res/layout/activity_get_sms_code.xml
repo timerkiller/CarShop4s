@@ -3,37 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vke.shop4stech.activity.RegisterStep01Activity"
-    android:id="@+id/tech_register_step_01_relative_layout">
-    <!--android:background="@color/colorLightGray"-->
-
+    android:background="@color/colorLightGray"
+    tools:context="com.example.vke.shop4stech.activity.GetSmsCodeActivity">
 
     <EditText
-        android:id="@+id/tech_4s_spinner"
+        android:id="@+id/tech_input_password_edit_text"
         android:layout_below="@id/tech_register_step_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/tech_select_4s_shop"
+        android:hint="@string/tech_input_username"
         android:background="@drawable/bg_load_input"
         android:layout_marginTop="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd = "15dp"
-        android:textColor="#333333"
-        android:textColorHint="#BBBCCD"
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"
+        android:inputType="textPassword"
         android:paddingStart="15dp"
         android:focusable="true"/>
 
     <EditText
-        android:id="@+id/tech_register_code_edit_text"
-        android:layout_below="@id/tech_4s_spinner"
+        android:id="@+id/tech_input_password_again_edit_text"
+        android:layout_below="@id/tech_input_password_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/tech_input_register_code"
+        android:inputType="textPassword"
+        android:hint="@string/tech_input_sms_code"
         android:background="@drawable/bg_load_input"
         android:layout_marginTop="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd = "15dp"
         android:paddingStart="15dp"
-        android:textColor="#333333"
-        android:textColorHint="#BBBCCD"/>
+        android:textColor="@color/colorText"
+        android:textColorHint="@color/colorTextHint"/>
+
 </RelativeLayout>

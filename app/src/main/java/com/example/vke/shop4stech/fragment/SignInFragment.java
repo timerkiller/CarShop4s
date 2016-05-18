@@ -36,6 +36,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.activity.ForgetPasswordActivity;
+import com.example.vke.shop4stech.activity.GetSmsCodeActivity;
 import com.example.vke.shop4stech.activity.HomeActivity;
 import com.example.vke.shop4stech.activity.RegisterStep01Activity;
 import com.example.vke.shop4stech.constant.RequestDataKey;
@@ -397,6 +399,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 RegisterStep01Activity.start(getActivity());
                 break;
             case R.id.tech_text_forget_password:
+                GetSmsCodeActivity.start(getActivity());
                 break;
         }
     }
