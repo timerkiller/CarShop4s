@@ -99,7 +99,7 @@ public abstract class BaseRegisterActivity extends BaseSwipeBackActivity impleme
 
                 Log.d(mTag,">tmpX :" + tmpX + " tmpY:" +tmpY);
                 if(tmpX < 0){
-                    //手指滑动速度大于200 并且 Y轴上的偏移小于20
+                    //手指滑动速度大于200 并且 Y轴上的偏移小于60
                     if (speed > XSPEED_MIN && tmpY < Y_MIN){
                         goNextPage();
                     }
