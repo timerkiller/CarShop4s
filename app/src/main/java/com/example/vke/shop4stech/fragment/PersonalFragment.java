@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.AboutUsActivity;
+import com.example.vke.shop4stech.activity.GetSmsCodeActivity;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.RequestDataKey;
@@ -204,6 +205,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tech_modify_password_relative_layout:
+                GetSmsCodeActivity.start(getActivity());
+
                 break;
             case R.id.tech_help_relative_layout:
                 break;
@@ -211,7 +214,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                 AboutUsActivity.start(getActivity());
                 break;
             case R.id.tech_sign_out_relative_layout:
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("确认退出吗?");
 
