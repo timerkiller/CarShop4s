@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 /**
  * Created by vke on 2016/5/8.
@@ -97,7 +98,15 @@ public class NetOperationHelper {
             String result = respData.getString("result");
             if (result.equals("ok")) {
                 //return shop list;
+                List<String> shopList = new ArrayList<String>();
+                JSONArray shopListArray = respData.getJSONArray("listItems");
+                for(int i=0; i< shopListArray.length(); i++){
+                    shopList.add(shopListArray.getString(i));
+                }
 
+                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+                respDataMap.put("shop",shopList);
+                return respDataMap;
             }
             else if(result.equals("error")){
                 return null;
@@ -264,5 +273,33 @@ public class NetOperationHelper {
         }
 
         return null;
+    }
+
+    public static String getSmsCode(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.SMS_CODE,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if (respData == null)
+        {
+            Log.e(mTag,"get personal info null");
+            return null;
+        }
+
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                return respData.getString("encrySMScode");
+            }
+            else if(result.equals("error")){
+                JSONArray errors = respData.getJSONArray("errors");
+                String errorInfo = errors.getJSONObject(0).getString("desc");
+
+                return "error"+ " " + errorInfo;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 }

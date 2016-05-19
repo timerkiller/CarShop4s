@@ -17,5 +17,9 @@ public class RequestDataKey {
     public static final String INFO = "info";
     public static final String PAGE = "page";
     public static final String PER_PAGE = "perPage";
+    public static final String TIMESTAMP = "timeStamp";
+    public static final String OPERATE = "operate";
+    public static final String CHECK = "check";
+
 
 }

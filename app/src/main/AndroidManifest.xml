@@ -48,7 +48,7 @@
                     android:scheme="example" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TaskActivity" />
+        <!--<activity android:name=".activity.BaseTaskActivity" />-->
         <!--
      ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

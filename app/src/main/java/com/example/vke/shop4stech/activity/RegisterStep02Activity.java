@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.model.PersonalInfo;
 
 public class RegisterStep02Activity extends BaseRegisterActivity {
 
@@ -31,7 +32,8 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
 
     @Override
     public void goNextPage() {
-        RegisterStep03Activity.start(this);
+        PersonalInfo personalInfo = new PersonalInfo();
+        RegisterStep03Activity.start(this,personalInfo);
     }
 
     @Override

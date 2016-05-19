@@ -9,7 +9,7 @@
 
 
     <EditText
-        android:id="@+id/tech_4s_spinner"
+        android:id="@+id/tech_4s_shop_edit_text"
         android:layout_below="@id/tech_register_step_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
 
     <EditText
         android:id="@+id/tech_register_code_edit_text"
-        android:layout_below="@id/tech_4s_spinner"
+        android:layout_below="@id/tech_4s_shop_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/tech_input_register_code"

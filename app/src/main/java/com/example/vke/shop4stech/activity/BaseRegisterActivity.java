@@ -42,6 +42,9 @@ public abstract class BaseRegisterActivity extends BaseSwipeBackActivity impleme
 
     public void  initToolBar(){
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.tech_register_step_tool_bar);
+        this.setSupportActionBar(toolbar);
+
         mBackButton = (Button)findViewById(R.id.tech_register_step_back_button);
         mNextButton = (Button)findViewById(R.id.tech_register_step_next_button);
 

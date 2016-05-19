@@ -7,7 +7,7 @@
     tools:context="com.example.vke.shop4stech.activity.GetSmsCodeActivity">
 
     <EditText
-        android:id="@+id/tech_input_password_edit_text"
+        android:id="@+id/tech_input_phone_edit_text"
         android:layout_below="@id/tech_register_step_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,23 +18,34 @@
         android:layout_marginEnd = "15dp"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorTextHint"
-        android:inputType="textPassword"
+        android:inputType="phone"
         android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:focusable="true"/>
 
     <EditText
-        android:id="@+id/tech_input_password_again_edit_text"
-        android:layout_below="@id/tech_input_password_edit_text"
-        android:layout_width="match_parent"
+        android:id="@+id/tech_input_sms_code_edit_text"
+        android:layout_below="@id/tech_input_phone_edit_text"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:inputType="number"
         android:hint="@string/tech_input_sms_code"
         android:background="@drawable/bg_load_input"
         android:layout_marginTop="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd = "15dp"
         android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorTextHint"/>
 
+    <Button
+        android:id="@+id/tech_get_sms_code_button"
+        android:layout_below="@id/tech_input_phone_edit_text"
+        android:layout_toEndOf="@+id/tech_input_sms_code_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd = "15dp"
+        android:text="获取验证码"/>
 </RelativeLayout>

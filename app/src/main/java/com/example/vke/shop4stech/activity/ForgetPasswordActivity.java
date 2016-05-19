@@ -10,8 +10,10 @@ import com.example.vke.shop4stech.R;
 
 public class ForgetPasswordActivity extends BaseRegisterActivity {
 
-    public static void start(Activity activity) {
+    public static void start(Activity activity,String phone,String encrySmsCode) {
         Intent starter = new Intent(activity, ForgetPasswordActivity.class);
+        starter.putExtra("phone",phone);
+        starter.putExtra("encrySmsCode",encrySmsCode);
         activity.startActivity(starter);
     }
 

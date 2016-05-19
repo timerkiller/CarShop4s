@@ -32,7 +32,7 @@
     <string name="tech_company_email">E-Mail:     hshr@hangsheng.com.cn</string>
     <string name="tech_no_data">没有数据可用</string>
     <string name="tech_load_more_data">查看更多数据</string>
-
+    <string name="tech_task_title">任务概况</string>
     <string name="tech_register_step_01">注册信息(1 / 3)</string>
     <string name="tech_register_step_02">注册信息(2 / 3)</string>
     <string name="tech_register_step_03">注册信息(3 / 3)</string>
@@ -48,6 +48,10 @@
     <string name="tech_input_sms_code">请输入验证码</string>
     <string name="tech_reset_password_step1">重置密码(1/2)</string>
     <string name="tech_reset_password_step2">重置密码(2/2)</string>
+    <string name="tech_shop_should_not_null">4s店名不允许为空</string>
+    <string name="tech_regsiter_should_not_null">注册码不允许为空,可以联系4S获取注册码</string>
+    <string name="tech_input_valid_phone">请输入合法手机号</string>
+    <string name="tech_get_sms_code_failed">网络不可用，获取验证码失败</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

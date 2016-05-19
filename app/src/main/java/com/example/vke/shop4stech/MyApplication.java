@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.example.vke.shop4stech.logcollector.LogCollector;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by vke on 2016/5/17.
  */
@@ -13,5 +15,7 @@ public class MyApplication extends Application{
         super.onCreate();
         LogCollector.setDebugMode(true);
         LogCollector.init(getApplicationContext(), "", null);
+
+        //JPushInterface.init(getApplicationContext());
     }
 }

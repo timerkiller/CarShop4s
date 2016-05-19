@@ -14,14 +14,18 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.model.PersonalInfo;
 
 public class RegisterStep03Activity extends BaseRegisterActivity {
 
     private static final String mTag = "RegisterStep03Activity";
     private Button mNextButton,mBackButton;
+    private PersonalInfo mPersonalInfo;
+    private static final String PERSONAL_INFO = "PersonalInfo";
 
-    public static void start(Activity activity) {
+    public static void start(Activity activity, PersonalInfo personalInfo) {
         Intent starter = new Intent(activity, RegisterStep03Activity.class);
+        starter.putExtra(PERSONAL_INFO,personalInfo);
         activity.startActivity(starter);
         activity.overridePendingTransition(R.anim.base_slide_right_in,R.anim.base_slide_right_out);
     }
@@ -31,6 +35,8 @@ public class RegisterStep03Activity extends BaseRegisterActivity {
         super.onCreate(savedInstanceState);
         initContentView(R.layout.activity_register_step03);
         setToolBarTitle(getResources().getString(R.string.tech_register_step_03));
+
+        mPersonalInfo = (PersonalInfo) getIntent().getParcelableExtra(PERSONAL_INFO);
     }
 
     @Override

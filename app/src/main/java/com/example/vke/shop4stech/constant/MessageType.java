@@ -15,4 +15,9 @@ public class MessageType {
     public static final int TYPE_ACCESS_TOKEN_INVALID= 0x1009;
     public static final int TYPE_NETWORK_DISABLE = 0x1010;
     public static final int TYPE_NO_DATA_FOUND = 0x1011;
+    public static final int TYPE_GET_SHOP_LIST_SUCCESS = 0x1012;
+    public static final int TYPE_GET_SHOP_LIST_FAILED = 0x1013;
+    public static final int TYPE_GET_SMS_SUCCESS = 0x1014;
+    public static final int TYPE_GET_SMS_FAILED = 0x1015;
+
 }
