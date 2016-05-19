@@ -161,16 +161,23 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
 
     @Override
     public void goNextPage() {
-        if(mPhoneEditView.getText().toString().equals("") || mPhoneEditView.getText().toString().length() != VALID_PHONE_LENGTH){
+        String phone = mPhoneEditView.getText().toString();
+        if(phone.equals("") || phone.length() != VALID_PHONE_LENGTH){
             Toast.makeText(getApplicationContext(),R.string.tech_input_valid_phone,Toast.LENGTH_SHORT).show();
             return;
         }
 
-
+        String smsCode = mSmsCodeEditView.getText().toString();
+        String encrySmsCode = new String(Hex.encodeHex(DigestUtils.md5(smsCode)));
+        Log.i(mTag,"local encySmsCode:" + encrySmsCode + "service encrySmsCode:" + mEncrySmsCode);
+        if (!encrySmsCode.equals(mEncrySmsCode) || smsCode.equals(" ")){
+            Toast.makeText(getApplicationContext(),R.string.tech_sms_code_error,Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         this.finish();
         //this.overridePendingTransition(R.anim.animate_enter_alpha,R.anim.animate_out_alpha);
-        ForgetPasswordActivity.start(this);
+        ForgetPasswordActivity.start(this,phone,mEncrySmsCode);
     }
 
     @Override
