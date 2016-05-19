@@ -1,13 +1,12 @@
 package com.example.vke.shop4stech.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +21,7 @@ import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.DateTimeHelper;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
+import com.example.vke.shop4stech.helper.SMSBroadcastReceiverHelper;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -36,8 +36,10 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
     private Button mGetSmsCodeButton;
     private TimeCount mCounter;
     String mEncrySmsCode;
-
+    private SMSBroadcastReceiverHelper mSMSBroadcastReceiver;
     private  Handler mSmsCodeHander;
+    /** 收到短信Action **/
+    String ACTION_SMS_RECIVER = "android.provider.Telephony.SMS_RECEIVED";
 
     public static void start(Activity context) {
         Intent starter = new Intent(context, GetSmsCodeActivity.class);
@@ -124,6 +126,7 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         });
         mGetSmsCodeButton.setEnabled(false);
     }
+
 
     private void getSmsCode(){
         HashMap<String,Object> map = new HashMap<String, Object>();
@@ -215,5 +218,39 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         }
     }
 
+    @Override
+    public void onOpened() {
+        super.onOpened();
+        mPhoneEditView.setFocusable(true);
+        mPhoneEditView.setFocusableInTouchMode(true);
+        mPhoneEditView.requestFocus();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //生成广播处理
+        mSMSBroadcastReceiver = new SMSBroadcastReceiverHelper();
+
+        //实例化过滤器并设置要过滤的广播
+        IntentFilter intentFilter = new IntentFilter(ACTION_SMS_RECIVER);
+        intentFilter.setPriority(Integer.MAX_VALUE);
+        //注册广播
+        this.registerReceiver(mSMSBroadcastReceiver, intentFilter);
+
+        mSMSBroadcastReceiver.setOnReceivedMessageListener(new SMSBroadcastReceiverHelper.MessageListener() {
+            @Override
+            public void onReceived(String message) {
+                mSmsCodeEditView.setText(message);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //注销短信监听广播
+        this.unregisterReceiver(mSMSBroadcastReceiver);
+    }
 
 }
