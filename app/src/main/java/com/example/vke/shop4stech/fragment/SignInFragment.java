@@ -183,6 +183,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 //                mSelectedAvatar = Avatar.values()[savedAvatarIndex];
 //            }
 //        }
+
         super.onCreate(savedInstanceState);
     }
 
@@ -260,6 +261,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             public void afterTextChanged(Editable s) {
                 // showing the floating action button if avatar is selected and input data is valid
                 Log.i(mTag,"afterTextChanged");
+                if(mUserName.getText().length() == 11){
+                    mPassword.requestFocus();
+                }
+
             }
         };
 

@@ -89,6 +89,7 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
                 Log.i(mTag,"afterTextChanged" + " length" +s.toString().length());
                 if(s.toString().length() == VALID_PHONE_LENGTH && !mCounter.getTimerStatus()){
                     mGetSmsCodeButton.setEnabled(true);
+                    mSmsCodeEditView.requestFocus();
                 }
                 else{
                     mGetSmsCodeButton.setEnabled(false);

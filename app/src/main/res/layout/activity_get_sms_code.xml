@@ -21,6 +21,7 @@
         android:inputType="phone"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
+        android:maxLength="11"
         android:focusable="true"/>
 
     <EditText
@@ -37,6 +38,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:textColor="@color/colorText"
+        android:maxLength="6"
         android:textColorHint="@color/colorTextHint"/>
 
     <Button
