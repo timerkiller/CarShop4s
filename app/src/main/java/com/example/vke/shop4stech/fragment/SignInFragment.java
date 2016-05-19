@@ -40,6 +40,7 @@ import com.example.vke.shop4stech.activity.ForgetPasswordActivity;
 import com.example.vke.shop4stech.activity.GetSmsCodeActivity;
 import com.example.vke.shop4stech.activity.HomeActivity;
 import com.example.vke.shop4stech.activity.RegisterStep01Activity;
+import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
@@ -91,7 +92,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     else{
                         saveUiAccountInfoData(getActivity(),false);
                     }
-
                 case TOKEN_OK:
                     //登陆成功后，才能设置button重新可以登陆
                     mLoginButton.setClickable(true);
@@ -102,11 +102,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     break;
                 case LOGIN_SERVICE_ERR:
                     mLoginButton.setClickable(true);
-                    Toast.makeText(getActivity(), R.string.tech_user_login_error , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), (String)msg.obj , Toast.LENGTH_SHORT).show();
                     break;
 
                 case TOKEN_INVALID:
                     Log.i(mTag,">>>>>>>>>>>>> Token INVALID");
+
+                    mLoginButton.setClickable(true);
                     mContentLinear.setVisibility(View.VISIBLE);
                     break;
                 default:
@@ -311,17 +313,24 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                 loginDataMap.put(RequestDataKey.TYPE,"mantain");
 
                                 String result = NetOperationHelper.login(loginDataMap);
+                                Message msg = mLoginHandler.obtainMessage();
                                 if(result != null){
                                     String [] data = result.split(" ");
                                     if (data[0].equals("ok")){
                                         mAccessToken = data[1];
-
                                         mLoginHandler.sendEmptyMessage(LOGIN_SERVICE_OK);
                                     }
                                     else {
                                         //Toast.makeText(getActivity().getApplicationContext(),data[1],Toast.LENGTH_SHORT).show();
-                                        mLoginHandler.sendEmptyMessage(LOGIN_SERVICE_ERR);
+                                        msg.what = LOGIN_SERVICE_ERR;
+                                        msg.obj = data[1];
+                                        mLoginHandler.sendMessage(msg);
                                     }
+                                }
+                                else {
+                                    msg.what = LOGIN_SERVICE_ERR;
+                                    msg.obj = "Oh,服务器出了点状态，请稍后再试!";
+                                    mLoginHandler.sendMessage(msg);
                                 }
 
                             }
