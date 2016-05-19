@@ -293,6 +293,10 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
 
         Log.i(mTag,"after super invoked");
         TextView contentView = (TextView)v.findViewById(R.id.tech_message_content_text_view);
+        if(contentView == null){
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("消息");
         builder.setMessage(contentView.getText().toString());
