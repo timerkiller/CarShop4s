@@ -230,7 +230,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 }).start();
             }
             else {
-
                 view.findViewById(R.id.empty).setVisibility(View.GONE);
                 view.findViewById(R.id.tech_sign_in_content).setVisibility(View.VISIBLE);
             }
