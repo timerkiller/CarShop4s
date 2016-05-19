@@ -280,7 +280,7 @@ public class NetOperationHelper {
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if (respData == null)
         {
-            Log.e(mTag,"get personal info null");
+            Log.e(mTag,"get SMS info null");
             return null;
         }
 
@@ -294,6 +294,32 @@ public class NetOperationHelper {
                 String errorInfo = errors.getJSONObject(0).getString("desc");
 
                 return "error"+ " " + errorInfo;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    public static String modifyPassword(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if (respData == null)
+        {
+            Log.e(mTag,"get modifyPassword failed");
+            return null;
+        }
+
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                return "ok";
+            }
+            else if(result.equals("error")){
+                JSONArray errors = respData.getJSONArray("errors");
+                return errors.getJSONObject(0).getString("desc");
             }
         } catch (JSONException e) {
             e.printStackTrace();

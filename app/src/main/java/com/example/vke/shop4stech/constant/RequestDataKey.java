@@ -20,6 +20,8 @@ public class RequestDataKey {
     public static final String TIMESTAMP = "timeStamp";
     public static final String OPERATE = "operate";
     public static final String CHECK = "check";
+    public static final String NEW_PASSWORD = "newPassword";
+    public static final String SMS_TOKEN = "SMSToken";
 
 
 }

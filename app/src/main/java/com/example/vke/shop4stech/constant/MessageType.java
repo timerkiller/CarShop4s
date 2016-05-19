@@ -19,5 +19,7 @@ public class MessageType {
     public static final int TYPE_GET_SHOP_LIST_FAILED = 0x1013;
     public static final int TYPE_GET_SMS_SUCCESS = 0x1014;
     public static final int TYPE_GET_SMS_FAILED = 0x1015;
+    public static final int TYPE_MODIFY_SUCCESS = 0x1016;
+    public static final int TYPE_MODIFY_FAILED = 0x1017;
 
 }

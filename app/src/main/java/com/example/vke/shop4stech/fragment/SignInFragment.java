@@ -101,6 +101,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     activity.finish();
                     break;
                 case LOGIN_SERVICE_ERR:
+                    mLoginButton.setClickable(true);
                     Toast.makeText(getActivity(), R.string.tech_user_login_error , Toast.LENGTH_SHORT).show();
                     break;
 

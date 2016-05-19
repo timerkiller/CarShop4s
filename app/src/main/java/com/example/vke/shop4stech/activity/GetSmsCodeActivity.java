@@ -111,6 +111,7 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
                     return;
                 }
 
+                mGetSmsCodeButton.setEnabled(false);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
