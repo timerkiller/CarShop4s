@@ -109,7 +109,11 @@ public class NetOperationHelper {
                 return respDataMap;
             }
             else if(result.equals("error")){
-                return null;
+                JSONArray errorList = respData.getJSONArray("errors");
+                String erroInfo = errorList.getJSONObject(0).getString("desc");
+                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+                respDataMap.put("error",erroInfo);
+                return respDataMap;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -199,7 +203,11 @@ public class NetOperationHelper {
             }
             else if(result.equals("error")){
                 //这里还需要解析错误的信息
-                return null;
+                JSONArray errorList = respData.getJSONArray("errors");
+                String erroInfo = errorList.getJSONObject(0).getString("desc");
+                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+                respDataMap.put("error",erroInfo);
+                return respDataMap;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -239,7 +247,11 @@ public class NetOperationHelper {
             }
             else if(result.equals("error")){
                 //need handle errors operation
-                return null;
+                JSONArray errorList = respData.getJSONArray("errors");
+                String erroInfo = errorList.getJSONObject(0).getString("desc");
+                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+                respDataMap.put("error",erroInfo);
+                return respDataMap;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -267,6 +279,12 @@ public class NetOperationHelper {
                 String team=respData.getString("team");
 
                 return new PersonalInfo(username,staffID,jobType,station,team);
+            }
+            else if(result.equals("error")){
+                JSONArray errorList = respData.getJSONArray("errors");
+                String erroInfo = errorList.getJSONObject(0).getString("desc");
+                Log.e(mTag,"get Personal info failed ,error :" +erroInfo );
+                return null;
             }
         } catch (JSONException e) {
             e.printStackTrace();

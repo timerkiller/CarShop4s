@@ -153,8 +153,8 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         try{
             if(dataMap != null){
                 List<UserMessage> messages = (List<UserMessage>)dataMap.get("messages");
-                mTotalPage = (int)dataMap.get("pageAll");
                 if(messages != null && messages.size() !=0 ){
+                    mTotalPage = (int)dataMap.get("pageAll");
                     Message msg = mUserMessageHandler.obtainMessage();
                     if(operationType == OPERATION_TYPE.TYPE_UPDATE){
                         msg.obj = messages;

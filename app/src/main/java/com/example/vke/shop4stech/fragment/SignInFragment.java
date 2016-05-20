@@ -83,6 +83,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     private Handler mLoginHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            getActivity().findViewById(R.id.empty).setVisibility(View.GONE);
             switch (msg.what) {
                 case LOGIN_SERVICE_OK:
                     saveUserData(getActivity(),mAccessToken);
@@ -301,6 +302,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                             break;
                         }
 
+
+                        getActivity().findViewById(R.id.empty).setVisibility(View.VISIBLE);
                         mLoginButton.setClickable(false);
                         new Thread(new Runnable() {
                             @Override
@@ -329,7 +332,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                 }
                                 else {
                                     msg.what = LOGIN_SERVICE_ERR;
-                                    msg.obj = "Oh,服务器出了点状态，请稍后再试!";
+                                    msg.obj = "Oh,服务器出了点状况，请稍后再试!";
                                     mLoginHandler.sendMessage(msg);
                                 }
 
