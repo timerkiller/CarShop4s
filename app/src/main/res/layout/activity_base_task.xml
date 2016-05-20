@@ -34,12 +34,40 @@
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:id="@+id/tech_task_main_content_relative_layout"
+        android:id="@+id/tech_task_part_1_relative_layout"
         android:layout_below="@id/tech_task_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorLightGray">
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tech_task_part_2_relative_layout"
+        android:layout_below="@id/tech_task_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGray">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tech_task_part_3_relative_layout"
+        android:layout_below="@id/tech_task_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGray">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tech_task_part_4_relative_layout"
+        android:layout_below="@id/tech_task_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGray">
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -25,6 +25,7 @@ import com.example.vke.shop4stech.activity.AboutUsActivity;
 import com.example.vke.shop4stech.activity.GetSmsCodeActivity;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
@@ -118,7 +119,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                     String accessToken = getValidAccessToken();
                     if (accessToken == null) {
                         Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                        msg.obj = "AccessToken失效，请重新登陆";
+                        msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
                         msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
                         mUpdatePersonalInfoHandler.sendMessage(msg);
                         ;
@@ -136,7 +137,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                         mUpdatePersonalInfoHandler.sendMessage(msg);
                     } else {
                         Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                        msg.obj = "AccessToken失效，请重新登陆";
+                        msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
                         msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
                         mUpdatePersonalInfoHandler.sendMessage(msg);
                     }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 
@@ -111,7 +112,7 @@ public class ForgetPasswordActivity extends BaseRegisterActivity {
         if(result != null){
             if (result.equals("ok")){
                 msg.what = MessageType.TYPE_MODIFY_SUCCESS;
-                msg.obj = "修改成功";
+                msg.obj = Prompt.PROMPT_MODIFY_SUCCESS;
                 mModifyPasswordHandler.sendMessage(msg);
             }
             else{
@@ -122,7 +123,7 @@ public class ForgetPasswordActivity extends BaseRegisterActivity {
         }
         else{
             msg.what = MessageType.TYPE_MODIFY_FAILED;
-            msg.obj = "Oh O~,服务器出了点状况，请稍后再试!";
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
             mModifyPasswordHandler.sendMessage(msg);
         }
     }

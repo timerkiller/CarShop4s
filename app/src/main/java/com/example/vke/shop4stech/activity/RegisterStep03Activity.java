@@ -22,7 +22,7 @@ public class RegisterStep03Activity extends BaseRegisterActivity {
     private Button mNextButton,mBackButton;
     private PersonalInfo mPersonalInfo;
     private static final String PERSONAL_INFO = "PersonalInfo";
-
+    
     public static void start(Activity activity, PersonalInfo personalInfo) {
         Intent starter = new Intent(activity, RegisterStep03Activity.class);
         starter.putExtra(PERSONAL_INFO,personalInfo);

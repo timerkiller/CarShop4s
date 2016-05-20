@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 
 import java.util.HashMap;
@@ -56,13 +57,15 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
             public void handleMessage(Message msg) {
                 switch (msg.what){
                     case MessageType.TYPE_GET_SHOP_LIST_SUCCESS:
+                        mShopList = (List<String>)msg.obj;
                         break;
                     case MessageType.TYPE_GET_SHOP_LIST_FAILED:
+                        Toast.makeText(getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         Log.e(mTag,"Unknow message type:" + msg.what);
                 }
-                mShopList = (List<String>)msg.obj;
+
             }
         };
 
@@ -90,6 +93,7 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
         }
 
         RegisterStep02Activity.start(this);
+        this.finish();
     }
 
     @Override
@@ -103,24 +107,34 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("mode", "title");
         HashMap<String,Object> result= NetOperationHelper.getShopList(map);
+
         try {
+            Message msg = mShopHandler.obtainMessage();
             if(result != null){
                 //send to main thread to update shopList;
-                List<String> shops = (List<String>) result.get("shop");
-                Message msg = mShopHandler.obtainMessage();
-                msg.what = MessageType.TYPE_GET_SHOP_LIST_SUCCESS;
-                msg.obj = shops;
-                mShopHandler.sendMessage(msg);
+                List<String> shops = (List<String>) result.get(NetOperationHelper.KEY_SHOP);
+                if (shops != null){
+                    msg.what = MessageType.TYPE_GET_SHOP_LIST_SUCCESS;
+                    msg.obj = shops;
+                    mShopHandler.sendMessage(msg);
+                }
+                else {
+                    String errorinfo = (String)result.get(NetOperationHelper.KEY_ERROR);
+                    msg.what = MessageType.TYPE_GET_SHOP_LIST_FAILED;
+                    msg.obj = errorinfo;
+                    mShopHandler.sendMessage(msg);
+                }
             }
             else
             {
-                mShopHandler.sendEmptyMessage(MessageType.TYPE_GET_SHOP_LIST_FAILED);
+                msg.what = MessageType.TYPE_GET_SHOP_LIST_FAILED;
+                msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+                mShopHandler.sendMessage(msg);
             }
         }
         catch (Exception e){
             Log.e(mTag,e.toString());
         }
     }
-
 
 }

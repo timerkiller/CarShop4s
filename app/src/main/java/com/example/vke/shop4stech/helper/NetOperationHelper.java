@@ -31,8 +31,13 @@ import java.util.Objects;
  * Created by vke on 2016/5/8.
  */
 public class NetOperationHelper {
-    public static final String mTag="NetOperationHelper";
+    public static final String KEY_TASKS="tasks";
+    public static final String KEY_MESSAGES="messages";
+    public static final String KEY_SHOP="shop";
+    public static final String KEY_ERROR="error";
+    public static final String KEY_TOTAL_PAGE="pageAll";
 
+    public static final String mTag="NetOperationHelper";
     public static  String login(HashMap<String,Object> map){
 
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.AUTH,map);
@@ -105,14 +110,14 @@ public class NetOperationHelper {
                 }
 
                 HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put("shop",shopList);
+                respDataMap.put(KEY_SHOP,shopList);
                 return respDataMap;
             }
             else if(result.equals("error")){
                 JSONArray errorList = respData.getJSONArray("errors");
                 String erroInfo = errorList.getJSONObject(0).getString("desc");
                 HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put("error",erroInfo);
+                respDataMap.put(KEY_ERROR,erroInfo);
                 return respDataMap;
             }
         } catch (JSONException e) {
@@ -197,8 +202,8 @@ public class NetOperationHelper {
                     tasks.add(task);
                 }
                 HashMap<String,Object> dataMap = new HashMap<String,Object>();
-                dataMap.put("tasks",tasks);
-                dataMap.put("pageAll",Integer.parseInt(pageAll));
+                dataMap.put(KEY_TASKS,tasks);
+                dataMap.put(KEY_TOTAL_PAGE,Integer.parseInt(pageAll));
                 return dataMap;
             }
             else if(result.equals("error")){
@@ -206,7 +211,7 @@ public class NetOperationHelper {
                 JSONArray errorList = respData.getJSONArray("errors");
                 String erroInfo = errorList.getJSONObject(0).getString("desc");
                 HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put("error",erroInfo);
+                respDataMap.put(KEY_ERROR,erroInfo);
                 return respDataMap;
             }
         } catch (JSONException e) {
@@ -241,8 +246,8 @@ public class NetOperationHelper {
                     message.setTimeStamp(messageObj.getString("timestamp"));
                     messages.add(message);
                 }
-                respDataMap.put("messages",messages);
-                respDataMap.put("pageAll",Integer.parseInt(pageAll));
+                respDataMap.put(KEY_MESSAGES,messages);
+                respDataMap.put(KEY_TOTAL_PAGE,Integer.parseInt(pageAll));
                 return respDataMap;
             }
             else if(result.equals("error")){
@@ -250,7 +255,7 @@ public class NetOperationHelper {
                 JSONArray errorList = respData.getJSONArray("errors");
                 String erroInfo = errorList.getJSONObject(0).getString("desc");
                 HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put("error",erroInfo);
+                respDataMap.put(KEY_ERROR,erroInfo);
                 return respDataMap;
             }
         } catch (JSONException e) {

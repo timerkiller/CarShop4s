@@ -34,6 +34,7 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
     public void goNextPage() {
         PersonalInfo personalInfo = new PersonalInfo();
         RegisterStep03Activity.start(this,personalInfo);
+        this.finish();
     }
 
     @Override

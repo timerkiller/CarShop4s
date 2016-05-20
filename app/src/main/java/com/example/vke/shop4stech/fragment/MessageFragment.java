@@ -20,6 +20,7 @@ import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.adapter.MessageAdapter;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.customLayout.XListView;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
@@ -135,7 +136,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         String accessToken = getValidAccessToken();
         if (accessToken == null){
             Message msg = mUserMessageHandler.obtainMessage();
-            msg.obj = "AccessToken失效，请重新登陆";
+            msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
             msg.what = MessageType.TYPE_ACCESS_TOKEN_INVALID;
             mUserMessageHandler.sendMessage(msg);;
             return ;
@@ -152,9 +153,9 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         HashMap<String,Object> dataMap = NetOperationHelper.getUserMessage(map);
         try{
             if(dataMap != null){
-                List<UserMessage> messages = (List<UserMessage>)dataMap.get("messages");
+                List<UserMessage> messages = (List<UserMessage>)dataMap.get(NetOperationHelper.KEY_MESSAGES);
                 if(messages != null && messages.size() !=0 ){
-                    mTotalPage = (int)dataMap.get("pageAll");
+                    mTotalPage = (int)dataMap.get(NetOperationHelper.KEY_TOTAL_PAGE);
                     Message msg = mUserMessageHandler.obtainMessage();
                     if(operationType == OPERATION_TYPE.TYPE_UPDATE){
                         msg.obj = messages;
@@ -246,7 +247,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
                         break;
                     case MessageType.TYPE_UPDATE_FAILED:
                     case MessageType.TYPE_LOAD_MORE_FAILED:
-                        Toast.makeText(getActivity().getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(),Prompt.PROMPT_LOAD_FAILED,Toast.LENGTH_SHORT).show();
                         onLoadFinish(false);
                         break;
                     case MessageType.TYPE_NETWORK_DISABLE:
@@ -327,7 +328,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         //判断当前加载的页数是否和服务器上的总页数相等，若相等了就不进行加载了，提示没有数据了
         if(mPageId > mTotalPage)
         {
-            Toast.makeText(getActivity().getApplicationContext(),"没有更多了",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(),Prompt.PROMPT_NO_MORE_DATA,Toast.LENGTH_SHORT).show();
             onLoadFinish(false);
             return;
         }

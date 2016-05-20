@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.DateTimeHelper;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
@@ -159,7 +160,7 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         }
         else{
             msg.what = MessageType.TYPE_GET_SMS_FAILED;
-            msg.obj = "Oh,服务器出了点状态，请稍后再试!";
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
             mSmsCodeHander.sendMessage(msg);
         }
     }

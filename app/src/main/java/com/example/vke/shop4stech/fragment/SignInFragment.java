@@ -41,6 +41,7 @@ import com.example.vke.shop4stech.activity.GetSmsCodeActivity;
 import com.example.vke.shop4stech.activity.HomeActivity;
 import com.example.vke.shop4stech.activity.RegisterStep01Activity;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
@@ -332,7 +333,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                 }
                                 else {
                                     msg.what = LOGIN_SERVICE_ERR;
-                                    msg.obj = "Oh,服务器出了点状况，请稍后再试!";
+                                    msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
                                     mLoginHandler.sendMessage(msg);
                                 }
 

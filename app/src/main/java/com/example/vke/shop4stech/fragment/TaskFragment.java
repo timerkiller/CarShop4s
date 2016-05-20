@@ -21,6 +21,7 @@ import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.adapter.TaskAdapter;
 import com.example.vke.shop4stech.constant.MessageType;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.constant.URL;
 import com.example.vke.shop4stech.customLayout.XListView;
@@ -161,7 +162,7 @@ public class TaskFragment extends ListFragment
                             break;
                         case MessageType.TYPE_UPDATE_FAILED:
                         case MessageType.TYPE_LOAD_MORE_FAILED:
-                            Toast.makeText(getActivity().getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(),Prompt.PROMPT_LOAD_FAILED,Toast.LENGTH_SHORT).show();
                             onLoadFinish(false);
                             break;
                         case MessageType.TYPE_NETWORK_DISABLE:
@@ -213,7 +214,7 @@ public class TaskFragment extends ListFragment
         String accessToken = getValidAccessToken();
         if (accessToken == null){
             Message msg = mGetTaskHandler.obtainMessage();
-            msg.obj = "AccessToken失效，请重新登陆";
+            msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
             msg.what = MessageType.TYPE_ACCESS_TOKEN_INVALID;
             mGetTaskHandler.sendMessage(msg);;
             return ;
@@ -231,9 +232,9 @@ public class TaskFragment extends ListFragment
         HashMap<String,Object> dataMap = NetOperationHelper.getTaskList(map);
         try{
             if(dataMap != null){
-                List<Task> tasks = (List<Task>)dataMap.get("tasks");
-                mTotalPage = (int)dataMap.get("pageAll");
+                List<Task> tasks = (List<Task>)dataMap.get(NetOperationHelper.KEY_TASKS);
                 if(tasks != null && tasks.size() !=0 ){
+                    mTotalPage = (int)dataMap.get(NetOperationHelper.KEY_TOTAL_PAGE);
                     Message msg = mGetTaskHandler.obtainMessage();
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
                         //mTotalTaskList = tasks;
@@ -252,7 +253,7 @@ public class TaskFragment extends ListFragment
                         return;
                     }
 
-                    //这里还需要考虑，有可能是ACCESSToken失效，还有其他failed的情况
+                    //是否要取出errorInfo 进行显示
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
                         mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_UPDATE_FAILED);
                     }
@@ -320,7 +321,7 @@ public class TaskFragment extends ListFragment
         //判断当前加载的页数是否和服务器上的总页数相等，若相等了就不进行加载了，提示没有数据了
         if(mPageId > mTotalPage)
         {
-            Toast.makeText(getActivity().getApplicationContext(),"没有更多了",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(),Prompt.PROMPT_NO_MORE_DATA,Toast.LENGTH_SHORT).show();
             onLoadFinish(false);
             return;
         }

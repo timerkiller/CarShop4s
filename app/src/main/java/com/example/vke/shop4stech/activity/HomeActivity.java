@@ -109,7 +109,7 @@ implements View.OnClickListener,View.OnLongClickListener{
         Timer exitTimer= null;
         if (!isExit) {
             isExit = true; // 准备退出
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,R.string.tech_touch_again_to_exit, Toast.LENGTH_SHORT).show();
             exitTimer = new Timer();
             exitTimer.schedule(new TimerTask() {
                 @Override
