@@ -73,6 +73,7 @@ public class TaskAdapter extends BaseAdapter{
             viewHolder.mTaskStateImgV = (ImageView)convertView.findViewById(R.id.tech_task_state_image_view);
             viewHolder.mTaskStateTV = (TextView)convertView.findViewById(R.id.tech_task_state_text_view);
             viewHolder.mDateTV = (TextView)convertView.findViewById(R.id.tech_task_date_text_view);
+            viewHolder.mIndex=(TextView)convertView.findViewById(R.id.tech_index);
             convertView.setTag(viewHolder);
         }
         else{
@@ -83,6 +84,7 @@ public class TaskAdapter extends BaseAdapter{
         viewHolder.mOrderSerialNumTV.setText(task.getOrderSerialNum());
         viewHolder.mTaskContentTextTV.setText(task.getOrderType());
         viewHolder.mCurrentExecutingManTV.setText(task.getCurrentExecutingMan());
+        viewHolder.mIndex.setText(task.getIndex());
 
         String DateTime = DateTimeHelper.timeStamp2Date(task.getOrderDate(),null);
         String Date = DateTime.split(" ")[0];
@@ -104,6 +106,7 @@ public class TaskAdapter extends BaseAdapter{
             case "暂停":
                 viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_running);
                 break;
+            case "待评价":
             case "已完成":
                 viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_complete);
                 break;
@@ -112,6 +115,7 @@ public class TaskAdapter extends BaseAdapter{
                 break;
             case "未开始":
                 viewHolder.mTaskStateImgV.setBackgroundResource(R.drawable.icon_prestart);
+                //viewHolder.mTaskStateTV.setTextColor(mContext.getResources().getColor(R.color.colorLightGray));
                 break;
         }
         viewHolder.mTaskStateTV.setText(task.getOrderState());
@@ -120,6 +124,7 @@ public class TaskAdapter extends BaseAdapter{
     }
 
     public static class ViewHolder{
+        TextView mIndex;
         TextView mOrderSerialNumTV;
         TextView mTaskContentTextTV;
         TextView mCurrentExecutingManTV;

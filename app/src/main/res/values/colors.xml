@@ -13,4 +13,5 @@
     <color name="colorGreen">#05C043</color>
     <color name="colorText">#333333</color>
     <color name="colorTextHint">#BBBCCD</color>
+    <color name="colorCutLine">#C1CDCD</color>
 </resources>

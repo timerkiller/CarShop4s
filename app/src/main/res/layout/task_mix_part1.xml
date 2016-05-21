@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/tech_task_mix_point1"
+        android:contentDescription="@string/description_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_point"
+        android:paddingTop="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:layout_toEndOf="@id/tech_task_mix_point1"
+        android:id="@+id/tech_task_part_1_title_1_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textSize="15sp"
+        android:textColor="@color/colorBlack"
+        android:text="步骤2/7"/>
+
+    <TextView
+        android:id="@+id/tech_task_part_1_title_2_text_view"
+        android:layout_below="@id/tech_task_part_1_title_1_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:scrollbars="vertical"
+        android:singleLine="false"
+        android:maxLines="2"
+        android:text="发动机可垃圾费克发大水发法士大夫士大夫里斯蒂娜看看老师的反馈了圣诞节疯狂洛杉矶的反馈六角恐龙发动机卡上范德萨发士大夫撒旦法士大夫撒旦法撒旦法师法撒旦法师就疯狂拉升的积分卡拉萨的积分卡拉圣诞节疯狂洛杉矶抵抗力附件三克拉的房间卡拉斯的减肥开始就打开了房间 "/>
+
+    <ImageView
+        android:id="@+id/tech_task_mix_point2"
+        android:layout_below="@id/tech_task_part_1_title_2_text_view"
+        android:contentDescription="@string/description_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_point"
+        android:paddingTop="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:id="@+id/tech_task_part_1_title_3_text_view"
+        android:layout_toEndOf="@id/tech_task_mix_point2"
+        android:layout_below="@id/tech_task_part_1_title_2_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:textSize="15sp"
+        android:textColor="@color/colorBlack"
+        android:text="执行人: 我是谁" />
+
+    <Chronometer
+        android:id="@+id/tech_task_part_1_title_4_text_view"
+        android:layout_below="@id/tech_task_part_1_title_3_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/bg_timer_gray"
+        android:textSize="15sp"
+        android:textColor="@color/colorTextHint"
+        android:textAlignment="center"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/description_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pic_done"
+        android:visibility="gone"/>
+
+</RelativeLayout>

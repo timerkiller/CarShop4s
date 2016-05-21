@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.BaseTaskActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.BaseTaskActivity"
+    android:background="@color/colorLightGray">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tech_task_tool_bar"
@@ -37,37 +39,125 @@
         android:id="@+id/tech_task_part_1_relative_layout"
         android:layout_below="@id/tech_task_tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLightGray">
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGray"
+        android:padding="10dp">
+
+        <!--<TextView-->
+            <!--android:id="@+id/tech_task_part_1_title_1_text_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="订单号: WB201605191423449"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tech_task_part_1_title_2_text_view"-->
+            <!--android:layout_below="@id/tech_task_part_1_title_1_text_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="工位任务: 保养"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tech_task_part_1_title_3_text_view"-->
+            <!--android:layout_below="@id/tech_task_part_1_title_2_text_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="工位号: 洗车" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tech_task_part_1_title_4_text_view"-->
+            <!--android:layout_below="@id/tech_task_part_1_title_3_text_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:text="执行人: 宋仲基 我是谁"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tech_task_part_1_title_5_text_view"-->
+            <!--android:layout_below="@id/tech_task_part_1_title_4_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:background="@drawable/bg_timer_gray"-->
+            <!--android:text="00:07:53"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textColor="@color/colorTextHint"-->
+            <!--android:textAlignment="center"-->
+            <!--android:padding="5dp"/>-->
+
+        <!--<ImageView-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:contentDescription="@string/description_null"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/pic_done"/>-->
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/tech_cut_off_line_1"
+        android:contentDescription="@string/description_null"
+        android:layout_below="@id/tech_task_part_1_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_height="2dp"
+        android:src="@color/colorCutLine" />
 
     <RelativeLayout
         android:id="@+id/tech_task_part_2_relative_layout"
-        android:layout_below="@id/tech_task_tool_bar"
+        android:layout_below="@id/tech_cut_off_line_1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLightGray">
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGray"
+        android:padding="10dp">
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/tech_cut_off_line_2"
+        android:contentDescription="@string/description_null"
+        android:layout_below="@id/tech_task_part_2_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_height="2dp"
+        android:src="@color/colorCutLine" />
 
     <RelativeLayout
         android:id="@+id/tech_task_part_3_relative_layout"
-        android:layout_below="@id/tech_task_tool_bar"
+        android:layout_below="@id/tech_cut_off_line_2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLightGray">
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGray"
+        android:padding="10dp">
 
     </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/tech_cut_off_line_3"
+        android:contentDescription="@string/description_null"
+        android:layout_below="@id/tech_task_part_3_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_height="2dp"
+        android:src="@color/colorCutLine" />
 
     <RelativeLayout
         android:id="@+id/tech_task_part_4_relative_layout"
-        android:layout_below="@id/tech_task_tool_bar"
+        android:layout_below="@id/tech_cut_off_line_3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLightGray">
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGray"
+        android:padding="10dp">
 
     </RelativeLayout>
-
 
 </RelativeLayout>

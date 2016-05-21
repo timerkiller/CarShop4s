@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/tech_task_mix_part2_point1"
+        android:contentDescription="@string/description_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_point"
+        android:paddingTop="5dp"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:layout_toEndOf="@id/tech_task_mix_part2_point1"
+        android:id="@+id/tech_task_mix_part2_component_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tech_task_need_component"
+        android:textColor="@color/colorBlack"
+        android:layout_marginStart="5dp"/>
+
+    <ListView
+        android:layout_below="@id/tech_task_mix_part2_component_title_text_view"
+        android:id="@+id/tech_task_mix_part2_component_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/tech_task_mix_part2_container_relative_layout"
+        android:layout_below="@id/tech_task_mix_part2_component_list_view"
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+        <Button
+            android:layout_marginTop="5dp"
+            android:id="@+id/tech_task_mix_part2_add_component_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/btn_add"
+            android:clickable="false"/>
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/tech_task_mix_part2_add_component_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tech_task_add_component"
+            android:textColor="@color/colorBlack"/>
+    </RelativeLayout>
+</RelativeLayout>

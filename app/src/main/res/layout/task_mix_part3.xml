@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorLightGray">
+
+    <Button
+        android:id="@+id/tech_pre_task_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/btn_load_submit"
+        android:text="上一步"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:layout_below="@id/tech_pre_task_button"
+        android:id="@+id/tech_mix_func_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="暂停"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/btn_stop"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="15dp"/>
+
+    <Button
+        android:layout_below="@id/tech_mix_func_button"
+        android:id="@+id/tech_next_task_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/btn_load_submit"
+        android:text="下一步"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="15dp"/>
+
+</RelativeLayout>

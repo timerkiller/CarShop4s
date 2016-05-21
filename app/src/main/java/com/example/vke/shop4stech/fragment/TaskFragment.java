@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.SignInActivity;
+import com.example.vke.shop4stech.activity.TaskMixExecuteActivity;
 import com.example.vke.shop4stech.adapter.TaskAdapter;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.Prompt;
@@ -108,6 +109,7 @@ public class TaskFragment extends ListFragment
 
     @Override
     public void onResume() {
+        Log.i(mTag,"onResume Enter");
         super.onResume();
         mGetTaskHandler = new Handler(){
             @Override
@@ -183,12 +185,36 @@ public class TaskFragment extends ListFragment
                 }
             }
         };
+
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.i(mTag,">>>>>>>>>on list item click");
         super.onListItemClick(l, v, position, id);
+        TextView indexTextView = (TextView)v.findViewById(R.id.tech_index);
+        TextView orderSerialNumTextView = (TextView)v.findViewById(R.id.tech_order_serial_num_text_view);
+        TextView currentStateTextView = (TextView)v.findViewById(R.id.tech_task_state_text_view);
+        if(indexTextView == null || orderSerialNumTextView == null || currentStateTextView == null){
+            Log.w(mTag,"Head list click or footer item clicked");
+            return;
+        }
+
+        switch (currentStateTextView.getText().toString()){
+            case "暂停":
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_PAUSE,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                break;
+            case "未开始":
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_UNSTART,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                break;
+            case "执行中":
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_EXECUTING,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                break;
+            case "待评价":
+            case "完成":
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_DONE,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                break;
+        }
     }
 
     private void onLoadFinish(boolean updateTime) {
@@ -297,6 +323,19 @@ public class TaskFragment extends ListFragment
         PreferencesHelper.signOut(getActivity());
         SignInActivity.startWithNoAnimate(getActivity());
         ActivityCompat.finishAfterTransition(getActivity());
+    }
+
+
+    @Override
+    public void onStart() {
+        Log.i(mTag,"onStart enter");
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        Log.i(mTag,"onStop enter");
+        super.onStop();
     }
 
     //更新数据

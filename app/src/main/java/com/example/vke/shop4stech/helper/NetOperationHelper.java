@@ -114,11 +114,7 @@ public class NetOperationHelper {
                 return respDataMap;
             }
             else if(result.equals("error")){
-                JSONArray errorList = respData.getJSONArray("errors");
-                String erroInfo = errorList.getJSONObject(0).getString("desc");
-                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put(KEY_ERROR,erroInfo);
-                return respDataMap;
+                return parseErrorInfo(respData);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -129,14 +125,131 @@ public class NetOperationHelper {
 
 
 
-    public static void forgetPassword(HashMap<String,Object> map){
-        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
+    public static HashMap<String,Object> getOrderDetail(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_ORDER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if(respData == null){
-            Log.e(mTag,"modify password failed");
+            Log.e(mTag,"getOrderDetail failed");
+            return null;
         }
+
+        try{
+            String result = respData.getString("ok");
+            if(result.equals("ok")){
+                return  null;
+            }else if( result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+            else {
+                throw new UnsupportedOperationException("get unknow result from server");
+            }
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
+
+        return null;
     }
 
+    public static HashMap<String,Object> nextTask(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_NEXT,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"nextTask failed");
+            return null;
+        }
+
+        try{
+            String result = respData.getString("ok");
+            if(result.equals("ok")){
+                return  null;
+            }else if( result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+            else {
+                throw new UnsupportedOperationException("get unknow result from server");
+            }
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
+
+        return null;
+    }
+
+    public static HashMap<String,Object> preTask(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_PRE,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"preTask failed");
+            return null;
+        }
+
+        try{
+            String result = respData.getString("ok");
+            if(result.equals("ok")){
+                return  null;
+            }else if( result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+            else {
+                throw new UnsupportedOperationException("get unknow result from server");
+            }
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
+
+        return null;
+    }
+
+
+    public static HashMap<String,Object> pauseTask(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_PAUSE,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"pauseTask failed");
+            return null;
+        }
+
+        try{
+            String result = respData.getString("ok");
+            if(result.equals("ok")){
+                return  null;
+            }else if( result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+            else {
+                throw new UnsupportedOperationException("get unknow result from server");
+            }
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
+
+        return null;
+    }
+
+    public static HashMap<String,Object> resumeTask(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_RESUME,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"resumeTask failed");
+            return null;
+        }
+
+        try{
+            String result = respData.getString("ok");
+            if(result.equals("ok")){
+                return  null;
+            }else if( result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+            else {
+                throw new UnsupportedOperationException("get unknow result from server");
+            }
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
+
+        return null;
+    }
 
     public static boolean checkAccessTokenInvalid(String accessToken){
         HashMap<String,Object> map = new HashMap<String,Object>();
@@ -207,17 +320,26 @@ public class NetOperationHelper {
                 return dataMap;
             }
             else if(result.equals("error")){
-                //这里还需要解析错误的信息
-                JSONArray errorList = respData.getJSONArray("errors");
-                String erroInfo = errorList.getJSONObject(0).getString("desc");
-                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put(KEY_ERROR,erroInfo);
-                return respDataMap;
+                return parseErrorInfo(respData);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    private static HashMap<String,Object>  parseErrorInfo(JSONObject object){
+        try{
+            JSONArray errorList = object.getJSONArray("errors");
+            String erroInfo = errorList.getJSONObject(0).getString("desc");
+            HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+            respDataMap.put(KEY_ERROR,erroInfo);
+            Log.i(mTag,"Error get from server:" + erroInfo);
+            return respDataMap;
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
         return null;
     }
 
@@ -252,11 +374,7 @@ public class NetOperationHelper {
             }
             else if(result.equals("error")){
                 //need handle errors operation
-                JSONArray errorList = respData.getJSONArray("errors");
-                String erroInfo = errorList.getJSONObject(0).getString("desc");
-                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
-                respDataMap.put(KEY_ERROR,erroInfo);
-                return respDataMap;
+                return parseErrorInfo(respData);
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/tech_task_part3_component_point1"
+        android:contentDescription="@string/description_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_point"
+        android:paddingTop="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:layout_toEndOf="@id/tech_task_part3_component_point1"
+        android:id="@+id/task_part3_component_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="消耗零件"
+        android:textColor="@color/colorText"
+        android:layout_margin="5dp"
+        android:textSize="15sp"/>
+
+    <ListView
+        android:id="@+id/task_part3_component_list_view"
+        android:layout_below="@id/task_part3_component_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:background="@color/colorLightBlue">
+
+    </ListView>
+
+</RelativeLayout>

@@ -8,8 +8,8 @@
     <uses-permission android:name="android.permission.SEND_RESPOND_VIA_MESSAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:name=".MyApplication"
@@ -50,7 +50,7 @@
                     android:scheme="example" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".activity.BaseTaskActivity" />-->
+        <!-- <activity android:name=".activity.BaseTaskActivity" /> -->
         <!--
      ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -62,11 +62,11 @@
         <activity
             android:name=".activity.ForgetPasswordActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme"  />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.AboutUsActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.HomeActivity" />
@@ -83,8 +83,12 @@
             android:name=".activity.RegisterStep03Activity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.GetSmsCodeActivity"
+        <activity
+            android:name=".activity.GetSmsCodeActivity"
             android:launchMode="singleInstance"
+            android:theme="@style/AppTheme" />
+
+        <activity android:name=".activity.TaskMixExecuteActivity"
             android:theme="@style/AppTheme" />
     </application>
 
