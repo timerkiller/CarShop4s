@@ -99,6 +99,8 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         super.onCreate(savedInstanceState);
         mMessageAdapter = new MessageAdapter(getActivity(),mTotalMessageList);
         setListAdapter(mMessageAdapter);
+        initHandler();
+
     }
 
     @Override
@@ -128,18 +130,31 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     * get messages from server
     * */
     private void getMessage(int operationType,int pageId){
+        if(mUserMessageHandler == null){
+            Log.e(mTag,"mGetTaskHandler no init yet");
+            return;
+        }
+
         if(!NetOperationHelper.isNetworkConnected(getActivity())){
             mUserMessageHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
             return;
         }
 
-        String accessToken = getValidAccessToken();
-        if (accessToken == null){
+        String accessToken = NetOperationHelper.getValidAccessToken(getActivity());
+        if (accessToken == null){//服务器不可用
+            Log.w(mTag,"Net server  unavailable");
+            Message msg = mUserMessageHandler.obtainMessage();
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            msg.what = MessageType.TYPE_SERVER_NOT_AVAILABLE;
+            mUserMessageHandler.sendMessage(msg);
+            return ;
+        }
+        else if(accessToken.equals("failed")){
             Message msg = mUserMessageHandler.obtainMessage();
             msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
             msg.what = MessageType.TYPE_ACCESS_TOKEN_INVALID;
-            mUserMessageHandler.sendMessage(msg);;
-            return ;
+            mUserMessageHandler.sendMessage(msg);
+            return;
         }
 
         HashMap<String,Object> map = new HashMap<String,Object>();
@@ -147,7 +162,6 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         map.put(RequestDataKey.INFO, "list");
         map.put(RequestDataKey.PAGE, Integer.toString(pageId));
         map.put(RequestDataKey.PER_PAGE, Integer.toString(PER_PAGE));
-
 
         //从服务器获取任务数据
         HashMap<String,Object> dataMap = NetOperationHelper.getUserMessage(map);
@@ -195,6 +209,12 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        if(mUserMessageHandler == null){
+            initHandler();
+        }
+    }
+
+    private  void initHandler(){
         mUserMessageHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -240,6 +260,10 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
                         }
 
                         break;
+                    case MessageType.TYPE_SERVER_NOT_AVAILABLE:
+                        Toast.makeText(getActivity().getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
+                        onLoadFinish(false);
+                        break;
                     case MessageType.TYPE_ACCESS_TOKEN_INVALID:
                         String tip = (String)msg.obj;
                         Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
@@ -270,15 +294,6 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     public void onPause() {
         super.onPause();
         mPageId = 2;
-    }
-
-    //获取有效的accessToken，这里会进行一个网络操作判断
-    private String getValidAccessToken(){
-        String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
-        if(NetOperationHelper.checkAccessTokenInvalid(accessToken)){
-            return accessToken;
-        }
-        return null;
     }
 
     private void mergeToTotalList(List<UserMessage> messageList){

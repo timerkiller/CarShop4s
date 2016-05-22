@@ -72,6 +72,8 @@ public class TaskFragment extends ListFragment
         super.onCreate(savedInstanceState);
         mTaskAdapter = new TaskAdapter(getActivity(),mTotalTaskList);
         setListAdapter(mTaskAdapter);
+        initHandler();
+
     }
 
     @Override
@@ -90,6 +92,11 @@ public class TaskFragment extends ListFragment
             xListView.setPullRefreshEnable(true);
         }
         mIsUpdateOngoing = true;
+        if(mGetTaskHandler == null){
+            initHandler();
+
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -111,6 +118,12 @@ public class TaskFragment extends ListFragment
     public void onResume() {
         Log.i(mTag,"onResume Enter");
         super.onResume();
+        if(mGetTaskHandler == null){
+            initHandler();
+        }
+    }
+
+    private void initHandler(){
         mGetTaskHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -157,6 +170,10 @@ public class TaskFragment extends ListFragment
                             }
 
                             break;
+                        case MessageType.TYPE_SERVER_NOT_AVAILABLE:
+                            Toast.makeText(getActivity().getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
                         case MessageType.TYPE_ACCESS_TOKEN_INVALID:
                             String tip = (String)msg.obj;
                             Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
@@ -185,7 +202,6 @@ public class TaskFragment extends ListFragment
                 }
             }
         };
-
     }
 
     @Override
@@ -232,18 +248,32 @@ public class TaskFragment extends ListFragment
     }
 
     void getTask(int type,int pageId){
+        if(mGetTaskHandler == null){
+            Log.e(mTag,"mGetTaskHandler no init yet");
+            return;
+        }
+
         if(!NetOperationHelper.isNetworkConnected(getActivity())){
             mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
             return;
         }
 
-        String accessToken = getValidAccessToken();
+
+        String accessToken = NetOperationHelper.getValidAccessToken(getActivity());
         if (accessToken == null){
+            Log.i(mTag,"net work unAvailable");
+            Message msg = mGetTaskHandler.obtainMessage();
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            msg.what = MessageType.TYPE_SERVER_NOT_AVAILABLE;
+            mGetTaskHandler.sendMessage(msg);
+            return ;
+        }
+        else if(accessToken.equals("failed")){
             Message msg = mGetTaskHandler.obtainMessage();
             msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
             msg.what = MessageType.TYPE_ACCESS_TOKEN_INVALID;
-            mGetTaskHandler.sendMessage(msg);;
-            return ;
+            mGetTaskHandler.sendMessage(msg);
+            return;
         }
 
         HashMap<String,Object> map = new HashMap<String,Object>();
@@ -295,16 +325,6 @@ public class TaskFragment extends ListFragment
             Log.w(mTag,e.toString());
         }
     }
-
-    //获取有效的accessToken，这里会进行一个网络操作判断
-    private String getValidAccessToken(){
-        String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
-        if(NetOperationHelper.checkAccessTokenInvalid(accessToken)){
-            return accessToken;
-        }
-        return null;
-    }
-
 
     private void mergeTasksToTotalList(List<Task> tasksList){
 

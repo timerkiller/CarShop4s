@@ -21,5 +21,6 @@ public class MessageType {
     public static final int TYPE_GET_SMS_FAILED = 0x1015;
     public static final int TYPE_MODIFY_SUCCESS = 0x1016;
     public static final int TYPE_MODIFY_FAILED = 0x1017;
+    public static final int TYPE_SERVER_NOT_AVAILABLE = 0x1018;
 
 }

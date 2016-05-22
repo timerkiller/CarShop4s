@@ -106,23 +106,32 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        if(mUpdatePersonalInfoHandler == null){
+            initHandler();
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 try {
                     if (!NetOperationHelper.isNetworkConnected(getActivity())) {
                         mUpdatePersonalInfoHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
                         return;
                     }
 
-                    String accessToken = getValidAccessToken();
-                    if (accessToken == null) {
+                    String accessToken = NetOperationHelper.getValidAccessToken(getActivity());
+                    if (accessToken == null){
+                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                        msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+                        msg.what = MessageType.TYPE_SERVER_NOT_AVAILABLE;
+                        mUpdatePersonalInfoHandler.sendMessage(msg);
+                        return ;
+                    }
+                    else if(accessToken.equals("failed")){
                         Message msg = mUpdatePersonalInfoHandler.obtainMessage();
                         msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
                         msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
                         mUpdatePersonalInfoHandler.sendMessage(msg);
-                        ;
+                        return;
                     }
 
                     HashMap<String, Object> map = new HashMap<String, Object>();
@@ -156,6 +165,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         Log.i(mTag,"onResume");
         super.onResume();
+        if(mUpdatePersonalInfoHandler == null){
+            initHandler();
+        }
+    }
+
+    private void initHandler(){
         mUpdatePersonalInfoHandler= new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -163,6 +178,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                     case MessageType.TYPE_GET_PERSONAL_INFO_OK:
                         PersonalInfo personalInfo =(PersonalInfo) msg.obj;
                         updateContentView(personalInfo);
+                        break;
+                    case MessageType.TYPE_SERVER_NOT_AVAILABLE:
+                        Toast.makeText(getActivity().getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                         break;
                     case MessageType.TYPE_GET_PERSONAL_INFO_ERROR:
                         String tip = (String)msg.obj;
@@ -182,16 +200,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
                 }
             }
         };
-    }
-
-    //获取有效的accessToken，这里会进行一个网络操作判断
-    private String getValidAccessToken(){
-        String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
-        if(NetOperationHelper.checkAccessTokenInvalid(accessToken)){
-            return accessToken;
-        }
-
-        return null;
     }
 
     private void updateContentView(PersonalInfo personalInfo){

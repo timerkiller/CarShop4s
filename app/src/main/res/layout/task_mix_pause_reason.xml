@@ -14,9 +14,9 @@
     <TextView
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_point1"
         android:id="@+id/tech_task_mix_pause_reason_title_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="暂停原因:  出去尿个尿"
+        android:text="暂停原因:"
         android:textColor="@color/colorBlack"
         android:layout_marginStart="5dp"
         android:textSize="15sp"/>
@@ -27,26 +27,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="出去尿个尿"
+        android:textColor="@color/colorBlack"
         android:layout_marginStart="5dp" />
 
     <TextView
         android:layout_below="@id/tech_task_mix_pause_reason_title_text_view"
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_point1"
         android:id="@+id/tech_task_mix_pause_reason_time_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="预计耽误时间:  2小时"
+        android:text="预计耽误时间:"
         android:textColor="@color/colorBlack"
         android:layout_marginTop="10dp"
         android:layout_marginStart="5dp"
         android:textSize="15sp"/>
 
     <TextView
+        android:layout_below="@id/tech_task_mix_pause_reason_title_text_view"
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_time_text_view"
         android:id="@+id/tech_task_mix_pause_reason_time_content_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="出去尿个尿"
+        android:layout_marginTop="10dp"
+        android:text="2小时"
+        android:textColor="@color/colorBlack"
         android:layout_marginStart="5dp" />
 
 </RelativeLayout>

@@ -71,6 +71,7 @@
         android:padding="5dp" />
 
     <ImageView
+        android:id="@+id/tech_task_part1_done_image_view"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/description_null"
         android:layout_width="wrap_content"

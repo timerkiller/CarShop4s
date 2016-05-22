@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView;
@@ -251,28 +252,47 @@ public class NetOperationHelper {
         return null;
     }
 
-    public static boolean checkAccessTokenInvalid(String accessToken){
+    /*
+    * 获取有效的accessToken
+    * @Param 1.activity
+    * @return 1.成功:"ok" 2.失败:"failed"  3.服务器未开: null
+    */
+    public static String getValidAccessToken(Activity activity){
+        String accessToken = PreferencesHelper.getPreferenceAccessToken(activity);
+        String result = checkAccessTokenInvalid(accessToken);
+        if(result != null){
+            if(result.equals("ok")) {
+                return accessToken;
+            }
+            else {
+                return "failed";
+            }
+        }
+
+        return null;
+    }
+
+    public static String checkAccessTokenInvalid(String accessToken){
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
         map.put(RequestDataKey.LOGIN_MODE, "userInfo");
 
-
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if(respData == null){
-            return false;
+            return null;
         }
 
         try {
             String result = respData.getString("result");
             if (result.equals("ok")) {
-                return true;
+                return "ok";
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return "failed";
     }
 
     /**

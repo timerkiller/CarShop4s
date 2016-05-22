@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.helper.NetOperationHelper;
+import com.example.vke.shop4stech.helper.PreferencesHelper;
 
 import java.util.zip.Inflater;
 
@@ -25,14 +27,29 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
     private ImageView  mCutLine3;
 
     private Button mBackButton;
+    protected String mAccessToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_task);
         Toolbar toolbar = (Toolbar)this.findViewById(R.id.tech_task_tool_bar);
         this.setSupportActionBar(toolbar);
-
         initBaseContentView();
+    }
+
+    private String getValidAccessToken(){
+        String accessToken = PreferencesHelper.getPreferenceAccessToken(this);
+        String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
+        if(result != null){
+            if(result.equals("ok")) {
+                return accessToken;
+            }
+            else {
+                return "failed";
+            }
+        }
+
+        return null;
     }
 
     private void initBaseContentView(){
@@ -52,7 +69,6 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
     }
 
     protected void initContentView(int layoutResID[]){
-
         for(int i = 0; i< layoutResID.length; i++){
             if(layoutResID[i] != -1){
                 Log.i(mTag,"init view:" + i +"resId:" + layoutResID[i]);
@@ -64,8 +80,6 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
                 mTaskPartRelativeLayout[i].setVisibility(View.GONE);
             }
         }
-
     }
-
     public abstract void onBackEvent();
 }
