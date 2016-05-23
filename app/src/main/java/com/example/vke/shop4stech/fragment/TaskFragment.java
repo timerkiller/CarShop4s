@@ -122,6 +122,14 @@ public class TaskFragment extends ListFragment
         if(mGetTaskHandler == null){
             initHandler();
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                getTask(OPERATION_TYPE.TYPE_UPDATE,FIRST_PAGE);
+            }
+        }).start();
     }
 
     private void initHandler(){
@@ -218,19 +226,20 @@ public class TaskFragment extends ListFragment
             return;
         }
 
+        String orderSerialNum = orderSerialNumTextView.getText().toString().split(" ")[1];
         switch (currentStateTextView.getText().toString()){
             case "暂停":
-                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_PAUSE,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_PAUSE,indexTextView.getText().toString(),orderSerialNum);
                 break;
             case "未开始":
-                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_UNSTART,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_UNSTART,indexTextView.getText().toString(),orderSerialNum);
                 break;
             case "执行中":
-                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_EXECUTING,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_EXECUTING,indexTextView.getText().toString(),orderSerialNum);
                 break;
             case "待评价":
             case "完成":
-                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_DONE,indexTextView.getText().toString(),orderSerialNumTextView.getText().toString());
+                TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_DONE,indexTextView.getText().toString(),orderSerialNum);
                 break;
         }
     }

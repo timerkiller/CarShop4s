@@ -1,6 +1,7 @@
 package com.example.vke.shop4stech.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,10 +56,21 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 break;
             case R.id.tech_mix_func_button:
                 if(mActivityType == ActivityType.TYPE_PAUSE){
-                    resumeTask();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            resumeTask();
+                        }
+                    }).start();
                 }
                 else if(mActivityType == ActivityType.TYPE_EXECUTING){
-                    pauseTask("有点事情","213123");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pauseTask("有点事情","213123");
+                        }
+                    }).start();
+
                 }
                 else{
                     Log.e(mTag,"onClick tech_task_part4_operation_button --> unsupported click");
@@ -200,7 +212,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 public void handleMessage(Message msg) {
                     switch (msg.what){
                         case MessageType.TYPE_GET_TASK_DETAIL_SUCCESS:
-
                             updateViewData((OrderDetailModel)msg.obj);
                             break;
                         case MessageType.TYPE_PAUSE_TASK_SUCCESS:
@@ -226,7 +237,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         case MessageType.TYPE_GET_TASK_DETAIL_FAILED:
                             Toast.makeText(getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                             break;
-
                     }
 
                 }
@@ -250,7 +260,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
 
                 mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
-                mMixExecuteWidgets.mPauseReason.setText(orderDetailModel.getmCurrentStepTitle());
+                mMixExecuteWidgets.mPauseReason.setText(orderDetailModel.getmPauseTitle());
                 mMixExecuteWidgets.mPauseTime.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmPauseTime()*1000);
                 break;
             case ActivityType.TYPE_DONE:
@@ -357,7 +367,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     private void initPauseView(){
         if(mMixExecuteWidgets !=null){
             initTaskMixCommonView(mMixExecuteWidgets);
-            mMixExecuteWidgets.mTimeBox.setBase(30000);
+            mMixExecuteWidgets.mButtonMixFunction.setText("恢复");
 
             //part_pause_reason
             mMixExecuteWidgets.mPauseReason = (TextView)this.findViewById(R.id.tech_task_mix_pause_reason_content_text_view);
@@ -511,6 +521,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
+        map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
         map.put(RequestDataKey.CURRENT_STEP,mCurrentStep);
         map.put(RequestDataKey.TITLE,pauseReason);
         map.put(RequestDataKey.ESTIMATED_TIME,pauseTime);
@@ -539,6 +550,31 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     }
 
     private void resumeTask(){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
+        map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
+        map.put(RequestDataKey.CURRENT_STEP,mCurrentStep);
+
+        HashMap<String,Object> respMap = NetOperationHelper.resumeTask(map);
+        Message msg = mHandler.obtainMessage();
+        if(respMap!=null){
+            String result = (String)respMap.get(NetOperationHelper.KEY_RESULT);
+            if (result != null){
+                mHandler.sendEmptyMessage(MessageType.TYPE_RESUME_TASK_SUCCESS);
+            }
+            else {
+                String errorInfo = (String)respMap.get(NetOperationHelper.KEY_ERROR);
+
+                msg.what = MessageType.TYPE_RESUME_TASK_FAILED;
+                msg.obj = errorInfo;
+                mHandler.sendMessage(msg);
+            }
+        }
+        else{
+            msg.what = MessageType.TYPE_RESUME_TASK_FAILED;
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            mHandler.sendMessage(msg);
+        }
 
     }
 

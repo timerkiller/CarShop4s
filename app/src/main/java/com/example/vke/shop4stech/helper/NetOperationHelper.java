@@ -172,6 +172,7 @@ public class NetOperationHelper {
                         orderDetail.setmPauseTitle(respData.getString("pauseTitle"));
                         orderDetail.setmPauseTime(Integer.parseInt(respData.getString("estimatedTime")));
                         break;
+
                     case "待评价":
                     case "完成":
                         List<String> stepCompleteList = new ArrayList<>();
@@ -282,7 +283,7 @@ public class NetOperationHelper {
         }
 
         try{
-            String result = respData.getString("ok");
+            String result = respData.getString("result");
             if(result.equals("ok")){
                 HashMap<String,Object> respDataMap = new HashMap<>();
                 respDataMap.put(KEY_RESULT,"ok");
@@ -309,9 +310,11 @@ public class NetOperationHelper {
         }
 
         try{
-            String result = respData.getString("ok");
+            String result = respData.getString("result");
             if(result.equals("ok")){
-                return  null;
+                HashMap<String,Object> respDataMap = new HashMap<>();
+                respDataMap.put(KEY_RESULT,"ok");
+                return  respDataMap;
             }else if( result.equals("error")){
                 return parseErrorInfo(respData);
             }
