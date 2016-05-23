@@ -42,7 +42,7 @@
         android:layout_marginStart="5dp"
         android:textSize="15sp"/>
 
-    <TextView
+    <Chronometer
         android:layout_below="@id/tech_task_mix_pause_reason_title_text_view"
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_time_text_view"
         android:id="@+id/tech_task_mix_pause_reason_time_content_text_view"

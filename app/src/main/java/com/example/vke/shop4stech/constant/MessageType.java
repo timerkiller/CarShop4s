@@ -22,5 +22,16 @@ public class MessageType {
     public static final int TYPE_MODIFY_SUCCESS = 0x1016;
     public static final int TYPE_MODIFY_FAILED = 0x1017;
     public static final int TYPE_SERVER_NOT_AVAILABLE = 0x1018;
-
+    public static final int TYPE_PAUSE_TASK_SUCCESS = 0x1019;
+    public static final int TYPE_PAUSE_TASK_FAILED = 0x101A;
+    public static final int TYPE_RESUME_TASK_SUCCESS = 0x101B;
+    public static final int TYPE_RESUME_TASK_FAILED = 0x101C;
+    public static final int TYPE_NEXT_TASK_SUCCESS = 0x101D;
+    public static final int TYPE_NEXT_TASK_FAILED = 0x101E;
+    public static final int TYPE_PRE_TASK_SUCCESS = 0x101F;
+    public static final int TYPE_PRE_TASK_FAILED = 0x1020;
+    public static final int TYPE_START_TASK_SUCCESS = 0x1021;
+    public static final int TYPE_START_TASK_FAILED = 0x1022;
+    public static final int TYPE_GET_TASK_DETAIL_SUCCESS = 0x1023;
+    public static final int TYPE_GET_TASK_DETAIL_FAILED = 0x1024;
 }

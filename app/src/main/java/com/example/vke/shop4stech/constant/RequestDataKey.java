@@ -22,6 +22,10 @@ public class RequestDataKey {
     public static final String CHECK = "check";
     public static final String NEW_PASSWORD = "newPassword";
     public static final String SMS_TOKEN = "SMSToken";
-
+    public static final String CURRENT_STEP = "currentStep";
+    public static final String TITLE = "title";
+    public static final String ESTIMATED_TIME = "estimatedTime";
+    public static final String COMPONENT_LIST = "componentList";
+    public static final String INDEX = "index";
 
 }

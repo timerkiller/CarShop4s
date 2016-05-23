@@ -78,9 +78,9 @@ public class HttpJsonHelper {
         String returnLine = "";
         try {
 
-            System.out.println("**************开始http通讯**************");
-            System.out.println("**************调用的接口地址为**************" + adress_Http);
-            System.out.println("**************请求发送的数据为**************" + strJson);
+            Log.i(mTag,"**************开始http通讯**************");
+            Log.i(mTag,"**************调用的接口地址为**************" + adress_Http);
+            Log.i(mTag,"**************请求发送的数据为**************" + strJson);
             URL my_url = new URL(adress_Http);
             HttpURLConnection connection = (HttpURLConnection) my_url.openConnection();
             connection.setDoOutput(true);
@@ -111,21 +111,21 @@ public class HttpJsonHelper {
 
             String line = "";
 
-            System.out.println("Contents of post request start");
+            Log.i(mTag,"Contents of post request start");
 
             while ((line = reader.readLine()) != null) {
                 // line = new String(line.getBytes(), "utf-8");
                 returnLine += line;
 
-                System.out.println(line);
+                Log.i(mTag,line);
 
             }
 
-            System.out.println("Contents of post request ends");
+            Log.i(mTag,"Contents of post request ends");
 
             reader.close();
             connection.disconnect();
-            System.out.println("========返回的结果的为========" + returnLine);
+            Log.i(mTag,"========返回的结果的为========" + returnLine);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,59 +133,6 @@ public class HttpJsonHelper {
 
         return returnLine;
     }
-//
-//    public JSONObject httpPostJsonData()
-//    {
-//        httpCilent = HttpClients.createDefault();
-//        try
-//        {
-//            HttpPost httpPost = new HttpPost(mUrl);
-//
-//            httpPost.addHeader("Content-Type", "application/json");
-//            //httpPost.setHeader("Content-Type", "application/json");
-//            //   httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-//            JSONObject data = new JSONObject();
-//            try
-//            {
-//                Iterator<?> iter = mDataMap.entrySet().iterator();
-//                while (iter.hasNext()) {
-//                    @SuppressWarnings("rawtypes")
-//                    Map.Entry entry = (Map.Entry) iter.next();
-//                    Object key = entry.getKey();
-//                    Object val = entry.getValue();
-//                    data.put((String) key, val);
-//                    //	Log.i(mTag, data.toString());
-//                }
-//            } catch (JSONException e) {
-//                    Log.e(mTag, e.toString());
-//            }
-//
-//            Log.i(mTag,mUrl+data.toString());
-//
-//            httpPost.setEntity(new StringEntity(data.toString(),"UTF-8"));
-//            response = httpCilent.execute(httpPost);
-//            Log.i(mTag, response.getStatusLine().getStatusCode()+"");
-//
-//            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-//            {
-//                entity = response.getEntity();
-//                StringBuffer sb = new StringBuffer();
-//
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-//                String s = null;
-//                while((s = reader.readLine()) != null){
-//                    sb.append(s);
-//                }
-//
-//                retObj = new JSONObject(sb.toString());
-//                return retObj;
-//            }
-//        } catch (Exception e) {
-//                Log.e(mTag, e.toString());
-//        }
-//
-//        return null;
-//    }
 
     public void httpGetJsonData(){
 

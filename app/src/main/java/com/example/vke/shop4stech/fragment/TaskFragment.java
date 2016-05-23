@@ -53,6 +53,7 @@ public class TaskFragment extends ListFragment
     private Handler mGetTaskHandler ;
     private boolean mIsUpdateOngoing = false;
 
+
     class OPERATION_TYPE{
         public static final int TYPE_UPDATE = 0x100;
         public static final int TYPE_LOAD_MORE = 0x101;
@@ -208,6 +209,7 @@ public class TaskFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.i(mTag,">>>>>>>>>on list item click");
         super.onListItemClick(l, v, position, id);
+        l.setClickable(false);
         TextView indexTextView = (TextView)v.findViewById(R.id.tech_index);
         TextView orderSerialNumTextView = (TextView)v.findViewById(R.id.tech_order_serial_num_text_view);
         TextView currentStateTextView = (TextView)v.findViewById(R.id.tech_task_state_text_view);

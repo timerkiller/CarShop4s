@@ -35,22 +35,32 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
         Toolbar toolbar = (Toolbar)this.findViewById(R.id.tech_task_tool_bar);
         this.setSupportActionBar(toolbar);
         initBaseContentView();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mAccessToken = PreferencesHelper.getPreferenceAccessToken(BaseTaskActivity.this);
+                if(mAccessToken == null){
+                    Log.e(mTag,"get AccessToken error");
+                }
+            }
+        }).start();
     }
 
-    private String getValidAccessToken(){
-        String accessToken = PreferencesHelper.getPreferenceAccessToken(this);
-        String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
-        if(result != null){
-            if(result.equals("ok")) {
-                return accessToken;
-            }
-            else {
-                return "failed";
-            }
-        }
-
-        return null;
-    }
+//    private String getValidAccessToken(){
+//        String accessToken = PreferencesHelper.getPreferenceAccessToken(this);
+//        String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
+//        if(result != null){
+//            if(result.equals("ok")) {
+//                return accessToken;
+//            }
+//            else {
+//                return "failed";
+//            }
+//        }
+//
+//        return null;
+//    }
 
     private void initBaseContentView(){
         mBackButton = (Button)findViewById(R.id.tech_task_step_back_button);
