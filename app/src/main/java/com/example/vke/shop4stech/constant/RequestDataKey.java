@@ -28,5 +28,6 @@ public class RequestDataKey {
     public static final String COMPONENT_LIST = "componentList";
     public static final String INDEX = "index";
     public static final String SERIAL_NUM = "serialNum";
+    public static final String SUB_STATE = "subState";
 
 }

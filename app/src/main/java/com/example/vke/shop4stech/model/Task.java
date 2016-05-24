@@ -1,11 +1,14 @@
 package com.example.vke.shop4stech.model;
 
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.ImageView;
 
 /**
  * Created by vke on 2016/5/14.
  */
-public class Task {
+public class Task implements Parcelable{
     private String mIndex;//索引，由服务器提供
     private String mOrderType;
     private String mOrderDate;
@@ -14,10 +17,33 @@ public class Task {
     private String mCurrentExecutingMan;
     private String mOrderState;
     private String mCurrentStep;
-    private ImageView mStateImageView;//当前状态显示图片
+
+    public static final Parcelable.Creator<Task> CREATOR = new Task.Creator<Task>(){
+
+        @Override
+        public Task createFromParcel(Parcel source) {
+            return new Task(source);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
 
     public Task(){
 
+    }
+
+    public Task(Parcel parcel){
+        mIndex = parcel.readString();
+        mOrderType = parcel.readString();
+        mOrderDate = parcel.readString();
+        mOrderSerialNum = parcel.readString();
+        mTaskContent = parcel.readString();
+        mCurrentExecutingMan = parcel.readString();
+        mOrderState = parcel.readString();
+        mCurrentStep = parcel.readString();
     }
 
     public Task(String index,
@@ -27,8 +53,7 @@ public class Task {
                 String taskContent,
                 String currentExecutingMan,
                 String orderState,
-                String currentStep,
-                ImageView stateImageView){
+                String currentStep){
         mIndex = index;
         mOrderType = orderType;
         mOrderDate = orderDate;
@@ -37,12 +62,8 @@ public class Task {
         mCurrentExecutingMan = currentExecutingMan;
         mOrderState = orderState;
         mCurrentStep = currentStep;
-        mStateImageView = stateImageView;
     }
 
-    public ImageView getmStateImageView() {
-        return mStateImageView;
-    }
 
     public String getCurrentExecutingMan() {
         return "当前执行人: "+mCurrentExecutingMan;
@@ -104,15 +125,28 @@ public class Task {
         mOrderType = orderType;
     }
 
-    public void setStateImageView(ImageView stateImageView) {
-        mStateImageView = stateImageView;
-    }
-
     public void setTaskContent(String taskContent) {
         mTaskContent = taskContent;
     }
 
     public void setCurrentStep(String currentStep) {
         this.mCurrentStep = currentStep;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mIndex);
+        dest.writeString(mOrderType);
+        dest.writeString(mOrderDate);
+        dest.writeString(mOrderSerialNum);
+        dest.writeString(mTaskContent);
+        dest.writeString(mCurrentExecutingMan);
+        dest.writeString(mOrderState);
+        dest.writeString(mCurrentStep);
     }
 }

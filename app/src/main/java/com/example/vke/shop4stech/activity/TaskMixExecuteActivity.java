@@ -2,11 +2,13 @@ package com.example.vke.shop4stech.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.model.OrderDetailModel;
+import com.example.vke.shop4stech.model.Task;
 
 import org.json.JSONArray;
 
@@ -36,23 +39,91 @@ import java.util.List;
 public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnClickListener{
 
     private static final String mTag = "TaskMixExecuteActivity";
-    private static final String KEY_ACTIVITY_TYPE = "TaskMixExecuteActivity.Type";
-    private static final String KEY_INDEX = "TaskMixExecuteActivity.Index";
-    private static final String KEY_ORDER_SERIAL_NUM = "TaskMixExecuteActivity.OrderSerialNum";
+    public static final String KEY_ACTIVITY_TYPE = "TaskMixExecuteActivity.Type";
+    public static final String KEY_INDEX = "TaskMixExecuteActivity.Index";
+    public static final String KEY_ORDER_SERIAL_NUM = "TaskMixExecuteActivity.OrderSerialNum";
     private int mActivityType;
 
     private MixExecuteWidgets mMixExecuteWidgets;
     private MixDoneOrUnStartWidgets mMixDoneOrUnStartWidgets;
 
     private Handler mHandler;
-    private String mIndex,mOrderSerialNum,mCurrentStep;
+    private String mIndex,mOrderSerialNum,mCurrentStep,mOrderType,mOrderState,mExecuteMan,mStepAll;
+    private String mRecordAppCurrentStep;//记录app界面当前执行到第几步，因为有可能是查看已完成的步骤
 
     @Override
     public void onClick(View v) {
+        if(!NetOperationHelper.isNetworkConnected(this)){
+            Toast.makeText(getApplicationContext(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (v.getId()){
             case R.id.tech_pre_task_button:
+                if(mRecordAppCurrentStep.equals("1")){
+                    Toast.makeText(getApplicationContext(),"已经是第一步",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) -1);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getPreTask(mRecordAppCurrentStep);
+                    }
+                }).start();
+
                 break;
             case R.id.tech_next_task_button:
+                if(mOrderState.equals("完成") || mOrderState.equals("待评价")){
+                    if(mRecordAppCurrentStep.equals(mStepAll)){
+                        Toast.makeText(getApplicationContext(),"已经是最后一步",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    else{//
+                        mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) +1);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getNextTask(mRecordAppCurrentStep,"完成");
+                            }
+                        }).start();
+                    }
+                }
+                else {
+                    if(mRecordAppCurrentStep.equals(mCurrentStep)){//等于当前步骤时，则开始下一步
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("确认完成当前步骤吗?");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) +1);//查看下一步
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getNextTask(mCurrentStep,"执行中");
+                                    }
+                                }).start();
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    }
+                    else {
+                        mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) +1);//查看下一步
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getNextTask(mRecordAppCurrentStep,"完成");
+                            }
+                        }).start();
+                    }
+                }
                 break;
             case R.id.tech_mix_func_button:
                 if(mActivityType == ActivityType.TYPE_PAUSE){
@@ -82,7 +153,13 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     reeditTaskComponents();
                 }
                 else if(mActivityType == ActivityType.TYPE_UNSTART){
-                    startTask();
+                    Log.i(mTag,"onClick tech_task_part4_operation_button --> start task");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startTask();
+                        }
+                    }).start();
                 }
                 else{
                     Log.e(mTag,"onClick tech_task_part4_operation_button --> unsupported click");
@@ -213,6 +290,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     switch (msg.what){
                         case MessageType.TYPE_GET_TASK_DETAIL_SUCCESS:
                             updateViewData((OrderDetailModel)msg.obj);
+                            mRecordAppCurrentStep = mCurrentStep;
                             break;
                         case MessageType.TYPE_PAUSE_TASK_SUCCESS:
                             TaskMixExecuteActivity.this.finish();
@@ -222,9 +300,53 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             TaskMixExecuteActivity.this.finish();
                             TaskMixExecuteActivity.start(TaskMixExecuteActivity.this,ActivityType.TYPE_EXECUTING,mIndex,mOrderSerialNum);
                             break;
+                        case MessageType.TYPE_START_TASK_SUCCESS:
+                            TaskMixExecuteActivity.this.finish();
+                            TaskMixExecuteActivity.start(TaskMixExecuteActivity.this,ActivityType.TYPE_EXECUTING,mIndex,mOrderSerialNum);
+                            break;
                         case MessageType.TYPE_NEXT_TASK_SUCCESS:
+                            OrderDetailModel model = (OrderDetailModel)msg.obj;
+                            mCurrentStep = model.getmCurrentStep();
+                            if(model.getmOrderState().equals("待评价")|| model.getmOrderState().equals("完成")){
+                                TaskMixExecuteActivity.this.finish();
+                                TaskMixExecuteActivity.start(TaskMixExecuteActivity.this,ActivityType.TYPE_DONE,mIndex,mOrderSerialNum);
+                                break;
+                            }
+                            updateViewData(model);
+                            //当查看步骤回归到与当前步骤一致时，重新设置button可按和界面重新显示
+                            if(mActivityType == ActivityType.TYPE_EXECUTING ){
+                                if(mRecordAppCurrentStep.equals(mCurrentStep)){
+                                    String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+                                    mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+                                    mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
+                                    mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGreen));
+                                    mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(true);
+                                    mMixExecuteWidgets.mButtonMixFunction.setClickable(true);
+                                }else {
+                                    String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+                                    mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+                                    mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
+                                    mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
+                                    mMixExecuteWidgets.mTimeBox.stop();
+                                    mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
+                                    mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+                                }
+
+                            }
                             break;
                         case MessageType.TYPE_PRE_TASK_SUCCESS:
+                            OrderDetailModel detailModel = (OrderDetailModel)msg.obj;
+                            updateViewData(detailModel);
+                            if(mActivityType == ActivityType.TYPE_EXECUTING){//回到上一步时，不能编辑，不能查看，不能暂停，只允许下一步，和上一步
+                                String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+                                mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
+                                mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
+                                mMixExecuteWidgets.mTimeBox.stop();
+                                mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
+                                mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+                            }
+
                             break;
                         case MessageType.TYPE_ACCESS_TOKEN_INVALID:
                             break;
@@ -246,6 +368,10 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
     private void updateViewData(OrderDetailModel orderDetailModel){
         mCurrentStep = orderDetailModel.getmCurrentStep();
+        mOrderType = orderDetailModel.getmOrderType();
+        mExecuteMan = orderDetailModel.getmPrincipal();
+        mOrderState = orderDetailModel.getmOrderState();
+        mStepAll = orderDetailModel.getmStepAll();
         switch (mActivityType){
             case ActivityType.TYPE_DONE_EDITOR:
                 break;
@@ -253,6 +379,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 break;
             case ActivityType.TYPE_EXECUTING:
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
+                mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
+                mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGreen));
                 mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
                 mMixExecuteWidgets.mTimeBox.start();
                 break;
@@ -373,6 +501,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             mMixExecuteWidgets.mPauseReason = (TextView)this.findViewById(R.id.tech_task_mix_pause_reason_content_text_view);
             mMixExecuteWidgets.mPauseTime = (Chronometer)this.findViewById(R.id.tech_task_mix_pause_reason_time_content_text_view);
 
+            mMixExecuteWidgets.mButtonNext.setClickable(false);
+            mMixExecuteWidgets.mButtonPre.setClickable(false);
         }
         else {
             throw new KeyCharacterMap.UnavailableException("mMixExecuteWidgets is not init,it is null,so must init mMixExecuteWidgets firstly");
@@ -466,7 +596,34 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     }
 
     private void startTask(){
+        JSONArray array = new JSONArray();
 
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
+        map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
+        map.put(RequestDataKey.CURRENT_STEP,mCurrentStep);
+        map.put(RequestDataKey.SUB_STATE,"未开始");
+
+        Message msg = mHandler.obtainMessage();
+        HashMap<String,Object> respMap = NetOperationHelper.nextTask(map);
+        if(respMap!=null){
+            OrderDetailModel result = (OrderDetailModel)respMap.get(NetOperationHelper.KEY_RESULT);
+            if (result != null){
+                mHandler.sendEmptyMessage(MessageType.TYPE_START_TASK_SUCCESS);
+            }
+            else {
+                String errorInfo = (String)respMap.get(NetOperationHelper.KEY_ERROR);
+
+                msg.what = MessageType.TYPE_START_TASK_FAILED;
+                msg.obj = errorInfo;
+                mHandler.sendMessage(msg);
+            }
+        }
+        else{
+            msg.what = MessageType.TYPE_START_TASK_FAILED;
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void getOrderDetail(){
@@ -508,12 +665,70 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
     }
 
-    private void getNextTask(int step){
+    private void getNextTask(String step,String subState){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
+        map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
+        map.put(RequestDataKey.CURRENT_STEP,step);
+        if(step.equals("0")){
+            map.put(RequestDataKey.SUB_STATE,"未开始");
+        }
+        else{
+            map.put(RequestDataKey.SUB_STATE,subState);
+        }
+
+        Message msg = mHandler.obtainMessage();
+        HashMap<String,Object> respMap = NetOperationHelper.nextTask(map);
+        if(respMap!=null){
+            OrderDetailModel result = (OrderDetailModel)respMap.get(NetOperationHelper.KEY_RESULT);
+            if (result != null){
+                msg.obj = result;
+                msg.what = MessageType.TYPE_NEXT_TASK_SUCCESS;
+                mHandler.sendMessage(msg);
+            }
+            else {
+                String errorInfo = (String)respMap.get(NetOperationHelper.KEY_ERROR);
+
+                msg.what = MessageType.TYPE_NEXT_TASK_FAILED;
+                msg.obj = errorInfo;
+                mHandler.sendMessage(msg);
+            }
+        }
+        else{
+            msg.what = MessageType.TYPE_PAUSE_TASK_FAILED;
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            mHandler.sendMessage(msg);
+        }
 
     }
 
-    private void getPreTask(int step){
+    private void getPreTask(String step){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
+        map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
+        map.put(RequestDataKey.CURRENT_STEP,step);
 
+        Message msg = mHandler.obtainMessage();
+        HashMap<String,Object> respMap = NetOperationHelper.preTask(map);
+        if(respMap!=null){
+            OrderDetailModel result = (OrderDetailModel)respMap.get(NetOperationHelper.KEY_RESULT);
+            if (result != null){
+                msg.obj = result;
+                msg.what = MessageType.TYPE_PRE_TASK_SUCCESS;
+                mHandler.sendMessage(msg);
+            }
+            else {
+                String errorInfo = (String)respMap.get(NetOperationHelper.KEY_ERROR);
+                msg.what = MessageType.TYPE_PRE_TASK_FAILED;
+                msg.obj = errorInfo;
+                mHandler.sendMessage(msg);
+            }
+        }
+        else{
+            msg.what = MessageType.TYPE_PRE_TASK_FAILED;
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void pauseTask(String pauseReason,String pauseTime){
@@ -582,4 +797,22 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     public void onBackEvent() {
         finish();
     }
+
+//    @Override
+//    public void finish() {
+//        Log.i(mTag," on finish ");
+//        Task task = new Task();
+//        task.setIndex(mIndex);
+//        task.setOrderSerialNum(mOrderSerialNum);
+//        task.setOrderType(mOrderType.split(" ")[1]);
+//        task.setOrderState(mOrderState);
+//        task.setCurrentExecutingMan(mExecuteMan);
+//        task.setOrderDate("134354123");
+//
+//        Intent intent = new Intent();
+//        intent.putExtra("result", task);
+//        setResult(RESULT_OK, intent);
+//
+//        super.finish();
+//    }
 }

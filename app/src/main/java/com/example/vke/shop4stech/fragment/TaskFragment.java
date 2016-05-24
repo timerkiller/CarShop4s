@@ -2,6 +2,7 @@ package com.example.vke.shop4stech.fragment;
 
 //import android.app.ListFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
@@ -46,6 +47,7 @@ public class TaskFragment extends ListFragment
 
     private static final String mTag = "TaskFragment";
 
+    private static final String PER_PAGE = "20";
     private TaskAdapter mTaskAdapter;
     private  List<Task> mTotalTaskList;
     private int mPageId = 2;
@@ -53,6 +55,7 @@ public class TaskFragment extends ListFragment
     private Handler mGetTaskHandler ;
     private boolean mIsUpdateOngoing = false;
 
+    private int mListClickItemLocation = 0;
 
     class OPERATION_TYPE{
         public static final int TYPE_UPDATE = 0x100;
@@ -123,6 +126,7 @@ public class TaskFragment extends ListFragment
             initHandler();
         }
 
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -136,10 +140,8 @@ public class TaskFragment extends ListFragment
         mGetTaskHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-
                 Log.i(mTag,"Thread :ID:"+Thread.currentThread().getId() +" Thread Name: "+ Thread.currentThread().getName());
                 try{
-
                     mIsUpdateOngoing = false;
                     XListView xListView = (XListView)getListView();
                     //只有一页数据的时候，不显示下拉框
@@ -217,7 +219,6 @@ public class TaskFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.i(mTag,">>>>>>>>>on list item click");
         super.onListItemClick(l, v, position, id);
-        l.setClickable(false);
         TextView indexTextView = (TextView)v.findViewById(R.id.tech_index);
         TextView orderSerialNumTextView = (TextView)v.findViewById(R.id.tech_order_serial_num_text_view);
         TextView currentStateTextView = (TextView)v.findViewById(R.id.tech_task_state_text_view);
@@ -226,19 +227,33 @@ public class TaskFragment extends ListFragment
             return;
         }
 
-        String orderSerialNum = orderSerialNumTextView.getText().toString().split(" ")[1];
+        //记录被点击的item，若该task状态发生改变时，需要在taskFragment更新下数据。
+        mListClickItemLocation = position;
+        String orderSerialNum = orderSerialNumTextView.getText().toString().split(" ")[1];//订单号: WX20150530123455  获取后面的订单号
+//        Intent starter = new Intent(getActivity(), TaskMixExecuteActivity.class);
+//        starter.putExtra(TaskMixExecuteActivity.KEY_INDEX,indexTextView.getText().toString());
+//        starter.putExtra(TaskMixExecuteActivity.KEY_ORDER_SERIAL_NUM,orderSerialNum);
         switch (currentStateTextView.getText().toString()){
             case "暂停":
+
+//                starter.putExtra(TaskMixExecuteActivity.KEY_ACTIVITY_TYPE,TaskMixExecuteActivity.ActivityType.TYPE_PAUSE);
+//                startActivityForResult(starter,0);
                 TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_PAUSE,indexTextView.getText().toString(),orderSerialNum);
                 break;
             case "未开始":
+//                starter.putExtra(TaskMixExecuteActivity.KEY_ACTIVITY_TYPE,TaskMixExecuteActivity.ActivityType.TYPE_UNSTART);
+//                startActivityForResult(starter,0);
                 TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_UNSTART,indexTextView.getText().toString(),orderSerialNum);
                 break;
             case "执行中":
+//                starter.putExtra(TaskMixExecuteActivity.KEY_ACTIVITY_TYPE,TaskMixExecuteActivity.ActivityType.TYPE_EXECUTING);
+//                startActivityForResult(starter,0);
                 TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_EXECUTING,indexTextView.getText().toString(),orderSerialNum);
                 break;
             case "待评价":
             case "完成":
+//                starter.putExtra(TaskMixExecuteActivity.KEY_ACTIVITY_TYPE,TaskMixExecuteActivity.ActivityType.TYPE_DONE);
+//                startActivityForResult(starter,0);
                 TaskMixExecuteActivity.start(getActivity(),TaskMixExecuteActivity.ActivityType.TYPE_DONE,indexTextView.getText().toString(),orderSerialNum);
                 break;
         }
@@ -289,11 +304,10 @@ public class TaskFragment extends ListFragment
 
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
-        map.put("info", "list");
-        map.put("type", "all");
-        map.put("page", Integer.toString(pageId));
-        map.put("perPage", "4");
-
+        map.put(RequestDataKey.INFO, "list");
+        map.put(RequestDataKey.TYPE, "all");
+        map.put(RequestDataKey.PAGE, Integer.toString(pageId));
+        map.put(RequestDataKey.PER_PAGE, PER_PAGE);
 
         //从服务器获取任务数据
         HashMap<String,Object> dataMap = NetOperationHelper.getTaskList(map);
@@ -416,4 +430,19 @@ public class TaskFragment extends ListFragment
         Log.i(mTag,"onDestroyView invoked");
         mGetTaskHandler = null;
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Log.i(mTag,"on ActivityResult requestCode:" + requestCode + "resultCode" + resultCode);
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == 0){
+//            Task task = data.getParcelableExtra("result");
+//            mTotalTaskList.remove(mListClickItemLocation-1);
+//            mTotalTaskList.set(mListClickItemLocation-1,task);
+//            mTaskAdapter.bindData(mTotalTaskList);
+//            mTaskAdapter.notifyDataSetChanged();
+//
+//        }
+//
+//    }
 }
