@@ -316,6 +316,33 @@ public class NetOperationHelper {
         return null;
     }
 
+    public static HashMap<String,Object> editComponents(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.EDIT_COMPONENTS,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"editComponents failed");
+            return null;
+        }
+
+        try{
+            String result = respData.getString("result");
+            if(result.equals("0k")){
+                HashMap<String,Object> respDataMap = new HashMap<>();
+                respDataMap.put(KEY_RESULT,"ok");
+                return  respDataMap;
+            }else if( result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+            else {
+                throw new UnsupportedOperationException("get unknow result from server");
+            }
+        }catch (Exception e){
+            Log.e(mTag,e.toString());
+        }
+
+        return null;
+    }
+
     public static HashMap<String,Object> resumeTask(HashMap<String,Object> map){
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.TASK_RESUME,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();

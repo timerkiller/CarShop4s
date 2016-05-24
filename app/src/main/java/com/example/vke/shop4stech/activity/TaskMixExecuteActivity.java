@@ -143,9 +143,14 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
                 }
                 else if(mActivityType == ActivityType.TYPE_DONE_VIEW){
-
+                    TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_EDITOR,mIndex,mOrderSerialNum);
                 }else if(mActivityType == ActivityType.TYPE_DONE_EDITOR){
-
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            editComponents(mCurrentStep);
+                        }
+                    }).start();
                 }
                 else {
                     Log.e(mTag,"onClick tech_task_part4_operation_button --> unsupported click");
@@ -300,6 +305,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             TaskMixExecuteActivity.this.finish();
                             TaskMixExecuteActivity.start(TaskMixExecuteActivity.this,ActivityType.TYPE_PAUSE,mIndex,mOrderSerialNum);
                             break;
+                        case MessageType.TYPE_EDIT_COMPONENT_SUCCESS:
+                            TaskMixExecuteActivity.this.finish();
+                            break;
                         case MessageType.TYPE_RESUME_TASK_SUCCESS:
                             TaskMixExecuteActivity.this.finish();
                             TaskMixExecuteActivity.start(TaskMixExecuteActivity.this,ActivityType.TYPE_EXECUTING,mIndex,mOrderSerialNum);
@@ -373,6 +381,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         case MessageType.TYPE_PAUSE_TASK_FAILED:
                         case MessageType.TYPE_START_TASK_FAILED:
                         case MessageType.TYPE_RESUME_TASK_FAILED:
+                        case MessageType.TYPE_EDIT_COMPONENT_FAILED:
                         case MessageType.TYPE_GET_TASK_DETAIL_FAILED:
                             Toast.makeText(getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                             break;
@@ -391,8 +400,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         mStepAll = orderDetailModel.getmStepAll();
         switch (mActivityType){
             case ActivityType.TYPE_DONE_EDITOR:
-                updateCommData(mMixExecuteWidgets,orderDetailModel);
-                break;
+                //updateCommData(mMixExecuteWidgets,orderDetailModel);
             case ActivityType.TYPE_DONE_VIEW:
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
                 String[] executeMan = orderDetailModel.getmPrincipal().split(" ");
@@ -830,7 +838,26 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         map.put(RequestDataKey.CURRENT_STEP,step);
         map.put(RequestDataKey.COMPONENT_LIST,array);
 
-        
+        Message msg = mHandler.obtainMessage();
+        HashMap<String,Object> respMap = NetOperationHelper.editComponents(map);
+        if(respMap != null){
+            String result = (String)respMap.get(NetOperationHelper.KEY_RESULT);
+            if (result != null){
+                mHandler.sendEmptyMessage(MessageType.TYPE_EDIT_COMPONENT_SUCCESS);
+            }
+            else {
+                String errorInfo = (String)respMap.get(NetOperationHelper.KEY_ERROR);
+
+                msg.what = MessageType.TYPE_EDIT_COMPONENT_FAILED;
+                msg.obj = errorInfo;
+                mHandler.sendMessage(msg);
+            }
+        }
+        else{
+            msg.what = MessageType.TYPE_EDIT_COMPONENT_FAILED;
+            msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+            mHandler.sendMessage(msg);
+        }
     }
 
     @Override

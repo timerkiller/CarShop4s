@@ -20,4 +20,5 @@ public class URL {
     public final static String SHOP_ACTIVITY =  SERVICE_ADDRESS+"api/ShopActivity/";
     public final static String USER_CARE =  SERVICE_ADDRESS+"api/userCare/";
     public final static String USER_MESSAGE =  SERVICE_ADDRESS+"api/userMessage/";
+    public final static String EDIT_COMPONENTS =  SERVICE_ADDRESS+"api/component/";
 }
