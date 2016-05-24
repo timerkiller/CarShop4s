@@ -9,12 +9,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyCharacterMap;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -134,13 +137,44 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     }).start();
                 }
                 else if(mActivityType == ActivityType.TYPE_EXECUTING){
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            pauseTask("有点事情","213123");
-                        }
-                    }).start();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TaskMixExecuteActivity.this);
+                    View view= LayoutInflater.from(TaskMixExecuteActivity.this).inflate(R.layout.task_custom_dialog,null);
+                    TextView contentTV1 = (TextView)view.findViewById(R.id.tech_custom_dialog_content1_text_view);
+                    TextView contentTV2 = (TextView)view.findViewById(R.id.tech_custom_dialog_content2_text_view);
+                    Button cancelBtn=(Button)view.findViewById(R.id.tech_custom_dialog_cancel_button);
+                    Button confirmBtn=(Button)view.findViewById(R.id.tech_custom_dialog_confirm_button);
 
+                    final EditText contentED1 = (EditText)view.findViewById(R.id.tech_custom_dialog_content1_edit_view);
+                    final EditText contentED2 = (EditText)view.findViewById(R.id.tech_custom_dialog_content2_edit_view);
+                    contentED2.setInputType(InputType.TYPE_CLASS_NUMBER );
+                    builder.setView(view);
+
+                    final AlertDialog dialog = builder.show();
+
+                    cancelBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    confirmBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final String PauseReason = contentED1.getText().toString();
+                            final String PauseTime = contentED2.getText().toString();
+                            if(PauseReason.equals("") || PauseTime.equals("")){
+                                Toast.makeText(getApplicationContext(),R.string.tech_pause_can_not_null,Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            dialog.dismiss();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pauseTask(PauseReason,PauseTime);
+                                }
+                            }).start();
+                        }
+                    });
                 }
                 else if(mActivityType == ActivityType.TYPE_DONE_VIEW){
                     TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_EDITOR,mIndex,mOrderSerialNum);
@@ -175,6 +209,34 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 }
                 break;
             case R.id.tech_task_mix_part2_container_relative_layout://add component
+                AlertDialog.Builder builder = new AlertDialog.Builder(TaskMixExecuteActivity.this);
+                View view= LayoutInflater.from(TaskMixExecuteActivity.this).inflate(R.layout.task_custom_dialog,null);
+                TextView contentTV1 = (TextView)view.findViewById(R.id.tech_custom_dialog_content1_text_view);
+                TextView contentTV2 = (TextView)view.findViewById(R.id.tech_custom_dialog_content2_text_view);
+
+                Button cancelBtn=(Button)view.findViewById(R.id.tech_custom_dialog_cancel_button);
+                Button confirmBtn=(Button)view.findViewById(R.id.tech_custom_dialog_confirm_button);
+
+                EditText contentED1 = (EditText)view.findViewById(R.id.tech_custom_dialog_content1_edit_view);
+                EditText contentED2 = (EditText)view.findViewById(R.id.tech_custom_dialog_content2_edit_view);
+                builder.setView(view);
+
+                final AlertDialog dialog = builder.show();
+
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                confirmBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
                 break;
         }
     }

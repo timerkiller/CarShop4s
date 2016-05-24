@@ -18,6 +18,7 @@
     <string name="tech_user_login_error">登陆失败，请重新输入用户名密码</string>
     <string name="tech_account_info_not_null">用户名和密码不能为空</string>
     <string name="tech_network_unuseful">网络不可用</string>
+    <string name="tech_pause_can_not_null">暂停原因和暂停时间不能为空</string>
     <string name="tech_pls_input_account_info">请输入用户名和密码</string>
     <string name="tech_type">技师种类</string>
     <string name="tech_station">所属工位</string>
@@ -56,6 +57,10 @@
     <string name="tech_get_sms_code_failed">网络不可用，获取验证码失败</string>
     <string name="tech_password_check_failed">两次密码输入不一致</string>
     <string name="tech_touch_again_to_exit"> 再按一次退出程序</string>
+    <string name="tech_button_cancel"> 取消</string>
+    <string name="tech_button_confirm"> 确定</string>
+    <string name="tech_hint_input_pause_time"> 请输入暂停时间</string>
+    <string name="tech_hint_input_pause_reason"> 请输入暂停原因</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
