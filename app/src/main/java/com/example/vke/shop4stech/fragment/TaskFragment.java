@@ -347,7 +347,7 @@ public class TaskFragment extends ListFragment
                         }
                     }
 
-                    
+
                     //这里应该不会再跳到了，是否考虑删除
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
                         mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_UPDATE_FAILED);

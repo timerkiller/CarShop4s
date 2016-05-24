@@ -187,7 +187,9 @@ public class NetOperationHelper {
                         componentList.add(componentItem);
                     }
 
+                    orderDetail.setmCurrentStepTitle(respData.getString("currentStepTitle"));
                     orderDetail.setmComponentsList(componentList);
+                    orderDetail.setmCurrentStepSpendTime(Integer.parseInt(respData.getString("currentStepSpendTime")));
 
                     break;
                 case "执行中":
@@ -215,79 +217,10 @@ public class NetOperationHelper {
             return null;
         }
 
-
         try{
             String result = respData.getString("result");
             if(result.equals("ok")){
-                HashMap<String,Object> respDataMap = new HashMap<>();
-                OrderDetailModel orderDetail = new OrderDetailModel();
-                orderDetail.setmCanNext(respData.getString("canNext"));
-                orderDetail.setmCurrentStep(respData.getString("currentStep"));
-                orderDetail.setmOperation(respData.getString("operate"));
-                orderDetail.setmOrderSerialNum(respData.getString("serialNum"));
-                orderDetail.setmOrderType(respData.getString("type"));
-                orderDetail.setmOrderStation(respData.getString("station"));
-                orderDetail.setmStepAll(respData.getString("stepAll"));
-                orderDetail.setmPrincipal(respData.getString("principal"));
-                orderDetail.setmOrderSubState(respData.getString("subState"));
-                String orderState = respData.getString("state");
-                orderDetail.setmOrderState(orderState);
-                switch(orderState){
-                    case "未开始":
-                        List<String> stepList = new ArrayList<>();
-                        JSONArray stepJsonArray = respData.getJSONArray("stepListItems");
-                        for(int i=0; i<stepJsonArray.length(); i++){
-                            JSONObject stepObject = stepJsonArray.getJSONObject(i);
-                            int index = i+1;
-                            stepList.add(index + ". "+ stepObject.getString("title"));
-                        }
-                        orderDetail.setmStepsList(stepList);
-
-                        break;
-                    case "暂停":
-                        orderDetail.setmCurrentStepTitle(respData.getString("currentStepTitle"));
-                        orderDetail.setmCurrentStepSpendTime(Integer.parseInt( respData.getString("currentStepSpendTime")));
-                        orderDetail.setmPauseTitle(respData.getString("pauseTitle"));
-                        orderDetail.setmPauseTime(Integer.parseInt(respData.getString("estimatedTime")));
-                        break;
-
-                    case "待评价":
-                    case "完成":
-                        List<String> stepCompleteList = new ArrayList<>();
-                        JSONArray stepCompleteJsonArray = respData.getJSONArray("stepListItems");
-                        int totalUsedTime = 0;
-                        for(int i=0; i<stepCompleteJsonArray.length(); i++){
-                            JSONObject stepObject = stepCompleteJsonArray.getJSONObject(i);
-                            totalUsedTime += Integer.parseInt(stepObject.getString("spentTime"));
-                            int index = i+1;
-                            stepCompleteList.add(index + ". "+ stepObject.getString("title")+"                                            "
-                                    +DateTimeHelper.timeStamp2Date(stepObject.getString("spentTime"),"HH:mm:ss"));
-                        }
-                        orderDetail.setmTotalSpendTime(totalUsedTime);
-                        orderDetail.setmStepsList(stepCompleteList);
-
-                        List<Map<String, Object>> componentList = new ArrayList<Map<String, Object>>();
-                        JSONArray componentCompleteJsonArray = respData.getJSONArray("componentList");
-                        for(int i=0; i<componentCompleteJsonArray.length(); i++){
-                            JSONObject componentObject = componentCompleteJsonArray.getJSONObject(i);
-                            HashMap<String,Object> componentItem = new HashMap<>();
-                            componentItem.put("tech_task_component_title_text_view", componentObject.getString("title"));
-                            componentItem.put("tech_task_component_num_text_view", "X " + componentObject.getString("num"));
-                            componentList.add(componentItem);
-                        }
-
-                        orderDetail.setmComponentsList(componentList);
-
-                        break;
-                    case "执行中":
-                        orderDetail.setmCurrentStepTitle(respData.getString("currentStepTitle"));
-                        orderDetail.setmCurrentStepSpendTime(Integer.parseInt( respData.getString("currentStepSpendTime")));
-                        break;
-                    default:
-                        Log.e(mTag,"error state received from server state:" + orderState );
-                }
-                respDataMap.put(KEY_RESULT,orderDetail);
-                return respDataMap;
+                return parseResult(respData);
             }else if( result.equals("error")){
                 return parseErrorInfo(respData);
             }

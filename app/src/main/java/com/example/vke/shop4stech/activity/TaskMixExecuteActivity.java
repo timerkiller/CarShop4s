@@ -71,7 +71,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         getPreTask(mRecordAppCurrentStep);
                     }
                 }).start();
-
                 break;
             case R.id.tech_next_task_button:
                 if(mOrderState.equals("完成") || mOrderState.equals("待评价")){
@@ -143,7 +142,12 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     }).start();
 
                 }
-                else{
+                else if(mActivityType == ActivityType.TYPE_DONE_VIEW){
+
+                }else if(mActivityType == ActivityType.TYPE_DONE_EDITOR){
+
+                }
+                else {
                     Log.e(mTag,"onClick tech_task_part4_operation_button --> unsupported click");
                 }
 
@@ -307,7 +311,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         case MessageType.TYPE_NEXT_TASK_SUCCESS:
                             OrderDetailModel model = (OrderDetailModel)msg.obj;
                             mCurrentStep = model.getmCurrentStep();
-                            if(model.getmOrderState().equals("待评价")|| model.getmOrderState().equals("完成")){
+                            if((model.getmOrderState().equals("待评价")|| model.getmOrderState().equals("完成"))&& mActivityType == ActivityType.TYPE_EXECUTING){
                                 TaskMixExecuteActivity.this.finish();
                                 TaskMixExecuteActivity.start(TaskMixExecuteActivity.this,ActivityType.TYPE_DONE,mIndex,mOrderSerialNum);
                                 break;
@@ -331,8 +335,12 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                                     mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
                                     mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
                                 }
-
                             }
+                            else if (mActivityType == ActivityType.TYPE_DONE_EDITOR || mActivityType == ActivityType.TYPE_DONE_VIEW){
+                                String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+                            }
+
                             break;
                         case MessageType.TYPE_PRE_TASK_SUCCESS:
                             OrderDetailModel detailModel = (OrderDetailModel)msg.obj;
@@ -345,6 +353,10 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                                 mMixExecuteWidgets.mTimeBox.stop();
                                 mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
                                 mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+                            }
+                            else {
+                                String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
                             }
 
                             break;
@@ -379,20 +391,25 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         mStepAll = orderDetailModel.getmStepAll();
         switch (mActivityType){
             case ActivityType.TYPE_DONE_EDITOR:
+                updateCommData(mMixExecuteWidgets,orderDetailModel);
                 break;
             case ActivityType.TYPE_DONE_VIEW:
+                updateCommData(mMixExecuteWidgets,orderDetailModel);
+                String[] executeMan = orderDetailModel.getmPrincipal().split(" ");
+                String person ="执行人: " +  executeMan[executeMan.length-1];
+                mMixExecuteWidgets.mExecutingMan.setText(person);
                 break;
             case ActivityType.TYPE_EXECUTING:
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
                 mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
                 mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGreen));
-                mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
+                //mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
                 mMixExecuteWidgets.mTimeBox.start();
                 break;
             case ActivityType.TYPE_PAUSE:
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
 
-                mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
+                //mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
                 mMixExecuteWidgets.mPauseReason.setText(orderDetailModel.getmPauseTitle());
                 mMixExecuteWidgets.mPauseTime.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmPauseTime()*1000);
                 break;
@@ -445,6 +462,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             mMixExecuteWidgets.mCurrentStepContent.setText(orderDetailModel.getmCurrentStepTitle());
             String person ="执行人: " +  orderDetailModel.getmPrincipal();
             mMixExecuteWidgets.mExecutingMan.setText(person);
+            mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
+
         }
     }
 
@@ -586,6 +605,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         if(mMixExecuteWidgets != null){
             initTaskMixCommonView(mMixExecuteWidgets);
             mMixExecuteWidgets.mDoneImageView.setVisibility(View.VISIBLE);
+            mMixExecuteWidgets.mButtonMixFunction.setText("完成");
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(true);
         }
     }
 
@@ -593,11 +614,14 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         if(mMixExecuteWidgets != null){
             initTaskMixCommonView(mMixExecuteWidgets);
             mMixExecuteWidgets.mDoneImageView.setVisibility(View.VISIBLE);
+            mMixExecuteWidgets.mButtonMixFunction.setText("编辑");
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
         }
     }
 
-    private void reeditTaskComponents(){
 
+    private void reeditTaskComponents(){
+        TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_VIEW,mIndex,mOrderSerialNum);
     }
 
     private void startTask(){
@@ -796,6 +820,17 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             mHandler.sendMessage(msg);
         }
 
+    }
+
+    private void editComponents(String step){
+        JSONArray array = new JSONArray();
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
+        map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
+        map.put(RequestDataKey.CURRENT_STEP,step);
+        map.put(RequestDataKey.COMPONENT_LIST,array);
+
+        
     }
 
     @Override
