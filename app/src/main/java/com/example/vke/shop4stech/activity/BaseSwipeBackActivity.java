@@ -3,6 +3,7 @@ package com.example.vke.shop4stech.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -142,5 +143,25 @@ public abstract class BaseSwipeBackActivity extends AppCompatActivity implements
     public void finish() {
         super.finish();
         this.overridePendingTransition(0, R.anim.slide_out_right);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    static private long mLastClickTime;
+
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - mLastClickTime;
+        mLastClickTime = time;
+        return timeD <= 500;
     }
 }

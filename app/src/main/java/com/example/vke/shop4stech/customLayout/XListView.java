@@ -386,6 +386,26 @@ public class XListView extends ListView implements OnScrollListener {
 		public void onLoadMore();
 	}
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    static private long mLastClickTime;
+
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - mLastClickTime;
+        mLastClickTime = time;
+        return timeD <= 500;
+    }
+
 }
 
 
