@@ -10,4 +10,5 @@ public class Prompt {
     public static final String PROMPT_LOAD_FAILED="加载失败";
     public static final String PROMPT_NO_MORE_DATA="没有更多了";
     public static final String PROMPT_MODIFY_SUCCESS="修改成功";
+    public static final String PROMPT_ORDER_NOT_EXIST="订单不存在";
 }

@@ -201,7 +201,7 @@ public class TaskFragment extends ListFragment
                             break;
                         case MessageType.TYPE_NO_DATA_FOUND:
                             textView.setText(R.string.tech_no_data);
-                            //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                             onLoadFinish(false);
                             break;
                         default:
@@ -330,11 +330,25 @@ public class TaskFragment extends ListFragment
                 }
                 else{
                     if(tasks != null && tasks.size() == 0){
-                        mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_NO_DATA_FOUND);
+                        Message msg = mGetTaskHandler.obtainMessage();
+                        msg.what = MessageType.TYPE_NO_DATA_FOUND;
+                        msg.obj = Prompt.PROMPT_ORDER_NOT_EXIST;
+                        mGetTaskHandler.sendMessage(msg);
                         return;
                     }
+                    else{
+                        String errorInfo = (String)dataMap.get(NetOperationHelper.KEY_ERROR);
+                        if(errorInfo != null){
+                            Message msg = mGetTaskHandler.obtainMessage();
+                            msg.what = MessageType.TYPE_NO_DATA_FOUND;
+                            msg.obj = errorInfo;
+                            mGetTaskHandler.sendMessage(msg);
+                            return;
+                        }
+                    }
 
-                    //是否要取出errorInfo 进行显示
+                    
+                    //这里应该不会再跳到了，是否考虑删除
                     if(type == OPERATION_TYPE.TYPE_UPDATE){
                         mGetTaskHandler.sendEmptyMessage(MessageType.TYPE_UPDATE_FAILED);
                     }

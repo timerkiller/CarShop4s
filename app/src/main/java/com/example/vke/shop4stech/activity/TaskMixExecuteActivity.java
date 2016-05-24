@@ -350,9 +350,14 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             break;
                         case MessageType.TYPE_ACCESS_TOKEN_INVALID:
                             break;
-
                         case MessageType.TYPE_PRE_TASK_FAILED:
+                            //失败需要回退步骤
+                            mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) +1);
+                            Toast.makeText(getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
+                            break;
                         case MessageType.TYPE_NEXT_TASK_FAILED:
+                            //操作失败需要回退步骤
+                            mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) -1);
                         case MessageType.TYPE_PAUSE_TASK_FAILED:
                         case MessageType.TYPE_START_TASK_FAILED:
                         case MessageType.TYPE_RESUME_TASK_FAILED:
