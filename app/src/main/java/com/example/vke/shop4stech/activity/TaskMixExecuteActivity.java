@@ -821,8 +821,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             initTaskMixCommonView(mMixExecuteWidgets);
             mMixExecuteWidgets.mDoneImageView.setVisibility(View.VISIBLE);
             mMixExecuteWidgets.mButtonMixFunction.setText("编辑");
-            mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
-            mMixExecuteWidgets.mComponentListView.setClickable(false);
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setVisibility(View.GONE);
+
         }
     }
 
@@ -1115,4 +1115,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startThreadToGetOrderData();
+    }
 }
