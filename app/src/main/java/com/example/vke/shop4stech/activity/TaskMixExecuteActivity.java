@@ -12,7 +12,9 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -121,6 +123,15 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("确认完成当前步骤吗?");
+                        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                if(!mCanTouch){
+                                    mCanTouch = true;
+                                }
+                            }
+                        });
+
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which)
                             {
@@ -141,6 +152,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                                 mCanTouch = true;
                             }
                         }).show();
+
                     }
                     else {
                         mRecordAppCurrentStep = Integer.toString(Integer.parseInt(mRecordAppCurrentStep) +1);//查看下一步
@@ -173,6 +185,15 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     final EditText contentED1 = (EditText)view.findViewById(R.id.tech_custom_dialog_content1_edit_view);
                     final EditText contentED2 = (EditText)view.findViewById(R.id.tech_custom_dialog_content2_edit_view);
                     contentED2.setInputType(InputType.TYPE_CLASS_NUMBER );
+                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            if(!mCanTouch){
+                                mCanTouch = true;
+                            }
+                        }
+                    });
+
                     builder.setView(view);
 
                     final AlertDialog dialog = builder.show();
@@ -203,6 +224,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             }).start();
                         }
                     });
+
                 }
                 else if(mActivityType == ActivityType.TYPE_DONE_VIEW){
 
@@ -256,6 +278,15 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 contentED2.setHint(R.string.tech_hint_input_component_num);
                 contentED2.setInputType(InputType.TYPE_CLASS_NUMBER);
                 builder.setView(view);
+
+                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if(!mCanTouch){
+                            mCanTouch = true;
+                        }
+                    }
+                });
 
                 final AlertDialog dialog = builder.show();
 
@@ -634,7 +665,17 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         }
     }
 
-    private void updateCommData(Object object,OrderDetailModel orderDetailModel){
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i(mTag,"onKeyDown touch");
+        if(!mCanTouch){
+            mCanTouch = true;
+        }
+
+        return false;//super.onKeyDown(keyCode, event);
+    }
+
+    private void updateCommData(Object object, OrderDetailModel orderDetailModel){
         if(object instanceof MixDoneOrUnStartWidgets){
             mMixDoneOrUnStartWidgets.mOrderSerialNum.setText(orderDetailModel.getmOrderSerialNum());
             mMixDoneOrUnStartWidgets.mStationJob.setText(orderDetailModel.getmOrderType());
