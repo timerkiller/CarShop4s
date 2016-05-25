@@ -60,6 +60,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     private String mIndex,mOrderSerialNum,mCurrentStep,mOrderType,mOrderState,mExecuteMan,mStepAll;
     private String mRecordAppCurrentStep;//记录app界面当前执行到第几步，因为有可能是查看已完成的步骤
     private String mTriggerStep ;//用户记录是从第几步触发 编辑步骤
+    private boolean mCanTouch = true;
 
     @Override
     public void onClick(View v) {
@@ -67,17 +68,23 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             Toast.makeText(getApplicationContext(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(!mCanTouch){
+            Toast.makeText(getApplicationContext(),"正在获取数据中,请稍后",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mCanTouch = false;
         switch (v.getId()){
-//            case R.id.task_new_component_item_add_button:
-//                int currentNum = Integer.parseInt(viewHolder.componentNum.getText().toString());
-//                currentNum = currentNum+1;
-//                viewHolder.componentNum.setText(String.valueOf(currentNum));
-//                break;
-//            case R.id.task_new_component_item_reduce_button:
-//                break;
             case R.id.tech_pre_task_button:
+                if(mRecordAppCurrentStep == null){
+                    mCanTouch = true;
+                    return;
+                }
+
                 if(mRecordAppCurrentStep.equals("1")){
                     Toast.makeText(getApplicationContext(),"已经是第一步",Toast.LENGTH_SHORT).show();
+                    mCanTouch = true;
                     return;
                 }
 
@@ -90,9 +97,14 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 }).start();
                 break;
             case R.id.tech_next_task_button:
+                if(mRecordAppCurrentStep == null){
+                    mCanTouch = true;
+                    return;
+                }
                 if(mOrderState.equals("完成") || mOrderState.equals("待评价")){
                     if(mRecordAppCurrentStep.equals(mStepAll)){
                         Toast.makeText(getApplicationContext(),"已经是最后一步",Toast.LENGTH_SHORT).show();
+                        mCanTouch = true;
                         return;
                     }
                     else{//
@@ -128,6 +140,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                                mCanTouch = true;
                             }
                         }).show();
                     }
@@ -169,6 +182,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     cancelBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            mCanTouch = true;
                             dialog.dismiss();
                         }
                     });
@@ -179,6 +193,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             final String PauseTime = contentED2.getText().toString();
                             if(PauseReason.equals("") || PauseTime.equals("")){
                                 Toast.makeText(getApplicationContext(),R.string.tech_pause_can_not_null,Toast.LENGTH_SHORT).show();
+                                mCanTouch = true;
                                 return;
                             }
                             dialog.dismiss();
@@ -193,6 +208,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 }
                 else if(mActivityType == ActivityType.TYPE_DONE_VIEW){
                     TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_EDITOR,mIndex,mOrderSerialNum,mRecordAppCurrentStep);
+                    mCanTouch = true;
                 }else if(mActivityType == ActivityType.TYPE_DONE_EDITOR){
                     new Thread(new Runnable() {
                         @Override
@@ -247,6 +263,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 cancelBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mCanTouch = true;
                         dialog.dismiss();
                     }
                 });
@@ -258,6 +275,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         final String  componentNum = contentED2.getText().toString();
                         if(componentName.equals("") || componentNum.equals("")){
                             Toast.makeText(getApplicationContext(),R.string.tech_hint_input_component,Toast.LENGTH_SHORT).show();
+                            mCanTouch = true;
                             return;
                         }
                         ComponentModel newComponentModel= new ComponentModel(componentName,componentNum);
@@ -407,12 +425,16 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             mHandler = new Handler(){
                 @Override
                 public void handleMessage(Message msg) {
+                    //收到消息重新设置界面按钮可操作
+                    mCanTouch = true;
                     switch (msg.what){
                         case MessageType.TYPE_GET_TASK_DETAIL_SUCCESS:
                             updateViewData((OrderDetailModel)msg.obj);
                             mRecordAppCurrentStep = mCurrentStep;
                             if((mActivityType == ActivityType.TYPE_DONE_EDITOR || mActivityType == ActivityType.TYPE_DONE_VIEW) && mTriggerStep != null){
                                 mRecordAppCurrentStep = mTriggerStep;
+                                mCanTouch = false;
+
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -612,6 +634,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     }
 
     private void startThreadToGetOrderData(){
+        mCanTouch = false;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -773,6 +796,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
     private void reeditTaskComponents(){
         TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_VIEW,mIndex,mOrderSerialNum);
+        mCanTouch = true;
     }
 
     private void startTask(){
