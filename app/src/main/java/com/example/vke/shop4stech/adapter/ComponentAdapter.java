@@ -116,7 +116,6 @@ public class ComponentAdapter extends BaseAdapter {
                         {
                             mComponentList.remove(needRemovePosition);
                             TaskMixExecuteActivity activity = (TaskMixExecuteActivity)mContext;
-                            activity.removeItemFromList(needRemovePosition);
                             notifyDataSetChanged();
                             dialog.dismiss();
                         }

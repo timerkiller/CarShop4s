@@ -829,7 +829,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
 
     private void reeditTaskComponents(){
-        TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_VIEW,mIndex,mOrderSerialNum);
+        TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_VIEW,mIndex,mOrderSerialNum,mCurrentStep);
         mCanTouch = true;
     }
 
@@ -1096,25 +1096,26 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 //        super.finish();
 //    }
 
-    public void removeItemFromList(int location){
-        Log.i(mTag, "mComponentModelList size: "+mMixExecuteWidgets.mComponentModelList.size());
-        if(mMixExecuteWidgets.mComponentModelList != null)
-        {
-            try{
-                mMixExecuteWidgets.mComponentModelList.get(location);
-            }catch (Exception e){
-                Log.e(mTag,e.toString());
-                return;
-            }
-            Log.i(mTag,"remove from list success");
-            mMixExecuteWidgets.mComponentModelList.remove(location);
+//    public void removeItemFromList(int location){
+//        Log.i(mTag, "mComponentModelList size: "+mMixExecuteWidgets.mComponentModelList.size() + "location:" + location);
+//        if(mMixExecuteWidgets.mComponentModelList != null)
+//        {
+//            try{
+//                mMixExecuteWidgets.mComponentModelList.get(location);
+//            }catch (Exception e){
+//                Log.e(mTag,e.toString());
+//                return;
+//            }
+//            Log.i(mTag,"remove from list success");
+//            mMixExecuteWidgets.mComponentModelList.remove(location);
+//
+//        }
+//        else {
+//            Log.e(mTag,"remove list location :" + location+ "failed");
+//        }
+//
+//    }
 
-        }
-        else {
-            Log.e(mTag,"remove list location :" + location+ "failed");
-        }
-
-    }
 
     @Override
     protected void onResume() {
