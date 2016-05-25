@@ -347,7 +347,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         //task_part4_operation
         Button mOperationButton;
 
-        ArrayAdapter<String> mAdapter;
+        ArrayAdapter<String> mAdapter;//for unstart task
+        SimpleAdapter mStepsSimpleAdapter;//for done task
         SimpleAdapter mComponentsSimpleAdapter;
     }
 
@@ -445,10 +446,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getNextTask(mTriggerStep,"完成");
+                                        getNextTask(mRecordAppCurrentStep,"完成");
                                     }
                                 }).start();
-
                             }
                             break;
                         case MessageType.TYPE_PAUSE_TASK_SUCCESS:
@@ -459,7 +459,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             if(mActivityType == ActivityType.TYPE_DONE_EDITOR){
                             TaskMixExecuteActivity.this.finish();
                             }
-
                             break;
                         case MessageType.TYPE_RESUME_TASK_SUCCESS:
                             TaskMixExecuteActivity.this.finish();
@@ -605,8 +604,10 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 mMixDoneOrUnStartWidgets.mRelativePerson.setText(executePerson);
 
                 //step list
-                mMixDoneOrUnStartWidgets.mAdapter = new ArrayAdapter<String>(this,R.layout.task_step_item,orderDetailModel.getmStepsList());
-                mMixDoneOrUnStartWidgets.mStepListView.setAdapter(mMixDoneOrUnStartWidgets.mAdapter);
+                mMixDoneOrUnStartWidgets.mStepsSimpleAdapter = new SimpleAdapter(this,orderDetailModel.getmDoneStepsList(),R.layout.task_step_done_item,
+                        new String[] { "tech_task_step_done_title_text_view", "tech_task_step_done_time_text_view" },
+                        new int[]{R.id.tech_task_step_done_title_text_view,R.id.tech_task_step_done_time_text_view});
+                mMixDoneOrUnStartWidgets.mStepListView.setAdapter(mMixDoneOrUnStartWidgets.mStepsSimpleAdapter);
 
                 //component list
                 mMixDoneOrUnStartWidgets.mComponentsSimpleAdapter = new SimpleAdapter(this,orderDetailModel.getmComponentsList(),

@@ -24,6 +24,7 @@ public class OrderDetailModel{
     private String mOrderSubState;
 
     private List<Map<String, Object>> mConsumeComponentsList;//针对已经完成的消耗的零件list,不可添加删除
+    private List<Map<String, Object>> mDoneStepsList;//针对已经完成的消耗的零件list,不可添加删除
     private List<String> mStepsList;
 
 
@@ -41,6 +42,10 @@ public class OrderDetailModel{
 
     //未开始
 
+
+    public void setmDoneStepsList(List<Map<String, Object>> mDoneStepsList) {
+        this.mDoneStepsList = mDoneStepsList;
+    }
 
     public void setmExecutingComponentList(List<ComponentModel> mExecutingComponentList) {
         this.mExecutingComponentList = mExecutingComponentList;
@@ -116,6 +121,10 @@ public class OrderDetailModel{
         this.mCurrentStepTitle = mCurrentStepTitle;
     }
 
+    public List<Map<String, Object>> getmDoneStepsList() {
+        return mDoneStepsList;
+    }
+
     public String getmOrderType() {
         String respData;
         switch (mOrderType){
@@ -143,6 +152,7 @@ public class OrderDetailModel{
     public List<Map<String, Object>> getmComponentsList() {
         return mConsumeComponentsList;
     }
+
 
     public List<String> getmStepsList() {
         return mStepsList;

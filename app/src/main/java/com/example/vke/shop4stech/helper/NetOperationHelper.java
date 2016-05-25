@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 
 import com.example.vke.shop4stech.adapter.TaskAdapter;
@@ -173,19 +175,23 @@ public class NetOperationHelper {
                     break;
 
                 case "待评价":
-                case "完成":
-                    List<String> stepCompleteList = new ArrayList<>();
+                case "完成":;
                     JSONArray stepCompleteJsonArray = respData.getJSONArray("stepListItems");
+                    List<Map<String,Object>> stepCompleteList = new ArrayList<Map<String, Object>>();
                     int totalUsedTime = 0;
                     for(int i=0; i<stepCompleteJsonArray.length(); i++){
                         JSONObject stepObject = stepCompleteJsonArray.getJSONObject(i);
-                        totalUsedTime += Integer.parseInt(stepObject.getString("spentTime"));
                         int index = i+1;
-                        stepCompleteList.add(index + ". "+ stepObject.getString("title")+"                                            "
-                                +DateTimeHelper.timeStamp2Date(stepObject.getString("spentTime"),"HH:mm:ss"));
+                        totalUsedTime += Integer.parseInt(stepObject.getString("spentTime"));
+                        HashMap<String,Object> stepItem = new HashMap<>();
+                        stepItem.put("tech_task_step_done_title_text_view",index + ". "+stepObject.getString("title"));
+                        String spentTime = formatSecond(Double.parseDouble(stepObject.getString("spentTime")));
+                        stepItem.put("tech_task_step_done_time_text_view",spentTime);
+                        stepCompleteList.add(stepItem);
+
                     }
                     orderDetail.setmTotalSpendTime(totalUsedTime);
-                    orderDetail.setmStepsList(stepCompleteList);
+                    orderDetail.setmDoneStepsList(stepCompleteList);
 
                     List<Map<String, Object>> componentList = new ArrayList<Map<String, Object>>();
                     JSONArray componentCompleteJsonArray = respData.getJSONArray("componentList");
@@ -236,6 +242,30 @@ public class NetOperationHelper {
         }
 
         return null;
+    }
+
+    public static String formatSecond(Object second){
+        String  result="0秒";
+        if(second!=null){
+            double s=(double) second;
+            String format;
+            Object[] array;
+            Integer hours =(int) (s/(60*60));
+            Integer minutes = (int) (s/60-hours*60);
+            Integer seconds = (int) (s-minutes*60-hours*60*60);
+            if(hours>0){
+                format="%1$,d时%2$,d分%3$,d秒";
+                array=new Object[]{hours,minutes,seconds};
+            }else if(minutes>0){
+                format="%1$,d分%2$,d秒";
+                array=new Object[]{minutes,seconds};
+            }else{
+                format="%1$,d秒";
+                array=new Object[]{seconds};
+            }
+            result= String.format(format, array);
+        }
+        return result;
     }
 
     public static HashMap<String,Object> getOrderDetail(HashMap<String,Object> map){
