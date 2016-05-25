@@ -162,6 +162,6 @@ public abstract class BaseSwipeBackActivity extends AppCompatActivity implements
         long time = System.currentTimeMillis();
         long timeD = time - mLastClickTime;
         mLastClickTime = time;
-        return timeD <= 500;
+        return timeD <= 50;
     }
 }

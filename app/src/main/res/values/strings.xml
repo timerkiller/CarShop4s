@@ -61,6 +61,9 @@
     <string name="tech_button_confirm"> 确定</string>
     <string name="tech_hint_input_pause_time"> 请输入暂停时间</string>
     <string name="tech_hint_input_pause_reason"> 请输入暂停原因</string>
+    <string name="tech_hint_input_component_name"> 请输入零件名称</string>
+    <string name="tech_hint_input_component_num"> 请输入零件数量</string>
+    <string name="tech_hint_input_component"> 零件名和数量不允许为空</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -23,9 +23,11 @@ public class OrderDetailModel{
     private String mOrderState;
     private String mOrderSubState;
 
-    private List<Map<String, Object>> mComponentsList;
+    private List<Map<String, Object>> mConsumeComponentsList;//针对已经完成的消耗的零件list,不可添加删除
     private List<String> mStepsList;
 
+
+    private List<ComponentModel> mExecutingComponentList;//针对执行中或者暂停中的添加的零件列表，可以添加删除零件
     //暂停时需要填充
     private String mPauseTitle;
     private int mPauseTime;
@@ -39,6 +41,11 @@ public class OrderDetailModel{
 
     //未开始
 
+
+    public void setmExecutingComponentList(List<ComponentModel> mExecutingComponentList) {
+        this.mExecutingComponentList = mExecutingComponentList;
+    }
+
     public void setmTotalSpendTime(int mTotalSpendTime) {
         this.mTotalSpendTime = mTotalSpendTime;
     }
@@ -48,7 +55,7 @@ public class OrderDetailModel{
     }
 
     public void setmComponentsList(List<Map<String, Object>> mComponentsList) {
-        this.mComponentsList = mComponentsList;
+        this.mConsumeComponentsList = mComponentsList;
     }
 
     public void setmCurrentStep(String mCurrentStep) {
@@ -62,6 +69,8 @@ public class OrderDetailModel{
     public void setmOrderSerialNum(String mOrderSerialNum) {
         this.mOrderSerialNum = mOrderSerialNum;
     }
+
+
 
     public void setmOrderState(String mOrderState) {
         this.mOrderState = mOrderState;
@@ -132,7 +141,7 @@ public class OrderDetailModel{
     }
 
     public List<Map<String, Object>> getmComponentsList() {
-        return mComponentsList;
+        return mConsumeComponentsList;
     }
 
     public List<String> getmStepsList() {
@@ -186,6 +195,10 @@ public class OrderDetailModel{
 
     public int getmTotalSpendTime() {
         return mTotalSpendTime;
+    }
+
+    public List<ComponentModel> getmExecutingComponentList() {
+        return mExecutingComponentList;
     }
 }
 

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.example.vke.shop4stech.adapter.TaskAdapter;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.constant.URL;
+import com.example.vke.shop4stech.model.ComponentModel;
 import com.example.vke.shop4stech.model.OrderDetailModel;
 import com.example.vke.shop4stech.model.PersonalInfo;
 import com.example.vke.shop4stech.model.Task;
@@ -160,6 +161,15 @@ public class NetOperationHelper {
                     orderDetail.setmCurrentStepSpendTime(Integer.parseInt( respData.getString("currentStepSpendTime")));
                     orderDetail.setmPauseTitle(respData.getString("pauseTitle"));
                     orderDetail.setmPauseTime(Integer.parseInt(respData.getString("estimatedTime")));
+
+                    List<ComponentModel> componentModelList = new ArrayList<ComponentModel>();
+                    JSONArray componentJsonArray = respData.getJSONArray("componentList");
+                    for(int i=0; i<componentJsonArray.length(); i++){
+                        JSONObject componentObject = componentJsonArray.getJSONObject(i);
+                        ComponentModel componentModel = new ComponentModel(componentObject.getString("title"),componentObject.getString("num"));
+                        componentModelList.add(componentModel);
+                    }
+                    orderDetail.setmExecutingComponentList(componentModelList);
                     break;
 
                 case "待评价":
@@ -191,10 +201,29 @@ public class NetOperationHelper {
                     orderDetail.setmComponentsList(componentList);
                     orderDetail.setmCurrentStepSpendTime(Integer.parseInt(respData.getString("currentStepSpendTime")));
 
+                    List<ComponentModel> componentModelListDone = new ArrayList<ComponentModel>();
+                    JSONArray componentJsonArrayDone = respData.getJSONArray("componentList");
+                    for(int i=0; i<componentJsonArrayDone.length(); i++){
+                        JSONObject componentObject = componentJsonArrayDone.getJSONObject(i);
+                        ComponentModel componentModel = new ComponentModel(componentObject.getString("title"),componentObject.getString("num"));
+                        componentModelListDone.add(componentModel);
+                    }
+                    orderDetail.setmExecutingComponentList(componentModelListDone);
+
                     break;
                 case "执行中":
                     orderDetail.setmCurrentStepTitle(respData.getString("currentStepTitle"));
                     orderDetail.setmCurrentStepSpendTime(Integer.parseInt( respData.getString("currentStepSpendTime")));
+
+                    List<ComponentModel> componentModelListEx = new ArrayList<ComponentModel>();
+                    JSONArray componentJsonArrayEx = respData.getJSONArray("componentList");
+                    for(int i=0; i<componentJsonArrayEx.length(); i++){
+                        JSONObject componentObject = componentJsonArrayEx.getJSONObject(i);
+                        ComponentModel componentModel = new ComponentModel(componentObject.getString("title"),componentObject.getString("num"));
+                        componentModelListEx.add(componentModel);
+                    }
+                    orderDetail.setmExecutingComponentList(componentModelListEx);
+
                     break;
                 default:
                     Log.e(mTag,"error state received from server state:" + orderState );

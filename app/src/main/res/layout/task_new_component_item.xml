@@ -9,25 +9,35 @@
         android:text="轮胎"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"/>
+        android:textSize="15sp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="10dp"/>
 
     <LinearLayout
         android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/task_new_component_item_reduce_button"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="30dp"
+            android:background="@drawable/icon_minus"/>
 
         <TextView
+            android:id="@+id/task_new_component_item_num_text_view"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="20dp"
+            android:text="12"
+            android:textSize="16sp"
+            android:textAlignment="center" />
 
         <Button
+            android:id="@+id/task_new_component_item_add_button"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="30dp"
+            android:background="@drawable/icon_add"/>
     </LinearLayout>
 </RelativeLayout>
