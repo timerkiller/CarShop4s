@@ -81,7 +81,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     mCanTouch = true;
                     return;
                 }
-
                 if(mRecordAppCurrentStep.equals("1")){
                     Toast.makeText(getApplicationContext(),"已经是第一步",Toast.LENGTH_SHORT).show();
                     mCanTouch = true;
@@ -136,7 +135,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                                 dialog.dismiss();
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -182,8 +180,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     cancelBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mCanTouch = true;
                             dialog.dismiss();
+                            mCanTouch = true;
                         }
                     });
                     confirmBtn.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +205,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                     });
                 }
                 else if(mActivityType == ActivityType.TYPE_DONE_VIEW){
+
                     TaskMixExecuteActivity.start(this,ActivityType.TYPE_DONE_EDITOR,mIndex,mOrderSerialNum,mRecordAppCurrentStep);
                     mCanTouch = true;
                 }else if(mActivityType == ActivityType.TYPE_DONE_EDITOR){
@@ -286,11 +285,19 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         mMixExecuteWidgets.mComponentAdapter.bindData(mMixExecuteWidgets.mComponentModelList);
                         mMixExecuteWidgets.mComponentAdapter.notifyDataSetChanged();
                         dialog.dismiss();
+                        mCanTouch = true;
                     }
                 });
-
                 break;
         }
+    }
+
+    /*
+    * 用于点击上一步和下一步后，重新渲染当前执行到的步骤的VIEW
+    */
+    public class OperationType{
+        static final int STEP_DONE = 0;
+        static final int STEP_EXECUTING = 1;
     }
 
     /*
@@ -474,20 +481,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             //当查看步骤回归到与当前步骤一致时，重新设置button可按和界面重新显示
                             if(mActivityType == ActivityType.TYPE_EXECUTING ){
                                 if(mRecordAppCurrentStep.equals(mCurrentStep)){
-                                    String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-                                    mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
-                                    mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
-                                    mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGreen));
-                                    mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(true);
-                                    mMixExecuteWidgets.mButtonMixFunction.setClickable(true);
+                                    reupdateStepView(OperationType.STEP_EXECUTING);
                                 }else {
-                                    String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-                                    mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
-                                    mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
-                                    mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
-                                    mMixExecuteWidgets.mTimeBox.stop();
-                                    mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
-                                    mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+                                    reupdateStepView(OperationType.STEP_DONE);
                                 }
                             }
                             else if (mActivityType == ActivityType.TYPE_DONE_EDITOR || mActivityType == ActivityType.TYPE_DONE_VIEW){
@@ -500,13 +496,16 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             OrderDetailModel detailModel = (OrderDetailModel)msg.obj;
                             updateViewData(detailModel);
                             if(mActivityType == ActivityType.TYPE_EXECUTING){//回到上一步时，不能编辑，不能查看，不能暂停，只允许下一步，和上一步
-                                String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
-                                mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
-                                mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
-                                mMixExecuteWidgets.mTimeBox.stop();
-                                mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
-                                mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+                                reupdateStepView(OperationType.STEP_DONE);
+//                                String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+//                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+//                                mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
+//                                mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
+//                                mMixExecuteWidgets.mTimeBox.stop();
+//                                mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
+//                                mMixExecuteWidgets.mAddComponentRelativeLayout.setVisibility(View.GONE);
+//                                mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+//                                mMixExecuteWidgets.mButtonMixFunction.setBackgroundResource(R.drawable.btn_gray);
                             }
                             else {
                                 String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
@@ -535,6 +534,33 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
                 }
             };
+        }
+    }
+
+    private void reupdateStepView(int type){
+        if(type == OperationType.STEP_DONE){
+            String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+            mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+            mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
+            mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
+            mMixExecuteWidgets.mTimeBox.stop();
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setVisibility(View.GONE);
+            mMixExecuteWidgets.mButtonMixFunction.setClickable(false);
+            mMixExecuteWidgets.mButtonMixFunction.setBackgroundResource(R.drawable.btn_gray);
+        }
+        else if(type == OperationType.STEP_EXECUTING){
+            String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
+            mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+            mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
+            mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGreen));
+            mMixExecuteWidgets.mButtonMixFunction.setBackgroundResource(R.drawable.btn_stop);
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setVisibility(View.VISIBLE);
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(true);
+            mMixExecuteWidgets.mButtonMixFunction.setClickable(true);
+        }
+        else {
+            Log.e(mTag,"reupdateStepView error type received");
         }
     }
 
@@ -692,8 +718,15 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             mMixExecuteWidgets.mPauseReason = (TextView)this.findViewById(R.id.tech_task_mix_pause_reason_content_text_view);
             mMixExecuteWidgets.mPauseTime = (Chronometer)this.findViewById(R.id.tech_task_mix_pause_reason_time_content_text_view);
 
-            mMixExecuteWidgets.mButtonNext.setClickable(false);
-            mMixExecuteWidgets.mButtonPre.setClickable(false);
+            //button color change
+            mMixExecuteWidgets.mButtonNext.setVisibility(View.GONE);
+            mMixExecuteWidgets.mButtonPre.setVisibility(View.GONE);
+            mMixExecuteWidgets.mAddComponentRelativeLayout.setVisibility(View.GONE);
+//            mMixExecuteWidgets.mButtonNext.setClickable(false);
+//            mMixExecuteWidgets.mButtonNext.setBackgroundResource(R.drawable.btn_gray);
+//            mMixExecuteWidgets.mButtonPre.setClickable(false);
+//            mMixExecuteWidgets.mButtonPre.setBackgroundResource(R.drawable.btn_gray);
+//            mMixExecuteWidgets.mAddComponentRelativeLayout.setClickable(false);
         }
         else {
             throw new KeyCharacterMap.UnavailableException("mMixExecuteWidgets is not init,it is null,so must init mMixExecuteWidgets firstly");

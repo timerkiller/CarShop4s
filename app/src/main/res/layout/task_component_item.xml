@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorBlack"
         android:textSize="14sp"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="1dp"/>
 
     <TextView
         android:id="@+id/tech_task_component_num_text_view"
