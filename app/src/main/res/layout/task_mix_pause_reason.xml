@@ -11,7 +11,7 @@
         android:paddingTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_point1"
         android:id="@+id/tech_task_mix_pause_reason_title_text_view"
         android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
         android:layout_marginStart="5dp"
         android:textSize="15sp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_title_text_view"
         android:id="@+id/tech_task_mix_pause_reason_content_text_view"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:textColor="@color/colorBlack"
         android:layout_marginStart="5dp" />
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_below="@id/tech_task_mix_pause_reason_title_text_view"
         android:layout_toEndOf="@id/tech_task_mix_pause_reason_point1"
         android:id="@+id/tech_task_mix_pause_reason_time_text_view"

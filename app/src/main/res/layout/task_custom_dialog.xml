@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_custom_dialog_title_text_view"
         android:text="@string/tech_pause_title"
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:contentDescription="@null"
         android:src="@color/colorLightGray" />
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_custom_dialog_content1_text_view"
         android:layout_below="@id/tech_custom_dialog_cut_line1"
         android:text="暂停原因: "
@@ -45,7 +45,7 @@
         android:paddingStart="5dp"
         android:paddingEnd="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_custom_dialog_content2_text_view"
         android:layout_below="@id/tech_custom_dialog_content1_edit_view"
         android:text="暂停时间: "

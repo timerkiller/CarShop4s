@@ -12,7 +12,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_task_part1_desc_title_1_text_view"
         android:layout_toEndOf="@id/tech_part1_description_point1"
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_task_part1_desc_title_2_text_view"
         android:layout_toEndOf="@id/tech_part1_description_point2"
         android:layout_below="@id/tech_task_part1_desc_title_1_text_view"
@@ -51,7 +51,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_toEndOf="@id/tech_part1_description_point3"
         android:id="@+id/tech_task_part1_desc_title_3_text_view"
         android:layout_below="@id/tech_task_part1_desc_title_2_text_view"
@@ -71,7 +71,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_toEndOf="@id/tech_part1_description_point4"
         android:id="@+id/tech_task_part1_desc_title_4_text_view"
         android:layout_below="@id/tech_task_part1_desc_title_3_text_view"

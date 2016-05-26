@@ -12,7 +12,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_toEndOf="@id/tech_task_mix_point1"
         android:id="@+id/tech_task_part_1_title_1_text_view"
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:textColor="@color/colorBlack"
         android:text="步骤2/7"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_task_part_1_title_2_text_view"
         android:layout_below="@id/tech_task_part_1_title_1_text_view"
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:id="@+id/tech_task_part_1_title_3_text_view"
         android:layout_toEndOf="@id/tech_task_mix_point2"
         android:layout_below="@id/tech_task_part_1_title_2_text_view"

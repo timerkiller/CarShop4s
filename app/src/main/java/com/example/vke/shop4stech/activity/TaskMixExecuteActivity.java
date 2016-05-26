@@ -33,6 +33,7 @@ import com.example.vke.shop4stech.adapter.ComponentAdapter;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
+import com.example.vke.shop4stech.customLayout.RevealTextView;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.model.ComponentModel;
@@ -177,8 +178,8 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 else if(mActivityType == ActivityType.TYPE_EXECUTING){
                     AlertDialog.Builder builder = new AlertDialog.Builder(TaskMixExecuteActivity.this);
                     View view= LayoutInflater.from(TaskMixExecuteActivity.this).inflate(R.layout.task_custom_dialog,null);
-                    TextView contentTV1 = (TextView)view.findViewById(R.id.tech_custom_dialog_content1_text_view);
-                    TextView contentTV2 = (TextView)view.findViewById(R.id.tech_custom_dialog_content2_text_view);
+                    RevealTextView contentTV1 = (RevealTextView)view.findViewById(R.id.tech_custom_dialog_content1_text_view);
+                    RevealTextView contentTV2 = (RevealTextView)view.findViewById(R.id.tech_custom_dialog_content2_text_view);
                     Button cancelBtn=(Button)view.findViewById(R.id.tech_custom_dialog_cancel_button);
                     Button confirmBtn=(Button)view.findViewById(R.id.tech_custom_dialog_confirm_button);
 
@@ -262,9 +263,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             case R.id.tech_task_mix_part2_container_relative_layout://add component
                 AlertDialog.Builder builder = new AlertDialog.Builder(TaskMixExecuteActivity.this);
                 View view= LayoutInflater.from(TaskMixExecuteActivity.this).inflate(R.layout.task_custom_dialog,null);
-                TextView title = (TextView)view.findViewById(R.id.tech_custom_dialog_title_text_view);
-                TextView contentTV1 = (TextView)view.findViewById(R.id.tech_custom_dialog_content1_text_view);
-                TextView contentTV2 = (TextView)view.findViewById(R.id.tech_custom_dialog_content2_text_view);
+                RevealTextView title = (RevealTextView)view.findViewById(R.id.tech_custom_dialog_title_text_view);
+                RevealTextView contentTV1 = (RevealTextView)view.findViewById(R.id.tech_custom_dialog_content1_text_view);
+                RevealTextView contentTV2 = (RevealTextView)view.findViewById(R.id.tech_custom_dialog_content2_text_view);
                 title.setText("添加零件");
                 contentTV1.setText("零件名称");
                 contentTV2.setText("零件数量");
@@ -297,7 +298,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                         dialog.dismiss();
                     }
                 });
-
                 confirmBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -337,24 +337,23 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     public class MixExecuteWidgets{
 
         //part1
-        TextView mCurrentStepTitle;
-        TextView mCurrentStepContent;
-        TextView mExecutingMan;
+        RevealTextView mCurrentStepTitle;
+        RevealTextView mCurrentStepContent;
+        RevealTextView mExecutingMan;
         Chronometer mTimeBox;
         ImageView mDoneImageView;
         //part2
         ListView mComponentListView;
         RelativeLayout mAddComponentRelativeLayout;
+        ComponentAdapter mComponentAdapter;
+        List<ComponentModel> mComponentModelList;
 
         //part3
         Button mButtonPre,mButtonNext,mButtonMixFunction;
 
         //part_pause_reason
-        TextView mPauseReason;
+        RevealTextView mPauseReason;
         Chronometer mPauseTime;
-
-        ComponentAdapter mComponentAdapter;
-        List<ComponentModel> mComponentModelList;
     }
 
     /*
@@ -362,10 +361,10 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     */
     public class MixDoneOrUnStartWidgets{
         //task_part1_description
-        TextView mOrderSerialNum;
-        TextView mStationJob;
-        TextView mStation;
-        TextView mRelativePerson;
+        RevealTextView mOrderSerialNum;
+        RevealTextView mStationJob;
+        RevealTextView mStation;
+        RevealTextView mRelativePerson;
         Chronometer mTimeBox;
         ImageView mDoneImageView;
 
@@ -518,7 +517,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             }
                             else if (mActivityType == ActivityType.TYPE_DONE_EDITOR || mActivityType == ActivityType.TYPE_DONE_VIEW){
                                 String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+                                mMixExecuteWidgets.mCurrentStepTitle.setAnimatedText(currentStepTitle);
                             }
 
                             break;
@@ -539,7 +538,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             }
                             else {
                                 String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-                                mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+                                mMixExecuteWidgets.mCurrentStepTitle.setAnimatedText(currentStepTitle);
                             }
 
                             break;
@@ -570,7 +569,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     private void reupdateStepView(int type){
         if(type == OperationType.STEP_DONE){
             String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-            mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+            mMixExecuteWidgets.mCurrentStepTitle.setAnimatedText(currentStepTitle);
             mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_gray);
             mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGray));
             mMixExecuteWidgets.mTimeBox.stop();
@@ -581,7 +580,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         }
         else if(type == OperationType.STEP_EXECUTING){
             String currentStepTitle = "步骤: " +mRecordAppCurrentStep +"/" + mStepAll;
-            mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
+            mMixExecuteWidgets.mCurrentStepTitle.setAnimatedText(currentStepTitle);
             mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
             mMixExecuteWidgets.mTimeBox.setTextColor(getResources().getColor(R.color.colorGreen));
             mMixExecuteWidgets.mButtonMixFunction.setBackgroundResource(R.drawable.btn_stop);
@@ -607,8 +606,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
                 String[] executeMan = orderDetailModel.getmPrincipal().split(" ");
                 String person ="执行人: " +  executeMan[executeMan.length-1];
-                mMixExecuteWidgets.mExecutingMan.setText(person);
+                mMixExecuteWidgets.mExecutingMan.setAnimatedText(person);
                 break;
+
             case ActivityType.TYPE_EXECUTING:
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
                 mMixExecuteWidgets.mTimeBox.setBackgroundResource(R.drawable.bg_timer_green);
@@ -621,7 +621,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 updateCommData(mMixExecuteWidgets,orderDetailModel);
 
                 //mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
-                mMixExecuteWidgets.mPauseReason.setText(orderDetailModel.getmPauseTitle());
+                mMixExecuteWidgets.mPauseReason.setAnimatedText(orderDetailModel.getmPauseTitle());
                 mMixExecuteWidgets.mPauseTime.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmPauseTime()*1000);
 
 
@@ -632,7 +632,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
                 mMixDoneOrUnStartWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime()-orderDetailModel.getmTotalSpendTime()*1000);
                 String executePerson = "执行人: "+orderDetailModel.getmPrincipal();
-                mMixDoneOrUnStartWidgets.mRelativePerson.setText(executePerson);
+                mMixDoneOrUnStartWidgets.mRelativePerson.setAnimatedText(executePerson);
 
                 //step list
                 mMixDoneOrUnStartWidgets.mStepsSimpleAdapter = new SimpleAdapter(this,orderDetailModel.getmDoneStepsList(),R.layout.task_step_done_item,
@@ -677,16 +677,16 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
     private void updateCommData(Object object, OrderDetailModel orderDetailModel){
         if(object instanceof MixDoneOrUnStartWidgets){
-            mMixDoneOrUnStartWidgets.mOrderSerialNum.setText(orderDetailModel.getmOrderSerialNum());
-            mMixDoneOrUnStartWidgets.mStationJob.setText(orderDetailModel.getmOrderType());
-            mMixDoneOrUnStartWidgets.mStation.setText(orderDetailModel.getmOrderStation());
+            mMixDoneOrUnStartWidgets.mOrderSerialNum.setAnimatedText(orderDetailModel.getmOrderSerialNum());
+            mMixDoneOrUnStartWidgets.mStationJob.setAnimatedText(orderDetailModel.getmOrderType());
+            mMixDoneOrUnStartWidgets.mStation.setAnimatedText(orderDetailModel.getmOrderStation());
         }
         else if(object instanceof  MixExecuteWidgets){
             String currentStepTitle = "步骤: " +orderDetailModel.getmCurrentStep() +"/" + orderDetailModel.getmStepAll();
-            mMixExecuteWidgets.mCurrentStepTitle.setText(currentStepTitle);
-            mMixExecuteWidgets.mCurrentStepContent.setText(orderDetailModel.getmCurrentStepTitle());
+            mMixExecuteWidgets.mCurrentStepTitle.setAnimatedText(currentStepTitle);
+            mMixExecuteWidgets.mCurrentStepContent.setAnimatedText(orderDetailModel.getmCurrentStepTitle());
             String person ="执行人: " +  orderDetailModel.getmPrincipal();
-            mMixExecuteWidgets.mExecutingMan.setText(person);
+            mMixExecuteWidgets.mExecutingMan.setAnimatedText(person);
             mMixExecuteWidgets.mTimeBox.setBase(SystemClock.elapsedRealtime() - orderDetailModel.getmCurrentStepSpendTime()*1000);
 
             //update component list
@@ -756,8 +756,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             initTaskMixCommonView(mMixExecuteWidgets);
             mMixExecuteWidgets.mButtonMixFunction.setText("恢复");
 
+
             //part_pause_reason
-            mMixExecuteWidgets.mPauseReason = (TextView)this.findViewById(R.id.tech_task_mix_pause_reason_content_text_view);
+            mMixExecuteWidgets.mPauseReason = (RevealTextView)this.findViewById(R.id.tech_task_mix_pause_reason_content_text_view);
             mMixExecuteWidgets.mPauseTime = (Chronometer)this.findViewById(R.id.tech_task_mix_pause_reason_time_content_text_view);
 
             //button color change
@@ -779,9 +780,9 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         //part1
         if(object instanceof MixExecuteWidgets){
             Log.i(mTag,"init MixExecuteWidgets ");
-            mMixExecuteWidgets.mCurrentStepTitle = (TextView)this.findViewById(R.id.tech_task_part_1_title_1_text_view) ;
-            mMixExecuteWidgets.mCurrentStepContent = (TextView)this.findViewById(R.id.tech_task_part_1_title_2_text_view);
-            mMixExecuteWidgets.mExecutingMan = (TextView)this.findViewById(R.id.tech_task_part_1_title_3_text_view);
+            mMixExecuteWidgets.mCurrentStepTitle = (RevealTextView)this.findViewById(R.id.tech_task_part_1_title_1_text_view) ;
+            mMixExecuteWidgets.mCurrentStepContent = (RevealTextView)this.findViewById(R.id.tech_task_part_1_title_2_text_view);
+            mMixExecuteWidgets.mExecutingMan = (RevealTextView)this.findViewById(R.id.tech_task_part_1_title_3_text_view);
             mMixExecuteWidgets.mTimeBox =(Chronometer)this.findViewById(R.id.tech_task_part_1_title_4_text_view);
             mMixExecuteWidgets.mDoneImageView = (ImageView)this.findViewById(R.id.tech_task_part1_done_image_view);
 
@@ -802,14 +803,15 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
             mMixExecuteWidgets.mComponentModelList = new ArrayList<>();
             mMixExecuteWidgets.mComponentAdapter = new ComponentAdapter(TaskMixExecuteActivity.this,mMixExecuteWidgets.mComponentModelList);
             mMixExecuteWidgets.mComponentListView.setAdapter( mMixExecuteWidgets.mComponentAdapter);
+
         }
         else if(object instanceof MixDoneOrUnStartWidgets){
             Log.i(mTag,"init MixDoneOrUnStartWidgets ");
             //task_part1_description
-            mMixDoneOrUnStartWidgets.mOrderSerialNum = (TextView)this.findViewById(R.id.tech_task_part1_desc_title_1_text_view);
-            mMixDoneOrUnStartWidgets.mStationJob = (TextView)this.findViewById(R.id.tech_task_part1_desc_title_2_text_view);
-            mMixDoneOrUnStartWidgets.mStation = (TextView)this.findViewById(R.id.tech_task_part1_desc_title_3_text_view);
-            mMixDoneOrUnStartWidgets.mRelativePerson =(TextView)this.findViewById(R.id.tech_task_part1_desc_title_4_text_view);
+            mMixDoneOrUnStartWidgets.mOrderSerialNum = (RevealTextView)this.findViewById(R.id.tech_task_part1_desc_title_1_text_view);
+            mMixDoneOrUnStartWidgets.mStationJob = (RevealTextView)this.findViewById(R.id.tech_task_part1_desc_title_2_text_view);
+            mMixDoneOrUnStartWidgets.mStation = (RevealTextView)this.findViewById(R.id.tech_task_part1_desc_title_3_text_view);
+            mMixDoneOrUnStartWidgets.mRelativePerson =(RevealTextView)this.findViewById(R.id.tech_task_part1_desc_title_4_text_view);
             mMixDoneOrUnStartWidgets.mTimeBox =(Chronometer)this.findViewById(R.id.tech_task_part1_desc_title_5_text_view);
             mMixDoneOrUnStartWidgets.mDoneImageView = (ImageView)this.findViewById(R.id.tech_task_part1_desc_done_image_view);
 

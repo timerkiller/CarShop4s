@@ -12,7 +12,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp"/>
 
-    <TextView
+    <com.example.vke.shop4stech.customLayout.RevealTextView
         android:layout_toEndOf="@id/tech_task_part2_station_progress_point1"
         android:id="@+id/task_part2_station_text_view"
         android:layout_width="match_parent"
