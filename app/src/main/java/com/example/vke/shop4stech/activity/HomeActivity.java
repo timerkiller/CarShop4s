@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -25,8 +26,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +62,7 @@ implements View.OnClickListener,View.OnLongClickListener{
     private TextView mTaskTextView;
     private TextView mMessageTextView;
     private TextView mPersonalInfoTextView;
+    private ProgressBar mProgressBar;
 
     private ViewPager mViewPager;
     private List<Fragment> mFragmentList;
@@ -68,6 +73,7 @@ implements View.OnClickListener,View.OnLongClickListener{
     private final static int FRAGMENT_ID_PERSONAL_INFO =2;
     private static Boolean isExit = false;
 
+    private static boolean mAnimateFlag = false;
     public static void start(Activity activity, User user, ActivityOptionsCompat options) {
         Intent starter = getStartIntent(activity, user);
         ActivityCompat.startActivity(activity, starter, options.toBundle());
@@ -172,6 +178,8 @@ implements View.OnClickListener,View.OnLongClickListener{
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.addOnPageChangeListener(new TabOnPageChangeListener());
 
+        mProgressBar = (ProgressBar)this.findViewById(R.id.tech_activity_home_progress_bar);
+
         mActionBar.setTitle("4S技师端");
         mActionBar.setDisplayShowHomeEnabled(false);
         Resources resources = getResources();
@@ -222,6 +230,28 @@ implements View.OnClickListener,View.OnLongClickListener{
                         "The onClick method has not been implemented for " + getResources()
                                 .getResourceEntryName(v.getId()));
         }
+    }
+
+    public void setContentViewVisibility(boolean flag) {
+        if(flag){
+            mProgressBar.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.VISIBLE);
+            if(mAnimateFlag){
+                mAnimateFlag = false;
+                AnimationSet animationSet = new AnimationSet(true);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+                alphaAnimation.setDuration(600);
+                animationSet.addAnimation(alphaAnimation);
+                mViewPager.startAnimation(animationSet);
+            }
+        }else {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void setAnimateFlag(boolean flag){
+        mAnimateFlag = flag;
     }
 
     class TabOnPageChangeListener implements ViewPager.OnPageChangeListener{

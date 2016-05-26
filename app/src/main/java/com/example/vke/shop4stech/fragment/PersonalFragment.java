@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.activity.AboutUsActivity;
 import com.example.vke.shop4stech.activity.GetSmsCodeActivity;
+import com.example.vke.shop4stech.activity.HomeActivity;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.Prompt;
@@ -56,7 +57,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     private RelativeLayout mUserManualRelativeLayOut;
     private RelativeLayout mAboutUsRelativeLayOut;
     private RelativeLayout mSignoutLayOut;
-
+    private HomeActivity mParentActivity;
     private Handler mUpdatePersonalInfoHandler;
     public static PersonalFragment newInstance() {
 
@@ -70,6 +71,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mParentActivity = (HomeActivity)getActivity();
+        if(mParentActivity != null){
+            mParentActivity.setContentViewVisibility(false);
+            mParentActivity.setAnimateFlag(true);
+        }
         Log.i(mTag,"on Create in personal fragment");
     }
 
@@ -174,6 +180,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         mUpdatePersonalInfoHandler= new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                if(mParentActivity !=null){
+                    mParentActivity.setContentViewVisibility(true);
+                }
+
                 switch (msg.what){
                     case MessageType.TYPE_GET_PERSONAL_INFO_OK:
                         PersonalInfo personalInfo =(PersonalInfo) msg.obj;

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.activity.HomeActivity;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.activity.TaskMixExecuteActivity;
 import com.example.vke.shop4stech.adapter.TaskAdapter;
@@ -55,15 +56,14 @@ public class TaskFragment extends ListFragment
     private int mTotalPage = 0;
     private Handler mGetTaskHandler ;
     private boolean mIsUpdateOngoing = false;
-
+    HomeActivity mParentActivity;
     private int mListClickItemLocation = 0;
 
     class OPERATION_TYPE{
         public static final int TYPE_UPDATE = 0x100;
         public static final int TYPE_LOAD_MORE = 0x101;
     }
-
-
+    
     public static TaskFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -75,17 +75,18 @@ public class TaskFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mParentActivity =(HomeActivity)getActivity();
         mTaskAdapter = new TaskAdapter(getActivity(),mTotalTaskList);
         setListAdapter(mTaskAdapter);
         initHandler();
-
+        mParentActivity.setContentViewVisibility(false);
+        mParentActivity.setAnimateFlag(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_task_list,container,false);
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -142,6 +143,8 @@ public class TaskFragment extends ListFragment
             @Override
             public void handleMessage(Message msg) {
                 Log.i(mTag,"Thread :ID:"+Thread.currentThread().getId() +" Thread Name: "+ Thread.currentThread().getName());
+                mParentActivity.setContentViewVisibility(true);
+
                 try{
                     mIsUpdateOngoing = false;
                     XListView xListView = (XListView)getListView();

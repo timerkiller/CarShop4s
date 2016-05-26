@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -72,8 +74,15 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
 
     protected void setContentViewVisibility(boolean flag){
         if(flag){
+            AnimationSet animationSet = new AnimationSet(true);
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+            alphaAnimation.setDuration(600);
+            animationSet.addAnimation(alphaAnimation);
+
             mProgressBar.setVisibility(View.GONE);
             mBaseContainerRelativeLayout.setVisibility(View.VISIBLE);
+            //mBaseContainerRelativeLayout.setAnimation(animationSet);
+
         }
         else {
             mProgressBar.setVisibility(View.VISIBLE);

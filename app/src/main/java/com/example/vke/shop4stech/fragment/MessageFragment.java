@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.activity.HomeActivity;
 import com.example.vke.shop4stech.activity.SignInActivity;
 import com.example.vke.shop4stech.adapter.MessageAdapter;
 import com.example.vke.shop4stech.constant.MessageType;
@@ -42,6 +43,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     private static final String mTag = "MessageFragment";
     private List<UserMessage> mTotalMessageList;
     private MessageAdapter mMessageAdapter;
+    HomeActivity mParentActivity;
     private static final int FIRST_PAGE =1;
     private static final int PER_PAGE = 10;
     private int mPageId = 2;
@@ -97,10 +99,14 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mParentActivity=(HomeActivity)getActivity();
         mMessageAdapter = new MessageAdapter(getActivity(),mTotalMessageList);
         setListAdapter(mMessageAdapter);
         initHandler();
-
+        if(mParentActivity != null){
+            mParentActivity.setContentViewVisibility(false);
+            mParentActivity.setAnimateFlag(true);
+        }
     }
 
     @Override
@@ -218,7 +224,9 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         mUserMessageHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-
+                if(mParentActivity !=null){
+                    mParentActivity.setContentViewVisibility(true);
+                }
                 XListView xListView = (XListView)getListView();
                 //只有一页数据的时候，不显示下拉框
                 if(mTotalPage == 1){

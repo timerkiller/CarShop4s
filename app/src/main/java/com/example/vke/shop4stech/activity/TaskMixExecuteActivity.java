@@ -442,7 +442,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 int layoutResId[] = {R.layout.task_mix_part1,R.layout.task_mix_part2,R.layout.task_mix_part3,-1};
                 initContentView(layoutResId);
                 break;
-            
+
             case ActivityType.TYPE_PAUSE:
                 int layoutResIdForPause[] = {R.layout.task_mix_part1,R.layout.task_mix_part2,R.layout.task_mix_pause_reason,R.layout.task_mix_part3};
                 initContentView(layoutResIdForPause);
