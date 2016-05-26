@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.example.vke.shop4stech.R;
@@ -26,6 +27,8 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
     private RelativeLayout mTaskPartRelativeLayout[] = new RelativeLayout[4];
     private ImageView  mCutLine3;
 
+    private RelativeLayout mBaseContainerRelativeLayout;
+    private ProgressBar mProgressBar;
     private Button mBackButton;
     protected String mAccessToken;
     @Override
@@ -47,21 +50,6 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
         }).start();
     }
 
-//    private String getValidAccessToken(){
-//        String accessToken = PreferencesHelper.getPreferenceAccessToken(this);
-//        String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
-//        if(result != null){
-//            if(result.equals("ok")) {
-//                return accessToken;
-//            }
-//            else {
-//                return "failed";
-//            }
-//        }
-//
-//        return null;
-//    }
-
     private void initBaseContentView(){
         mBackButton = (Button)findViewById(R.id.tech_task_step_back_button);
         mTaskPartRelativeLayout[0] = (RelativeLayout)findViewById(R.id.tech_task_part_1_relative_layout);
@@ -76,7 +64,23 @@ public abstract class BaseTaskActivity extends BaseSwipeBackActivity {
                 onBackEvent();
             }
         });
+
+        mBaseContainerRelativeLayout = (RelativeLayout)findViewById(R.id.tech_base_task_container_relative);
+        mProgressBar = (ProgressBar)findViewById(R.id.tech_base_task_process_bar);
     }
+
+
+    protected void setContentViewVisibility(boolean flag){
+        if(flag){
+            mProgressBar.setVisibility(View.GONE);
+            mBaseContainerRelativeLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mBaseContainerRelativeLayout.setVisibility(View.INVISIBLE);
+        }
+    }
+
 
     protected void initContentView(int layoutResID[]){
         for(int i = 0; i< layoutResID.length; i++){

@@ -101,6 +101,10 @@ public final class RevealTextView extends TextView implements Runnable, ValueAni
     * @param text Text to be shown.
     */
     public void setAnimatedText(String text) {
+        if(text == null){
+            return;
+        }
+
         this.text = text;
         alphas = new double[text.length()];
         for(int i=0; i<text.length(); i++) {

@@ -442,7 +442,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 int layoutResId[] = {R.layout.task_mix_part1,R.layout.task_mix_part2,R.layout.task_mix_part3,-1};
                 initContentView(layoutResId);
                 break;
-
+            
             case ActivityType.TYPE_PAUSE:
                 int layoutResIdForPause[] = {R.layout.task_mix_part1,R.layout.task_mix_part2,R.layout.task_mix_pause_reason,R.layout.task_mix_part3};
                 initContentView(layoutResIdForPause);
@@ -456,6 +456,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         initHandler();
 
         startThreadToGetOrderData();
+        setContentViewVisibility(false);
     }
 
     private void initHandler(){
@@ -464,6 +465,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                 @Override
                 public void handleMessage(Message msg) {
                     //收到消息重新设置界面按钮可操作
+                    setContentViewVisibility(true);
                     mCanTouch = true;
                     switch (msg.what){
                         case MessageType.TYPE_GET_TASK_DETAIL_SUCCESS:
@@ -472,7 +474,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             if((mActivityType == ActivityType.TYPE_DONE_EDITOR || mActivityType == ActivityType.TYPE_DONE_VIEW) && mTriggerStep != null){
                                 mRecordAppCurrentStep = mTriggerStep;
                                 mCanTouch = false;
-
+                                setContentViewVisibility(false);
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -665,15 +667,6 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.i(mTag,"onKeyDown touch");
-        if(!mCanTouch){
-            mCanTouch = true;
-        }
-
-        return false;//super.onKeyDown(keyCode, event);
-    }
 
     private void updateCommData(Object object, OrderDetailModel orderDetailModel){
         if(object instanceof MixDoneOrUnStartWidgets){
