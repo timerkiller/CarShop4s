@@ -15,7 +15,9 @@ public class MyApplication extends Application{
         super.onCreate();
         LogCollector.setDebugMode(true);
         LogCollector.init(getApplicationContext(), "", null);
+        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
 
-        //JPushInterface.init(getApplicationContext());
+        JPushInterface.init(getApplicationContext());
     }
+
 }

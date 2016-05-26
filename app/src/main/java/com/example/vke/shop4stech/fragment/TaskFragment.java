@@ -63,7 +63,7 @@ public class TaskFragment extends ListFragment
         public static final int TYPE_UPDATE = 0x100;
         public static final int TYPE_LOAD_MORE = 0x101;
     }
-    
+
     public static TaskFragment newInstance() {
 
         Bundle args = new Bundle();

@@ -47,6 +47,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.zip.Inflater;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class HomeActivity extends AppCompatActivity
 implements View.OnClickListener,View.OnLongClickListener{
 
@@ -99,6 +101,17 @@ implements View.OnClickListener,View.OnLongClickListener{
         mActionBar = getSupportActionBar();
         initContentViews();
         Log.d(m_Tag,"view create done !!!!");
+
+    }
+
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
     }
 
     @Override

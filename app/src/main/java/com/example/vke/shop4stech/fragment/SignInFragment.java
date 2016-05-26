@@ -54,6 +54,8 @@ import org.apache.commons.codec.binary.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * Enable selection of user name.
@@ -309,11 +311,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
+                                //jpush ID,用于接收推送
+
+                                String rid = JPushInterface.getRegistrationID(getActivity().getApplicationContext());
                                 HashMap<String,Object> loginDataMap = new HashMap<String, Object>();
                                 loginDataMap.put(RequestDataKey.PHONE,mUserName.getText().toString().replace(" ",""));
                                 loginDataMap.put(RequestDataKey.LOGIN_MODE,"login");
                                 loginDataMap.put(RequestDataKey.PASSWORD, Base64.encodeToString(mPassword.getText().toString().getBytes(),Base64.DEFAULT));
-                                loginDataMap.put(RequestDataKey.JPUSH_ID,"fjdsklfjkdj3fejkfjkdf");
+                                loginDataMap.put(RequestDataKey.JPUSH_ID,rid);
                                 loginDataMap.put(RequestDataKey.TYPE,"mantain");
 
                                 String result = NetOperationHelper.login(loginDataMap);
