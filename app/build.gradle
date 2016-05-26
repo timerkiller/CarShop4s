@@ -43,4 +43,8 @@ dependencies {
     compile files('libs/httpclient-4.5.2.jar')
     compile project(':SlidingLibrary')
     compile files('libs/jpush-android-2.1.5.jar')
+    compile files('libs/AndroidCrashSendToEmail.jar')
+    compile files('libs/jaxen-1.1-beta-6.jar.jar')
+    compile files('libs/activation.jar')
+    compile files('libs/dom4j-1.6.1.jar')
 }

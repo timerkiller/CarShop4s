@@ -305,7 +305,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                             break;
                         }
 
-
                         getActivity().findViewById(R.id.empty).setVisibility(View.VISIBLE);
                         mLoginButton.setClickable(false);
                         new Thread(new Runnable() {

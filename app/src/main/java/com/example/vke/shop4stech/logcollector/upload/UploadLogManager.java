@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * 
@@ -82,11 +83,18 @@ public class UploadLogManager {
 				return;
 			}
 			try {
-				String result = HttpManager.uploadFile(url, params, logFile);
-				if(result != null){
-					LogFileStorage.getInstance(mContext).deleteUploadLogFile();
+//				String result = HttpManager.uploadFile(url, params, logFile);
+				MailSender sender = new MailSender("ketijie@163.com","6285067");
+				String path = logFile.getAbsolutePath();
+				try{
+					boolean result = sender.sendMail("Log日志","请分析","ketijie@163.com","ketijie@163.com",path);
+					if(result){
+						LogFileStorage.getInstance(mContext).deleteUploadLogFile();
+					}
+				}catch (Exception e){
+					System.out.println(e.toString());
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally{
