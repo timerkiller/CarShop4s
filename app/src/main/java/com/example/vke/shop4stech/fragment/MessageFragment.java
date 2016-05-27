@@ -105,7 +105,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         initHandler();
         if(mParentActivity != null){
             mParentActivity.setContentViewVisibility(false);
-            mParentActivity.setAnimateFlag(true);
+            mParentActivity.setAnimateFlag(false);
         }
     }
 
