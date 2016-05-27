@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,7 @@ public class ComponentAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
 
         }
+        final int iPosition = position;
 
         final TaskMixExecuteActivity activity = (TaskMixExecuteActivity)mContext;
         viewHolder.addBtn.setOnClickListener(new View.OnClickListener() {
@@ -93,11 +95,11 @@ public class ComponentAdapter extends BaseAdapter {
                 int currentNum = Integer.parseInt(viewHolder.componentNum.getText().toString());
                 currentNum = currentNum+1;
                 viewHolder.componentNum.setText(String.valueOf(currentNum));
+                updateList(iPosition,currentNum);
             }
         });
 
 
-        final int needRemovePosition = position;
         viewHolder.reduceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +107,8 @@ public class ComponentAdapter extends BaseAdapter {
                     return;
                 }
 
-                int currentNUm = Integer.parseInt(viewHolder.componentNum.getText().toString());
-                if(currentNUm == 1)
+                int currentNum = Integer.parseInt(viewHolder.componentNum.getText().toString());
+                if(currentNum == 1)
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("确认删除该零件吗?");
@@ -114,8 +116,8 @@ public class ComponentAdapter extends BaseAdapter {
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            mComponentList.remove(needRemovePosition);
-                            TaskMixExecuteActivity activity = (TaskMixExecuteActivity)mContext;
+                            Log.i("ComponentAdapter","mComponentList size :" + mComponentList.size() + "Position :" + iPosition);
+                            mComponentList.remove(iPosition);
                             notifyDataSetChanged();
                             dialog.dismiss();
                         }
@@ -129,8 +131,10 @@ public class ComponentAdapter extends BaseAdapter {
 
                     return;
                 }
-                currentNUm--;
-                viewHolder.componentNum.setText(Integer.toString(currentNUm));
+                currentNum--;
+                viewHolder.componentNum.setText(String.valueOf(currentNum));
+                Log.i("ComponentAdapter","position : "+iPosition +"mComponentList size :" + mComponentList.size());
+                updateList(iPosition,currentNum);
             }
         });
 
@@ -139,4 +143,17 @@ public class ComponentAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    void updateList(int location,int num){
+        try{
+            ComponentModel model =  mComponentList.get(location);
+            model.setmComponentNum(String.valueOf(num));
+            mComponentList.set(location,model);
+            notifyDataSetChanged();
+        }
+        catch (Exception e){
+            Log.e("ComponentAdapter",e.toString());
+        }
+    }
+
 }
