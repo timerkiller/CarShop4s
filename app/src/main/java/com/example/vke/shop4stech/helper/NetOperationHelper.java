@@ -162,7 +162,12 @@ public class NetOperationHelper {
                     orderDetail.setmCurrentStepTitle(respData.getString("currentStepTitle"));
                     orderDetail.setmCurrentStepSpendTime(Integer.parseInt( respData.getString("currentStepSpendTime")));
                     orderDetail.setmPauseTitle(respData.getString("pauseTitle"));
-                    orderDetail.setmPauseTime(Integer.parseInt(respData.getString("estimatedTime")));
+                    if(respData.getString("estimatedTime").length() > 5){
+                        orderDetail.setmPauseTime(86400);
+                    }
+                    else {
+                        orderDetail.setmPauseTime(Integer.parseInt(respData.getString("estimatedTime")));
+                    }
 
                     List<ComponentModel> componentModelList = new ArrayList<ComponentModel>();
                     JSONArray componentJsonArray = respData.getJSONArray("componentList");
