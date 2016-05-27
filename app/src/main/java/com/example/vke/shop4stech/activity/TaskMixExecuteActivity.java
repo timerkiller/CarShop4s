@@ -489,7 +489,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
                             break;
                         case MessageType.TYPE_EDIT_COMPONENT_SUCCESS:
                             if(mActivityType == ActivityType.TYPE_DONE_EDITOR){
-                            TaskMixExecuteActivity.this.finish();
+                                TaskMixExecuteActivity.this.finish();
                             }
                             break;
                         case MessageType.TYPE_RESUME_TASK_SUCCESS:
@@ -1006,7 +1006,7 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
     }
 
     private void pauseTask(String pauseReason,String pauseTime){
-        JSONArray array = new JSONArray();
+        JSONArray array = getComponents();;
 
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
@@ -1067,20 +1067,25 @@ public class TaskMixExecuteActivity extends BaseTaskActivity implements View.OnC
 
     }
 
-    private void editComponents(String step){
-        JSONArray array = new JSONArray();
+    private JSONArray getComponents(){
+        JSONArray jsonArray = new JSONArray();
         for(int i=0;i<mMixExecuteWidgets.mComponentModelList.size();i++)
         {
             JSONObject compoentJsonObject = new JSONObject();
             try{
                 compoentJsonObject.put("title", mMixExecuteWidgets.mComponentModelList.get(i).getmComponentName());
                 compoentJsonObject.put("num",mMixExecuteWidgets.mComponentModelList.get(i).getmComponentNum() );
-                array.put(compoentJsonObject);
+                jsonArray.put(compoentJsonObject);
             }catch (Exception e){
                 Log.e(mTag,"editComponents:" + e.toString());
             }
         }
 
+        return jsonArray;
+    }
+
+    private void editComponents(String step){
+        JSONArray array = getComponents();
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put(RequestDataKey.ACCESS_TOKEN,mAccessToken);
         map.put(RequestDataKey.SERIAL_NUM,mOrderSerialNum);
