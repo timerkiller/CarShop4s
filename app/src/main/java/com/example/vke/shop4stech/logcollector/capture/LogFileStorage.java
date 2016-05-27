@@ -9,11 +9,6 @@ import com.example.vke.shop4stech.logcollector.utils.LogHelper;
 import android.content.Context;
 import android.util.Log;
 
-/**
- * 
- * @author jiabin
- *
- */
 public class LogFileStorage {
 
 	private static final String TAG = LogFileStorage.class.getName();

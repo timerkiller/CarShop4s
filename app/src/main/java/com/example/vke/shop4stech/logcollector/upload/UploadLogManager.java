@@ -12,11 +12,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-/**
- * 
- * @author jiabin
- *
- */
+
 public class UploadLogManager {
 	
 	private static final String TAG = UploadLogManager.class.getName();
