@@ -44,12 +44,6 @@ public class MessageAdapter extends BaseAdapter {
         mSelectedItemsIds = new SparseBooleanArray();
     }
 
-
-
-
-
-
-
     public void bindData(List<UserMessage> list){
         mMessageList = list;
     }
@@ -94,6 +88,7 @@ public class MessageAdapter extends BaseAdapter {
             mViewHolder.mTimeStamp = (TextView)convertView.findViewById(R.id.tech_message_date_time_text_view);
             mViewHolder.mIndex = (TextView)convertView.findViewById(R.id.tech_message_index_text_view);
             mViewHolder.mSelector =(CheckBox)convertView.findViewById(R.id.tech_message_check_box);
+            mViewHolder.mNeedAnimate = true;
 
             convertView.setTag(mViewHolder);
         }
@@ -104,10 +99,11 @@ public class MessageAdapter extends BaseAdapter {
 
         // 设置checkbox是否可见
         if (mShowMultSelectState) {
-            if(mNeedAnimate){
+            if(mViewHolder.mNeedAnimate){
                 Log.i(mTag,"on set animate");
 
                 //mNeedAnimate = false;
+                mViewHolder.mNeedAnimate = false;
                 TranslateAnimation animation = new TranslateAnimation(60, 0, 0, 0);
                 animation.setDuration(500);
                 mViewHolder.mTimeStamp.setAnimation(animation);
@@ -118,7 +114,6 @@ public class MessageAdapter extends BaseAdapter {
                 alphaAnimation.setDuration(600);
                 animationSet.addAnimation(alphaAnimation);
                 mViewHolder.mSelector.startAnimation(animationSet);
-
             }
 
             mViewHolder.mSelector.setVisibility(View.VISIBLE);
@@ -131,8 +126,9 @@ public class MessageAdapter extends BaseAdapter {
             }
 
         } else {
-            if(mNeedAnimate) {
+            if(mViewHolder.mNeedAnimate) {
                 //mNeedAnimate =false;
+                mViewHolder.mNeedAnimate = false;
                 TranslateAnimation animation = new TranslateAnimation(-60, 0, 0, 0);
                 animation.setDuration(600);
                 mViewHolder.mTimeStamp.setAnimation(animation);
@@ -159,7 +155,7 @@ public class MessageAdapter extends BaseAdapter {
         TextView mAuthor;
         TextView mTimeStamp;
         TextView mIndex;
-
+        Boolean mNeedAnimate;
         CheckBox mSelector;
     }
 
@@ -169,7 +165,6 @@ public class MessageAdapter extends BaseAdapter {
         mMessageList.remove(position);
         //NetOperationHelper.removeMessage();
     }
-
 
     public void toggleSelection(int position) {
         selectView(position, !mSelectedItemsIds.get(position));

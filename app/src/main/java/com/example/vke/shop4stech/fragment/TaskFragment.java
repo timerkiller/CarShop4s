@@ -49,7 +49,7 @@ public class TaskFragment extends ListFragment
 
     private static final String mTag = "TaskFragment";
 
-    private static final String PER_PAGE = "20";
+    private static final String PER_PAGE = "50";
     private TaskAdapter mTaskAdapter;
     private  List<Task> mTotalTaskList;
     private int mPageId = 2;
