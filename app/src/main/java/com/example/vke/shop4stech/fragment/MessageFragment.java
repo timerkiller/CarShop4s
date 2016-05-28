@@ -241,7 +241,8 @@ implements XListView.IXListViewListener{
                                 dialog.dismiss();
                             }
                         }).show();
-                        
+
+
                         return true;
                     case android.R.id.home:
                         Log.i(mTag,"onBack click");
