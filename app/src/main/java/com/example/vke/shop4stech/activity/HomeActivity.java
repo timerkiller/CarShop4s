@@ -276,8 +276,10 @@ implements View.OnClickListener,View.OnLongClickListener{
                 mViewPager.startAnimation(animationSet);
             }
         }else {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.INVISIBLE);
+            if(mProgressBar != null && mViewPager != null){
+                mProgressBar.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

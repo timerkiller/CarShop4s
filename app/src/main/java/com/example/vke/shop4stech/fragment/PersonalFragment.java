@@ -118,48 +118,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    if (!NetOperationHelper.isNetworkConnected(getActivity())) {
-                        mUpdatePersonalInfoHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
-                        return;
-                    }
-
-                    String accessToken = NetOperationHelper.getValidAccessToken(getActivity());
-                    if (accessToken == null){
-                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                        msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
-                        msg.what = MessageType.TYPE_SERVER_NOT_AVAILABLE;
-                        mUpdatePersonalInfoHandler.sendMessage(msg);
-                        return ;
-                    }
-                    else if(accessToken.equals("failed")){
-                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                        msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
-                        msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
-                        mUpdatePersonalInfoHandler.sendMessage(msg);
-                        return;
-                    }
-
-                    HashMap<String, Object> map = new HashMap<String, Object>();
-                    map.put(RequestDataKey.LOGIN_MODE, "userInfo");
-                    map.put(RequestDataKey.ACCESS_TOKEN, accessToken);
-
-                    PersonalInfo personalInfo = NetOperationHelper.getPersnoalInfo(map);
-                    if (personalInfo != null) {
-                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                        msg.obj = personalInfo;
-                        msg.what = MessageType.TYPE_GET_PERSONAL_INFO_OK;
-                        mUpdatePersonalInfoHandler.sendMessage(msg);
-                    } else {
-                        Message msg = mUpdatePersonalInfoHandler.obtainMessage();
-                        msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
-                        msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
-                        mUpdatePersonalInfoHandler.sendMessage(msg);
-                    }
-                }
-                catch(Exception e){
-                    Log.w(mTag,e.toString());
-                }
+                getPersonalInfo();
             }
         }).start();
 
@@ -167,11 +126,63 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
     }
 
+    public void getPersonalInfo(){
+        try {
+            if (!NetOperationHelper.isNetworkConnected(getActivity())) {
+                mUpdatePersonalInfoHandler.sendEmptyMessage(MessageType.TYPE_NETWORK_DISABLE);
+                return;
+            }
+
+            String accessToken = NetOperationHelper.getValidAccessToken(getActivity());
+            if (accessToken == null){
+                Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
+                msg.what = MessageType.TYPE_SERVER_NOT_AVAILABLE;
+                mUpdatePersonalInfoHandler.sendMessage(msg);
+                return ;
+            }
+            else if(accessToken.equals("failed")){
+                Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
+                msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
+                mUpdatePersonalInfoHandler.sendMessage(msg);
+                return;
+            }
+
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put(RequestDataKey.LOGIN_MODE, "userInfo");
+            map.put(RequestDataKey.ACCESS_TOKEN, accessToken);
+
+            PersonalInfo personalInfo = NetOperationHelper.getPersnoalInfo(map);
+            if (personalInfo != null) {
+                Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                msg.obj = personalInfo;
+                msg.what = MessageType.TYPE_GET_PERSONAL_INFO_OK;
+                mUpdatePersonalInfoHandler.sendMessage(msg);
+            } else {
+                Message msg = mUpdatePersonalInfoHandler.obtainMessage();
+                msg.obj = Prompt.PROMPT_ACCESS_TOKEN_INVALID;
+                msg.what = MessageType.TYPE_GET_PERSONAL_INFO_ERROR;
+                mUpdatePersonalInfoHandler.sendMessage(msg);
+            }
+        }
+        catch(Exception e){
+            Log.w(mTag,e.toString());
+        }
+    }
+
     @Override
     public void onResume() {
         Log.i(mTag,"onResume");
         super.onResume();
         initHandler();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getPersonalInfo();
+            }
+        }).start();
     }
 
     private void initHandler(){
@@ -264,10 +275,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onDestroyView() {
-        Log.i(mTag,"onDestroyView");
-        super.onDestroyView();
+    public void onPause() {
+        Log.i(mTag,"onPause");
+        super.onPause();
         mUpdatePersonalInfoHandler = null;
     }
+
 
 }

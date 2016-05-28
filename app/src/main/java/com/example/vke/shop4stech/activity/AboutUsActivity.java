@@ -77,7 +77,6 @@ public class AboutUsActivity extends BaseSwipeBackActivity {
 //        return super.onCreateOptionsMenu(menu);
 //    }
 
-
     // Press the back button in mobile phone
     @Override
     public void onBackPressed() {

@@ -56,6 +56,7 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         initView();
     }
 
+
     private void initView(){
         mSmsCodeHander = new Handler(){
             @Override
@@ -237,6 +238,7 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         IntentFilter intentFilter = new IntentFilter(ACTION_SMS_RECIVER);
         intentFilter.setPriority(Integer.MAX_VALUE);
         //注册广播
+
         this.registerReceiver(mSMSBroadcastReceiver, intentFilter);
 
         mSMSBroadcastReceiver.setOnReceivedMessageListener(new SMSBroadcastReceiverHelper.MessageListener() {
@@ -248,10 +250,15 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //注销短信监听广播
+    protected void onStop() {
+        super.onStop();
         this.unregisterReceiver(mSMSBroadcastReceiver);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //注销短信监听广播
+        //this.unregisterReceiver(mSMSBroadcastReceiver);
+    }
 }
