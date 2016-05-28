@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">车师傅</string>
+    <string name="tech_delete_ongoing">正在删除中，请稍后</string>
     <string name="tech_pause_title">暂停执行</string>
     <string name="login_logo">LoginLogo</string>
     <string name="disp_null"> </string>
@@ -58,6 +59,7 @@
     <string name="tech_password_check_failed">两次密码输入不一致</string>
     <string name="tech_touch_again_to_exit"> 再按一次退出程序</string>
     <string name="tech_button_cancel"> 取消</string>
+    <string name="tech_delete"> 删除</string>
     <string name="tech_button_confirm"> 确定</string>
     <string name="tech_hint_input_pause_time"> 请输入暂停时间</string>
     <string name="tech_hint_input_pause_reason"> 请输入暂停原因</string>

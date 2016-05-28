@@ -9,10 +9,17 @@ import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +36,8 @@ import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.model.User;
 import com.example.vke.shop4stech.model.UserMessage;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -39,20 +48,19 @@ import java.util.zip.Inflater;
  * Created by vke on 2016/5/8.
  */
 public class MessageFragment extends ListFragment
-implements XListView.IXListViewListener,View.OnLongClickListener{
+implements XListView.IXListViewListener{
     private static final String mTag = "MessageFragment";
     private List<UserMessage> mTotalMessageList;
     private MessageAdapter mMessageAdapter;
     HomeActivity mParentActivity;
     private static final int FIRST_PAGE =1;
-    private static final int PER_PAGE = 10;
+    private static final int PER_PAGE = 40;
     private int mPageId = 2;
     private int mTotalPage;
 
-    @Override
-    public boolean onLongClick(View v) {
-        return false;
-    }
+    private TextView mDeleteTipTextView;
+    private ProgressBar mDeletePorcessBar;
+
 
     class OPERATION_TYPE{
         public static final int TYPE_UPDATE = 0x100;
@@ -60,6 +68,17 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     }
 
     private Handler mUserMessageHandler;
+
+    public void showDeleteWidgets(boolean flag){
+        if(flag){
+            mDeleteTipTextView.setVisibility(View.VISIBLE);
+            mDeletePorcessBar.setVisibility(View.VISIBLE);
+        }
+        else {
+            mDeleteTipTextView.setVisibility(View.GONE);
+            mDeletePorcessBar.setVisibility(View.GONE);
+        }
+    }
 
     public static MessageFragment newInstance() {
         Bundle args = new Bundle();
@@ -100,6 +119,7 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mParentActivity=(HomeActivity)getActivity();
+
         mMessageAdapter = new MessageAdapter(getActivity(),mTotalMessageList);
         setListAdapter(mMessageAdapter);
         initHandler();
@@ -111,16 +131,122 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_message,container,false);
+        View view =  inflater.inflate(R.layout.fragment_message,container,false);
+        mDeleteTipTextView = (TextView)view.findViewById(R.id.tech_delete_tip_text_view);
+        mDeletePorcessBar = (ProgressBar)view.findViewById(R.id.tech_delete_message_process_bar);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.i(mTag,">>>>>>>>>>>>>onViewCreated");
         super.onViewCreated(view, savedInstanceState);
-        XListView xListView  = (XListView)getListView();
+        final XListView xListView  = (XListView)getListView();
         xListView.setXListViewListener(this);
         xListView.setPullLoadEnable(true);
         xListView.setPullRefreshEnable(true);
+        //xListView.setOnItemLongClickListener(this);
+        xListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        xListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                int checkedCount = xListView.getCheckedItemCount();
+                mode.setTitle(checkedCount + " selected");
+                mMessageAdapter.toggleSelection(position);
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                if(mParentActivity != null) {
+                    mParentActivity.setWidgetsClickable(false);
+                }
+                mMessageAdapter.setNeedAnimate(true);
+                mMessageAdapter.setItemMultiCheckable(true);
+                mode.getMenuInflater().inflate(R.menu.delete_action_mode, menu);
+                xListView.setPullLoadEnable(false);
+                xListView.setPullRefreshEnable(false);
+
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.delete_mode:
+                        if(!NetOperationHelper.isNetworkConnected(getActivity())){
+                            Toast.makeText(getActivity().getApplicationContext(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+                        showDeleteWidgets(true);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SparseBooleanArray selected = mMessageAdapter.getSelectedIds();
+                                String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
+                                String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
+                                if(!result.equals("ok")){
+                                    Message msg = mUserMessageHandler.obtainMessage();
+                                    msg.what = MessageType.TYPE_DELETE_MESSAGE_FAILED;
+                                    msg.obj = result;
+                                    mUserMessageHandler.sendMessage(msg);
+                                    return;
+                                }
+
+                                Log.i(mTag,"after check access token size:" +selected.size());
+                                for (int i = (selected.size() - 1); i >= 0; i--) {
+                                    UserMessage selectedItem = (UserMessage)mMessageAdapter.getItem(selected.keyAt(i)-1);
+                                    HashMap<String,Object> map = new HashMap<String, Object>();
+                                    map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
+                                    map.put(RequestDataKey.INFO,"delete");
+                                    map.put(RequestDataKey.INDEX,selectedItem.getIndex());
+                                    String ret = NetOperationHelper.removeMessage(map);
+                                    if(!ret.equals("ok")){
+                                        Message msg = mUserMessageHandler.obtainMessage();
+                                        msg.what = MessageType.TYPE_DELETE_MESSAGE_FAILED;
+                                        msg.obj = result;
+                                        mUserMessageHandler.sendMessage(msg);
+                                        return;
+                                    }
+
+                                    mMessageAdapter.remove(selected.keyAt(i)-1);
+                                }
+                                mUserMessageHandler.sendEmptyMessage(MessageType.TYPE_DELETE_MESSAGE_SUCCESS);
+                            }
+                        }).start();
+
+                        mode.setTag("done");
+                        mode.finish();
+                        return true;
+                    case android.R.id.home:
+                        Log.i(mTag,"onBack click");
+
+                    default:
+                        return false;
+                }
+            }
+
+            //退出删除模式处理
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                String tag = (String)mode.getTag();
+                if(tag != null && tag.equals("done")){
+                    Log.i(mTag,"end with mode finish");
+                }
+                else{
+                    resumeWidgets(xListView);
+                }
+                mMessageAdapter.setItemMultiCheckable(false);
+            }
+
+        });
 
         new Thread(new Runnable() {
             @Override
@@ -130,6 +256,20 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
             }
         }).start();
 
+    }
+
+    void resumeWidgets(XListView xListView){
+        mMessageAdapter.dataChange();
+        if(mParentActivity != null) {
+            mParentActivity.setWidgetsClickable(true);
+        }
+        xListView.setPullRefreshEnable(true);
+        if(mTotalPage > 1){
+            xListView.setPullLoadEnable(true);
+        }
+        else {
+            xListView.setPullLoadEnable(false);
+        }
     }
 
     /*
@@ -215,87 +355,101 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        if(mUserMessageHandler == null){
-            initHandler();
-        }
+        initHandler();
     }
 
     private  void initHandler(){
-        mUserMessageHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if(mParentActivity !=null){
-                    mParentActivity.setContentViewVisibility(true);
-                }
-                XListView xListView = (XListView)getListView();
-                //只有一页数据的时候，不显示下拉框
-                if(mTotalPage == 1){
+        if(mUserMessageHandler == null) {
+            mUserMessageHandler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if(mParentActivity !=null){
+                        mParentActivity.setContentViewVisibility(true);
+                    }
 
-                    xListView.setPullLoadEnable(false);
-                }
-                else if(mTotalPage > 1){
-                    xListView.setPullLoadEnable(true);
-                }
+                    XListView xListView = (XListView) getListView();
+                    //只有一页数据的时候，不显示下拉框
+                    if (mTotalPage == 1) {
 
-                TextView textView = (TextView)xListView.findViewById(R.id.xlistview_footer_hint_textview);
-                switch (msg.what){
-                    case MessageType.TYPE_LOAD_MORE_SUCCESS:
-                        //读取更多时，将数据merge到原来的list里
-                        mergeToTotalList((List<UserMessage>)msg.obj);
-                        mMessageAdapter.bindData(mTotalMessageList);
-                        mMessageAdapter.notifyDataSetChanged();
-                        onLoadFinish(true);
-                        if(mTotalMessageList != null && mTotalMessageList.size() != 0 ){
-                            textView.setText(R.string.tech_load_more_data);
-                        }
-                        else{
+                        xListView.setPullLoadEnable(false);
+                    } else if (mTotalPage > 1) {
+                        xListView.setPullLoadEnable(true);
+                    }
+
+                    TextView textView = (TextView) xListView.findViewById(R.id.xlistview_footer_hint_textview);
+                    switch (msg.what) {
+                        case MessageType.TYPE_LOAD_MORE_SUCCESS:
+                            //读取更多时，将数据merge到原来的list里
+                            mergeToTotalList((List<UserMessage>) msg.obj);
+                            mMessageAdapter.bindData(mTotalMessageList);
+                            mMessageAdapter.notifyDataSetChanged();
+                            onLoadFinish(true);
+                            if (mTotalMessageList != null && mTotalMessageList.size() != 0) {
+                                textView.setText(R.string.tech_load_more_data);
+                            } else {
+                                textView.setText(R.string.tech_no_data);
+                            }
+
+                            mPageId++;
+                            break;
+                        case MessageType.TYPE_UPDATE_SUCCESS:
+                            //更新时，直接替换数据
+                            mTotalMessageList = (List<UserMessage>) msg.obj;
+                            mMessageAdapter.bindData(mTotalMessageList);
+                            mMessageAdapter.notifyDataSetChanged();
+                            onLoadFinish(true);
+                            if (mTotalMessageList != null && mTotalMessageList.size() != 0) {
+                                textView.setText(R.string.tech_load_more_data);
+                            } else {
+                                textView.setText(R.string.tech_no_data);
+                            }
+
+                            break;
+                        case MessageType.TYPE_DELETE_MESSAGE_CANCEL:
+                        case MessageType.TYPE_DELETE_MESSAGE_SUCCESS:
+                            showDeleteWidgets(false);
+//                            mMessageAdapter.dataChange();
+//                            if(mParentActivity != null){
+//                                mParentActivity.setWidgetsClickable(true);
+//                            }
+                            resumeWidgets(xListView);
+                            Log.i(mTag,"delete message success");
+                            break;
+
+                        case MessageType.TYPE_SERVER_NOT_AVAILABLE:
+                            Toast.makeText(getActivity().getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        case MessageType.TYPE_ACCESS_TOKEN_INVALID:
+                            String tip = (String) msg.obj;
+                            Toast.makeText(getActivity().getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+                            signOut();
+                            break;
+                        case MessageType.TYPE_UPDATE_FAILED:
+                        case MessageType.TYPE_LOAD_MORE_FAILED:
+                            Toast.makeText(getActivity().getApplicationContext(), Prompt.PROMPT_LOAD_FAILED, Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        case MessageType.TYPE_NETWORK_DISABLE:
+                            Toast.makeText(getActivity(), R.string.tech_network_unuseful, Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        case MessageType.TYPE_NO_DATA_FOUND:
                             textView.setText(R.string.tech_no_data);
-                        }
-
-                        mPageId++;
-                        break;
-                    case MessageType.TYPE_UPDATE_SUCCESS:
-                        //更新时，直接替换数据
-                        mTotalMessageList = (List<UserMessage>)msg.obj;
-                        mMessageAdapter.bindData(mTotalMessageList);
-                        mMessageAdapter.notifyDataSetChanged();
-                        onLoadFinish(true);
-                        if(mTotalMessageList != null && mTotalMessageList.size() != 0 ){
-                            textView.setText(R.string.tech_load_more_data);
-                        }
-                        else{
-                            textView.setText(R.string.tech_no_data);
-                        }
-
-                        break;
-                    case MessageType.TYPE_SERVER_NOT_AVAILABLE:
-                        Toast.makeText(getActivity().getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    case MessageType.TYPE_ACCESS_TOKEN_INVALID:
-                        String tip = (String)msg.obj;
-                        Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
-                        signOut();
-                        break;
-                    case MessageType.TYPE_UPDATE_FAILED:
-                    case MessageType.TYPE_LOAD_MORE_FAILED:
-                        Toast.makeText(getActivity().getApplicationContext(),Prompt.PROMPT_LOAD_FAILED,Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    case MessageType.TYPE_NETWORK_DISABLE:
-                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    case MessageType.TYPE_NO_DATA_FOUND:
-                        textView.setText(R.string.tech_no_data);
-                        //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
-                        onLoadFinish(false);
-                        break;
-                    default:
-                        Log.e(mTag,"Unknow message type: " + msg.what);
+                            //Toast.makeText(getActivity(),R.string.tech_no_data,Toast.LENGTH_SHORT).show();
+                            onLoadFinish(false);
+                            break;
+                        case MessageType.TYPE_DELETE_MESSAGE_FAILED:
+                            showDeleteWidgets(false);
+                            resumeWidgets(xListView);
+                            Toast.makeText(getActivity().getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Log.e(mTag, "Unknow message type: " + msg.what);
+                    }
                 }
-            }
-        };
+            };
+        }
     }
 
     @Override
@@ -370,5 +524,4 @@ implements XListView.IXListViewListener,View.OnLongClickListener{
         super.onDestroyView();
         mUserMessageHandler = null;
     }
-
 }

@@ -101,12 +101,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <com.example.vke.shop4stech.customLayout.CustomViewPager
         android:id="@+id/tech_view_pager"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:background="@color/colorLightGray"
         android:layout_above="@id/tech_bottom_nav_button">
 
-    </android.support.v4.view.ViewPager>
+    </com.example.vke.shop4stech.customLayout.CustomViewPager>
 </RelativeLayout>

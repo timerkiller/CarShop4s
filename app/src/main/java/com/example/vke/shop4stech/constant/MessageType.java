@@ -36,4 +36,7 @@ public class MessageType {
     public static final int TYPE_GET_TASK_DETAIL_FAILED = 0x1024;
     public static final int TYPE_EDIT_COMPONENT_SUCCESS = 0x1025;
     public static final int TYPE_EDIT_COMPONENT_FAILED = 0x1026;
+    public static final int TYPE_DELETE_MESSAGE_SUCCESS = 0x1027;
+    public static final int TYPE_DELETE_MESSAGE_FAILED = 0x1028;
+    public static final int TYPE_DELETE_MESSAGE_CANCEL = 0x1029;
 }

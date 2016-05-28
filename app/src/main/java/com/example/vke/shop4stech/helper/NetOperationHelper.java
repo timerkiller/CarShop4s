@@ -89,6 +89,30 @@ public class NetOperationHelper {
         return null;
     }
 
+    public static String  removeMessage(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.USER_MESSAGE,map);
+        JSONObject respData = httpJsonHelper.httpPostJsonData();
+        if(respData == null){
+            Log.e(mTag,"register failed");
+            return "failed";
+        }
+
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                return "ok";
+            }
+            else if(result.equals("error")){
+                JSONArray errorList = respData.getJSONArray("errors");
+                return errorList.getJSONObject(0).getString("desc");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "failed";
+    }
+
     public static void register(HashMap<String,Object> map){
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
@@ -442,17 +466,13 @@ public class NetOperationHelper {
     public static String getValidAccessToken(Activity activity){
         String accessToken = PreferencesHelper.getPreferenceAccessToken(activity);
         String result = checkAccessTokenInvalid(accessToken);
-        if(result != null){
-            if(result.equals("ok")) {
-                Log.i(mTag,"get accessToken success");
-                return accessToken;
-            }
-            else {
-                return "failed";
-            }
+        if(result.equals("ok")) {
+            Log.i(mTag,"get accessToken success");
+            return accessToken;
         }
-
-        return null;
+        else {
+            return "failed";
+        }
     }
 
     public static String checkAccessTokenInvalid(String accessToken){
@@ -463,7 +483,7 @@ public class NetOperationHelper {
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if(respData == null){
-            return null;
+            return "failed";
         }
 
         try {

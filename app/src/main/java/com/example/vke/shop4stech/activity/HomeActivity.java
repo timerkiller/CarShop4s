@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.customLayout.CustomViewPager;
 import com.example.vke.shop4stech.fragment.MessageFragment;
 import com.example.vke.shop4stech.fragment.PersonalFragment;
 import com.example.vke.shop4stech.fragment.TaskFragment;
@@ -66,7 +67,7 @@ implements View.OnClickListener,View.OnLongClickListener{
     private TextView mPersonalInfoTextView;
     private ProgressBar mProgressBar;
 
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private List<Fragment> mFragmentList;
     private FragmentAdapter mFragmentAdapter;
 
@@ -98,6 +99,8 @@ implements View.OnClickListener,View.OnLongClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
         mActionBar = getSupportActionBar();
         initContentViews();
         Log.d(m_Tag,"view create done !!!!");
@@ -186,7 +189,7 @@ implements View.OnClickListener,View.OnLongClickListener{
         mFragmentList.add(MessageFragment.newInstance());
         mFragmentList.add(PersonalFragment.newInstance());
 
-        mViewPager = (ViewPager)this.findViewById(R.id.tech_view_pager);
+        mViewPager = (CustomViewPager) this.findViewById(R.id.tech_view_pager);
         mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(),mFragmentList);
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.addOnPageChangeListener(new TabOnPageChangeListener());
@@ -207,6 +210,21 @@ implements View.OnClickListener,View.OnLongClickListener{
         mPersonalInfoLinearLayOut.setOnClickListener(this);
 
         Log.i(m_Tag,"Set on click listener done!");
+    }
+
+    public void setWidgetsClickable(boolean flag){
+        if(flag){
+            mViewPager.setNoScroll(false);
+            mTaskLinearLayOut.setClickable(true);
+            mMessageLinearLayOut.setClickable(true);
+            mPersonalInfoLinearLayOut.setClickable(true);
+        }
+        else {
+            mViewPager.setNoScroll(true);
+            mTaskLinearLayOut.setClickable(false);
+            mMessageLinearLayOut.setClickable(false);
+            mPersonalInfoLinearLayOut.setClickable(false);
+        }
     }
 
     @Override

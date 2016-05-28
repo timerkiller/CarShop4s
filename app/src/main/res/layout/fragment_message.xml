@@ -11,4 +11,20 @@
 
     </com.example.vke.shop4stech.customLayout.XListView>
 
+    <ProgressBar
+        android:id="@+id/tech_delete_message_process_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tech_delete_tip_text_view"
+        android:layout_below="@id/tech_delete_message_process_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tech_delete_ongoing"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:visibility="gone"/>
+
 </RelativeLayout>

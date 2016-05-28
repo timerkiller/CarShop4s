@@ -72,10 +72,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mParentActivity = (HomeActivity)getActivity();
-        if(mParentActivity != null){
-            mParentActivity.setContentViewVisibility(false);
-            mParentActivity.setAnimateFlag(true);
-        }
+//        if(mParentActivity != null){
+//            mParentActivity.setContentViewVisibility(false);
+//            mParentActivity.setAnimateFlag(true);
+//        }
         Log.i(mTag,"on Create in personal fragment");
     }
 
@@ -171,45 +171,45 @@ public class PersonalFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         Log.i(mTag,"onResume");
         super.onResume();
-        if(mUpdatePersonalInfoHandler == null){
-            initHandler();
-        }
+        initHandler();
     }
 
     private void initHandler(){
-        mUpdatePersonalInfoHandler= new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if(mParentActivity !=null){
-                    mParentActivity.setContentViewVisibility(true);
-                }
+        if(mUpdatePersonalInfoHandler == null) {
+            mUpdatePersonalInfoHandler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+//                    if (mParentActivity != null) {
+//                        mParentActivity.setContentViewVisibility(true);
+//                    }
 
-                switch (msg.what){
-                    case MessageType.TYPE_GET_PERSONAL_INFO_OK:
-                        PersonalInfo personalInfo =(PersonalInfo) msg.obj;
-                        updateContentView(personalInfo);
-                        break;
-                    case MessageType.TYPE_SERVER_NOT_AVAILABLE:
-                        Toast.makeText(getActivity().getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
-                        break;
-                    case MessageType.TYPE_GET_PERSONAL_INFO_ERROR:
-                        String tip = (String)msg.obj;
-                        Toast.makeText(getActivity().getApplicationContext(),tip,Toast.LENGTH_SHORT).show();
-                        signOut();
-                        break;
-                    case MessageType.TYPE_SIGN_OUT_OK:
-                        break;
-                    case MessageType.TYPE_SIGN_OUT_ERROR:
-                        break;
+                    switch (msg.what) {
+                        case MessageType.TYPE_GET_PERSONAL_INFO_OK:
+                            PersonalInfo personalInfo = (PersonalInfo) msg.obj;
+                            updateContentView(personalInfo);
+                            break;
+                        case MessageType.TYPE_SERVER_NOT_AVAILABLE:
+                            Toast.makeText(getActivity().getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
+                            break;
+                        case MessageType.TYPE_GET_PERSONAL_INFO_ERROR:
+                            String tip = (String) msg.obj;
+                            Toast.makeText(getActivity().getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+                            signOut();
+                            break;
+                        case MessageType.TYPE_SIGN_OUT_OK:
+                            break;
+                        case MessageType.TYPE_SIGN_OUT_ERROR:
+                            break;
 
-                    case MessageType.TYPE_NETWORK_DISABLE:
-                        Toast.makeText(getActivity(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Log.e(mTag,"Unknow message type: " + msg.what);
+                        case MessageType.TYPE_NETWORK_DISABLE:
+                            Toast.makeText(getActivity(), R.string.tech_network_unuseful, Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Log.e(mTag, "Unknow message type: " + msg.what);
+                    }
                 }
-            }
-        };
+            };
+        }
     }
 
     private void updateContentView(PersonalInfo personalInfo){

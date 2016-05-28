@@ -10,6 +10,9 @@
 
     <style name="CustomActionBarTheme"
         parent="Theme.AppCompat.Light">
+        <!--<item name="android:textColor">@color/colorWhite</item>-->
+        <item name="android:actionModeBackground">@color/colorLightBlue</item>
+        <item name="android:actionModeCloseButtonStyle">@color/colorWhite</item>
         <item name="colorPrimary">@color/colorLightBlue</item>
         <item name="colorPrimaryDark">@color/colorWhite</item>
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->

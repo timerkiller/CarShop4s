@@ -62,12 +62,12 @@ public class HttpJsonHelper {
         }
 
         String response = SendRequest(mUrl,data.toString());
-        Log.i(mTag,"resp:"+response);
+        Log.d(mTag,"resp:"+response);
         try {
             retObj =new JSONObject(response);
             return retObj;
         }catch (JSONException e){
-            Log.i(mTag,e.toString());
+            Log.d(mTag,e.toString());
         }
 
         return null;
@@ -117,7 +117,7 @@ public class HttpJsonHelper {
                 // line = new String(line.getBytes(), "utf-8");
                 returnLine += line;
 
-                Log.i(mTag,line);
+                Log.d(mTag,line);
 
             }
 

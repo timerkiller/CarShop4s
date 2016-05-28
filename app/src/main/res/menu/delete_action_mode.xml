@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/delete_mode"
+        android:icon="@drawable/icon_mine_exit"
+        android:title="@string/tech_delete"/>
+</menu>
