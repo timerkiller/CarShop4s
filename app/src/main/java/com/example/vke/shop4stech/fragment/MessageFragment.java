@@ -180,50 +180,68 @@ implements XListView.IXListViewListener{
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.delete_mode:
+                        final ActionMode MODE = mode;
+
                         if(!NetOperationHelper.isNetworkConnected(getActivity())){
                             Toast.makeText(getActivity().getApplicationContext(),R.string.tech_network_unuseful,Toast.LENGTH_SHORT).show();
                             return false;
                         }
 
-                        showDeleteWidgets(true);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                SparseBooleanArray selected = mMessageAdapter.getSelectedIds();
-                                String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
-                                String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
-                                if(!result.equals("ok")){
-                                    Message msg = mUserMessageHandler.obtainMessage();
-                                    msg.what = MessageType.TYPE_DELETE_MESSAGE_FAILED;
-                                    msg.obj = result;
-                                    mUserMessageHandler.sendMessage(msg);
-                                    return;
-                                }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("确认删除吗?");
 
-                                Log.i(mTag,"after check access token size:" +selected.size());
-                                for (int i = (selected.size() - 1); i >= 0; i--) {
-                                    UserMessage selectedItem = (UserMessage)mMessageAdapter.getItem(selected.keyAt(i)-1);
-                                    HashMap<String,Object> map = new HashMap<String, Object>();
-                                    map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
-                                    map.put(RequestDataKey.INFO,"delete");
-                                    map.put(RequestDataKey.INDEX,selectedItem.getIndex());
-                                    String ret = NetOperationHelper.removeMessage(map);
-                                    if(!ret.equals("ok")){
-                                        Message msg = mUserMessageHandler.obtainMessage();
-                                        msg.what = MessageType.TYPE_DELETE_MESSAGE_FAILED;
-                                        msg.obj = result;
-                                        mUserMessageHandler.sendMessage(msg);
-                                        return;
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                showDeleteWidgets(true);
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        SparseBooleanArray selected = mMessageAdapter.getSelectedIds();
+                                        String accessToken = PreferencesHelper.getPreferenceAccessToken(getActivity());
+                                        String result = NetOperationHelper.checkAccessTokenInvalid(accessToken);
+                                        if(!result.equals("ok")){
+                                            Message msg = mUserMessageHandler.obtainMessage();
+                                            msg.what = MessageType.TYPE_DELETE_MESSAGE_FAILED;
+                                            msg.obj = result;
+                                            mUserMessageHandler.sendMessage(msg);
+                                            return;
+                                        }
+
+                                        Log.i(mTag,"after check access token size:" +selected.size());
+                                        for (int i = (selected.size() - 1); i >= 0; i--) {
+                                            UserMessage selectedItem = (UserMessage)mMessageAdapter.getItem(selected.keyAt(i)-1);
+                                            HashMap<String,Object> map = new HashMap<String, Object>();
+                                            map.put(RequestDataKey.ACCESS_TOKEN,accessToken);
+                                            map.put(RequestDataKey.INFO,"delete");
+                                            map.put(RequestDataKey.INDEX,selectedItem.getIndex());
+                                            String ret = NetOperationHelper.removeMessage(map);
+                                            if(!ret.equals("ok")){
+                                                Message msg = mUserMessageHandler.obtainMessage();
+                                                msg.what = MessageType.TYPE_DELETE_MESSAGE_FAILED;
+                                                msg.obj = result;
+                                                mUserMessageHandler.sendMessage(msg);
+                                                return;
+                                            }
+
+                                            mMessageAdapter.remove(selected.keyAt(i)-1);
+                                        }
+                                        mUserMessageHandler.sendEmptyMessage(MessageType.TYPE_DELETE_MESSAGE_SUCCESS);
                                     }
+                                }).start();
 
-                                    mMessageAdapter.remove(selected.keyAt(i)-1);
-                                }
-                                mUserMessageHandler.sendEmptyMessage(MessageType.TYPE_DELETE_MESSAGE_SUCCESS);
+                                MODE.setTag("done");
+                                MODE.finish();
+                                dialog.dismiss();
                             }
-                        }).start();
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
 
-                        mode.setTag("done");
-                        mode.finish();
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        
                         return true;
                     case android.R.id.home:
                         Log.i(mTag,"onBack click");
