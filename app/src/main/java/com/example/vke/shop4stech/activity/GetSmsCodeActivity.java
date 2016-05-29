@@ -137,7 +137,6 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         }
     }
 
-
     private void getSmsCode(){
         HashMap<String,Object> map = new HashMap<String, Object>();
         //reqMap.put("phone",);
