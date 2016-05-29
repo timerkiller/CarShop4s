@@ -34,7 +34,7 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
 
     private static final String mTag = "RegisterStep01Activity";
     private List<String> mShopList;
-    private static Handler mShopHandler;
+    private Handler mShopHandler;
     private EditText mShopEditText,mRegisterCodeEditText;
     public static void start(Activity activity) {
         Intent starter = new Intent(activity, RegisterStep01Activity.class);

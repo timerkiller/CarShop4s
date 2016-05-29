@@ -17,6 +17,8 @@
         <item name="colorPrimaryDark">@color/colorWhite</item>
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
         <item name="titleTextColor">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -29,6 +31,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="titleTextColor">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="windowActionBar">false</item>

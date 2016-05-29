@@ -106,6 +106,15 @@ public class PreferencesHelper {
         return accessToken;
     }
 
+    public static String getPreferenceUserName(Context context){
+        SharedPreferences preferences = getSharedPreferences(context,PLAYER_PREFERENCES);
+        final String username = preferences.getString(PREFERENCE_USER_NAME,null);
+        if (username == null){
+            return null;
+        }
+        return username;
+    }
+
     public static LoginUIAccountInfo getUIAccountInfo(Context context){
         SharedPreferences preferences = getSharedPreferences(context,UI_ACCOUNT_INFO_PREFERENCES);
         final String username = preferences.getString(PREFERENCE_UI_USER_NAME, null);

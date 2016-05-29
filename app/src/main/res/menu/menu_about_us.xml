@@ -4,5 +4,5 @@
     <item android:id="@+id/action_back"
     android:icon="@drawable/icon_top_back"
     android:title="@string/tech_action_back"
-    myAPP:showAsAction="ifRoom" />
+    myAPP:showAsAction="never" />
 </menu>

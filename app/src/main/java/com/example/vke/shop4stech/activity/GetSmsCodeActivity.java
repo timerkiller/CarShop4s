@@ -22,6 +22,7 @@ import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.helper.DateTimeHelper;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
+import com.example.vke.shop4stech.helper.PreferencesHelper;
 import com.example.vke.shop4stech.helper.SMSBroadcastReceiverHelper;
 
 import org.apache.commons.codec.binary.Hex;
@@ -123,10 +124,17 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
                         getSmsCode();
                     }
                 }).start();
-
             }
         });
-        mGetSmsCodeButton.setEnabled(false);
+
+        String phone = PreferencesHelper.getPreferenceUserName(GetSmsCodeActivity.this);
+        if(phone != null){
+            mPhoneEditView.setText(phone);
+            mGetSmsCodeButton.setEnabled(true);
+        }
+        else {
+            mGetSmsCodeButton.setEnabled(false);
+        }
     }
 
 
@@ -190,7 +198,6 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
     @Override
     public void goBackPage() {
         this.finish();
-        this.overridePendingTransition(R.anim.animate_enter_alpha,R.anim.animate_out_alpha);
     }
 
     class TimeCount extends CountDownTimer {
@@ -261,4 +268,5 @@ public class GetSmsCodeActivity extends BaseRegisterActivity {
         //注销短信监听广播
         //this.unregisterReceiver(mSMSBroadcastReceiver);
     }
+
 }

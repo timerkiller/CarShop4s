@@ -11,8 +11,21 @@
         android:id="@+id/tech_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLightBlue" />
+        android:background="@color/colorLightBlue" >
+        <Button
+            android:id="@+id/tech_abous_back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/icon_top_back"/>
 
+        <TextView
+            android:id="@+id/tech_register_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/tech_about_us_text"/>
+    </android.support.v7.widget.Toolbar>
     <RelativeLayout
         android:layout_below="@id/tech_tool_bar"
         android:layout_width="match_parent"
