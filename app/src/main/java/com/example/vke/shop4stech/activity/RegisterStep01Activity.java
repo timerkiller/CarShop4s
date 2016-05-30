@@ -26,6 +26,7 @@ import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
+import com.example.vke.shop4stech.model.PersonalInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
     private List<String> mShopList;
     private Handler mShopHandler;
     private EditText mShopEditText,mRegisterCodeEditText;
+
     public static void start(Activity activity) {
         Intent starter = new Intent(activity, RegisterStep01Activity.class);
         activity.startActivity(starter);
@@ -92,7 +94,17 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
             return;
         }
 
-        RegisterStep02Activity.start(this);
+        Bundle bundle = new Bundle();
+        PersonalInfo personalInfo = new PersonalInfo();
+        personalInfo.setmRegisterCode(mRegisterCodeEditText.getText().toString());
+        personalInfo.setmCarShop(mShopEditText.getText().toString());
+        bundle.putParcelable(RegisterStep03Activity.PERSONAL_INFO,personalInfo);
+
+        Intent intent = new Intent(this,RegisterStep02Activity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+        //RegisterStep02Activity.start(this);
         this.finish();
     }
 
