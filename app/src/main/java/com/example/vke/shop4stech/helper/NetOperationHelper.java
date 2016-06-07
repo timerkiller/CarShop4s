@@ -12,6 +12,7 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 
 import com.example.vke.shop4stech.adapter.TaskAdapter;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.constant.RequestDataKey;
 import com.example.vke.shop4stech.constant.URL;
 import com.example.vke.shop4stech.model.ComponentModel;
@@ -113,12 +114,26 @@ public class NetOperationHelper {
         return "failed";
     }
 
-    public static void register(HashMap<String,Object> map){
+    public static String register(HashMap<String,Object> map){
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.MAINTAIN_USER,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
         if(respData == null){
             Log.e(mTag,"register failed");
+            return Prompt.PROMPT_REGISTER_FAILED;
         }
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                return "ok";
+            }
+            else if(result.equals("error")){
+                JSONArray errorList = respData.getJSONArray("errors");
+                return errorList.getJSONObject(0).getString("desc");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
 
     }
 
