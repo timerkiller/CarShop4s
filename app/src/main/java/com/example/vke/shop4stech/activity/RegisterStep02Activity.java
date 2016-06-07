@@ -33,6 +33,17 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
         super.onCreate(savedInstanceState);
         initContentView(R.layout.activity_register_step02);
         initEditText();
+        //获取意图进行数据返现
+        Intent intent = getIntent();
+        if(null!=intent){
+            PersonalInfo personalInfo = intent.getParcelableExtra(RegisterStep03Activity.PERSONAL_INFO);
+            mUserNameEditText.setText(personalInfo.getUserName());
+            mPhoneEditText.setText(personalInfo.getPhone());
+            mStaffIdEditText.setText(personalInfo.getStaffId());
+            mJobTypeEditText.setText(personalInfo.getJobType());
+            mStationEditText.setText(personalInfo.getStation());
+            mTeamEditText.setText(personalInfo.getTeam());
+        }
         setToolBarTitle(getResources().getString(R.string.tech_register_step_02));
     }
     private void initEditText() {
@@ -65,8 +76,11 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
 
     @Override
     public void goBackPage() {
-        //TODO REG1页面需要回显数据
-        RegisterStep01Activity.start(this);
+        PersonalInfo mPersonalInfo = (PersonalInfo) getIntent().getParcelableExtra(RegisterStep03Activity.PERSONAL_INFO);
+        Intent intent = new Intent(this, RegisterStep03Activity.class);
+        intent.putExtra(RegisterStep03Activity.PERSONAL_INFO,mPersonalInfo);
+        startActivity(intent);
+        //RegisterStep01Activity.start(this);
         this.overridePendingTransition(R.anim.base_slide_right_in, R.anim.base_slide_right_out);
         this.finish();
     }

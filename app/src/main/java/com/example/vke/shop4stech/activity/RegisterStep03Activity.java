@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.ActionMenuView.OnMenuItemClickListener;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,8 +17,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.StringHelper;
 import com.example.vke.shop4stech.model.PersonalInfo;
+
+import java.util.HashMap;
 
 public class RegisterStep03Activity extends BaseRegisterActivity {
 
@@ -60,9 +64,25 @@ public class RegisterStep03Activity extends BaseRegisterActivity {
             return;
         }
         PersonalInfo personalInfo = getIntent().getParcelableExtra(RegisterStep03Activity.PERSONAL_INFO);
-        //TODO 密码需要加密
-        personalInfo.setPassword(mPwdEditText.getText().toString());
-        //TODO 保存信息
+
+        personalInfo.setPassword(Base64.encodeToString(mPwdEditText.getText().toString().getBytes(),Base64.DEFAULT));
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("mode", "register");
+        map.put("userName",personalInfo.getUserName());
+        map.put("phone",personalInfo.getPhone());
+        map.put("password",personalInfo.getmPassword());
+        map.put("registerCode",personalInfo.getmRegisterCode());
+        map.put("staffID",personalInfo.getStaffId());
+        map.put("jobType",personalInfo.getJobType());
+        map.put("station",personalInfo.getStation());
+        map.put("team",personalInfo.getTeam());
+        map.put("carShop",personalInfo.getmCarShop());
+        String result = NetOperationHelper.register(map);
+        if(!"ok".equals(result)){
+            Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
+            return ;
+        }
         SignInActivity.startWithNoAnimate(this);
         this.overridePendingTransition(R.anim.animate_out_alpha,R.anim.animate_enter_alpha);
         this.finish();
@@ -70,8 +90,11 @@ public class RegisterStep03Activity extends BaseRegisterActivity {
 
     @Override
     public void goBackPage() {
-        //TODO REG2页面需要回显数据
-        RegisterStep02Activity.start(this);
+        PersonalInfo mPersonalInfo = (PersonalInfo) getIntent().getParcelableExtra(PERSONAL_INFO);
+        Intent intent = new Intent(this, RegisterStep02Activity.class);
+        intent.putExtra(PERSONAL_INFO,mPersonalInfo);
+        startActivity(intent);
+        //RegisterStep02Activity.start(this);
         this.overridePendingTransition(R.anim.base_slide_right_in,R.anim.base_slide_right_out);
         this.finish();
     }
