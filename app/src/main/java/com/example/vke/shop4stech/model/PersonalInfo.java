@@ -63,7 +63,8 @@ public class PersonalInfo implements Parcelable{
     }
 
     public String getStaffId() {
-        return "工作证号:"+mStaffId;
+        //return "工作证号:"+mStaffId;
+        return mStaffId;
     }
 
     public String getTeam() {
@@ -133,13 +134,13 @@ public class PersonalInfo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mJobType);
-        dest.writeString(mPassword);
-        dest.writeString(mPhone);
-        dest.writeString(mStaffId);
-        dest.writeString(mTeam);
-        dest.writeString(mStation);
         dest.writeString(mUserName);
+        dest.writeString(mStaffId);
+        dest.writeString(mJobType);
+        dest.writeString(mStation);
+        dest.writeString(mTeam);
+        dest.writeString(mPhone);
+        dest.writeString(mPassword);
         dest.writeString(mRegisterCode);
         dest.writeString(mCarShop);
     }

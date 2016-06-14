@@ -41,7 +41,11 @@ public class NetOperationHelper {
     public static final String KEY_TASKS="tasks";
     public static final String KEY_MESSAGES="messages";
     public static final String KEY_SHOP="shop";
+    public static final String KEY_JOB="job";
+    public static final String KEY_TEAM="team";
+    public static final String KEY_STATION="station";
     public static final String KEY_ERROR="error";
+    public static final String KEY_OK="ok";
     public static final String KEY_TOTAL_PAGE="pageAll";
     public static final String KEY_RESULT="result";
 
@@ -137,6 +141,59 @@ public class NetOperationHelper {
 
     }
 
+    /**
+     * 获取4s店工种、工位、班组信息
+     * @param map
+     * @return
+     */
+    public static HashMap<String,Object> getShopInfoAbout(HashMap<String,Object> map){
+        HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.SHOP_4S,map);
+        JSONObject respData= httpJsonHelper.httpPostJsonData();
+
+        if(respData == null){
+            Log.e(mTag,"getShopInfo failed");
+            HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+            respDataMap.put(KEY_ERROR,"getShopInfo failed");
+            return respDataMap;
+        }
+
+        try {
+            String result = respData.getString("result");
+            if (result.equals("ok")) {
+                List<String> jobList = new ArrayList<String>();
+                List<String> teamList = new ArrayList<String>();
+                List<String> stationList = new ArrayList<String>();
+                JSONArray jobListArray = respData.getJSONArray("jobTypeLists");
+                JSONArray teamListArray = respData.getJSONArray("teamLists");
+                JSONArray stationListArray = respData.getJSONArray("stationLists");
+
+                for(int i=0; i< jobListArray.length(); i++){
+                    jobList.add(jobListArray.getString(i));
+                }
+                for(int i=0; i< teamListArray.length(); i++){
+                    teamList.add(teamListArray.getString(i));
+                }
+                for(int i=0; i< stationListArray.length(); i++){
+                    stationList.add(stationListArray.getString(i));
+                }
+
+                HashMap<String,Object> respDataMap = new HashMap<String,Object>();
+                respDataMap.put(KEY_OK,"ok");
+                respDataMap.put(KEY_JOB,jobList);
+                respDataMap.put(KEY_TEAM,teamList);
+                respDataMap.put(KEY_STATION,stationList);
+                return respDataMap;
+            }
+            else if(result.equals("error")){
+                return parseErrorInfo(respData);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static HashMap<String,Object> getShopList(HashMap<String,Object> map){
         HttpJsonHelper httpJsonHelper = new HttpJsonHelper(URL.SHOP_4S,map);
         JSONObject respData = httpJsonHelper.httpPostJsonData();
@@ -168,7 +225,6 @@ public class NetOperationHelper {
 
         return null;
     }
-
 
     public static HashMap<String,Object>parseResult(JSONObject respData){
         try{
