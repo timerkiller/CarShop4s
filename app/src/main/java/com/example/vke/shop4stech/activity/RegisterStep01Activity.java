@@ -1,6 +1,7 @@
 package com.example.vke.shop4stech.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -56,7 +57,6 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
         initContentView(R.layout.activity_register_step01);
 
         mShopEditText = (EditText)this.findViewById(R.id.tech_4s_shop_edit_text);
-        //mShopEditText.setEnabled(false);
         mRegisterCodeEditText = (EditText)this.findViewById(R.id.tech_register_code_edit_text);
 
         //获取意图进行数据返现
@@ -67,7 +67,6 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
                 mShopEditText.setText(personalInfo.getmCarShop());
                 mRegisterCodeEditText.setText(personalInfo.getmRegisterCode());
             }
-
         }
 
         setToolBarTitle(getResources().getString(R.string.tech_register_step_01));
@@ -117,7 +116,6 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         mShopEditText.setText(wheelView.getSeletedItem());
-
                                     }
                                 })
                                 .setNegativeButton("取消",null)
@@ -143,7 +141,6 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
     public void goNextPage() {
         if (mShopEditText.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),R.string.tech_shop_should_not_null,Toast.LENGTH_SHORT).show();
-
             return;
         }
 
@@ -152,8 +149,16 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
             return;
         }
 
-        //TODO 校验注册码是否存在
-
+        //校验4s点和注册码是否存在
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("mode", "info");
+        map.put("4SShop",mShopEditText.getText().toString());
+        map.put("registerCode",mRegisterCodeEditText.getText().toString());
+        //HashMap<String,Object> result = NetOperationHelper.getShopInfoAbout(map);
+       /* if(!"ok".equals(result.get("ok"))){
+            Toast.makeText(getApplicationContext(),result.get("error").toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }*/
 
         //Bundle bundle = new Bundle();
         PersonalInfo personalInfo = new PersonalInfo();
