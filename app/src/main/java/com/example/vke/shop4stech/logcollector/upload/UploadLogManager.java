@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.example.vke.shop4stech.logcollector.capture.LogFileStorage;
+import com.example.vke.shop4stech.logcollector.utils.LogCollectorUtility;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -83,7 +85,11 @@ public class UploadLogManager {
 				MailSender sender = new MailSender("ketijie@163.com","6285067");
 				String path = logFile.getAbsolutePath();
 				try{
-					boolean result = sender.sendMail("Log日志","请分析","ketijie@163.com","ketijie@163.com",path);
+					String title = "崩溃日志";
+					String body = "APP:" + LogCollectorUtility.getVerName(mContext) + "\n"+ "APP版本信息:" + LogCollectorUtility.getVerCode(mContext) +"\n"
+							+ "OS版本信息:" + Build.VERSION.RELEASE +"\n" + "厂商:" + Build.MANUFACTURER + "型号:" + Build.MODEL ;
+					String receivers = "ketijie@163.com" + "," + "690782486@qq.com";
+					boolean result = sender.sendMail(title,body,"ketijie@163.com",receivers,path);
 					if(result){
 						LogFileStorage.getInstance(mContext).deleteUploadLogFile();
 					}
@@ -97,7 +103,6 @@ public class UploadLogManager {
 				isRunning = false;
 			}
 		}
-		
 	}
 	
 }
