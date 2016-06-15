@@ -27,6 +27,8 @@ public class PersonalInfo implements Parcelable{
     private String mTeam;
     private String mPhone;
     private String mPassword;
+    private String mRegisterCode;
+    private String mCarShop;
 
     public PersonalInfo(){
 
@@ -40,6 +42,8 @@ public class PersonalInfo implements Parcelable{
         mTeam = parcel.readString();
         mPhone = parcel.readString();
         mPassword = parcel.readString();
+        mRegisterCode = parcel.readString();
+        mCarShop = parcel.readString();
     }
 
     public PersonalInfo(String userName,String staffId, String jobType,String station, String team){
@@ -59,7 +63,8 @@ public class PersonalInfo implements Parcelable{
     }
 
     public String getStaffId() {
-        return "工作证号:"+mStaffId;
+        //return "工作证号:"+mStaffId;
+        return mStaffId;
     }
 
     public String getTeam() {
@@ -106,6 +111,22 @@ public class PersonalInfo implements Parcelable{
         this.mUserName = mUserName;
     }
 
+    public String getmRegisterCode() {
+        return mRegisterCode;
+    }
+
+    public void setmRegisterCode(String mRegisterCode) {
+        this.mRegisterCode = mRegisterCode;
+    }
+
+    public String getmCarShop() {
+        return mCarShop;
+    }
+
+    public void setmCarShop(String mCarShop) {
+        this.mCarShop = mCarShop;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -113,12 +134,14 @@ public class PersonalInfo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mJobType);
-        dest.writeString(mPassword);
-        dest.writeString(mPhone);
-        dest.writeString(mStaffId);
-        dest.writeString(mTeam);
-        dest.writeString(mStation);
         dest.writeString(mUserName);
+        dest.writeString(mStaffId);
+        dest.writeString(mJobType);
+        dest.writeString(mStation);
+        dest.writeString(mTeam);
+        dest.writeString(mPhone);
+        dest.writeString(mPassword);
+        dest.writeString(mRegisterCode);
+        dest.writeString(mCarShop);
     }
 }

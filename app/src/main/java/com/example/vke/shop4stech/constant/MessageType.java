@@ -39,4 +39,5 @@ public class MessageType {
     public static final int TYPE_DELETE_MESSAGE_SUCCESS = 0x1027;
     public static final int TYPE_DELETE_MESSAGE_FAILED = 0x1028;
     public static final int TYPE_DELETE_MESSAGE_CANCEL = 0x1029;
+    public static final int TYPE_GET_SHOP_INFO_SUCCESS = 0x1030;
 }

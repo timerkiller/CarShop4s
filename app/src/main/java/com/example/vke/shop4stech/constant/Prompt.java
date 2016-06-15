@@ -5,6 +5,7 @@ package com.example.vke.shop4stech.constant;
  */
 public class Prompt {
     public static final String PROMPT_REGISTER_SUCCESS="注册成功";
+    public static final String PROMPT_REGISTER_FAILED="注册失败";
     public static final String PROMPT_SERVER_NOT_AVAILABLE="Oh,服务器出了点状况,请稍后再试!";
     public static final String PROMPT_ACCESS_TOKEN_INVALID="AccessToken失效,请重新登陆!";
     public static final String PROMPT_LOAD_FAILED="加载失败";
