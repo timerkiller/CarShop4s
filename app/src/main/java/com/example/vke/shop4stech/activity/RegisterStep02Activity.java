@@ -111,9 +111,9 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
 
                         View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
-                        wheelView.setOffset(2);
+                        wheelView.setOffset(0);
                         wheelView.setItems(jobTypeLists);
-                        wheelView.setSeletion(3);
+                        wheelView.setSeletion(1);
                         wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
                             public void onSelected(int selectedIndex, String item) {
                                 Log.i(mTag, "selectedIndex: " + selectedIndex + ", item: " + item);
@@ -135,8 +135,6 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                                 .show();
                         break;
                 }
-
-
             }
         });
 
@@ -152,9 +150,9 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
 
                         View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
-                        wheelView.setOffset(2);
+                        wheelView.setOffset(0);
                         wheelView.setItems(stationLists);
-                        wheelView.setSeletion(3);
+                        wheelView.setSeletion(1);
                         wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
                             public void onSelected(int selectedIndex, String item) {
                                 Log.i(mTag, "selectedIndex: " + selectedIndex + ", item: " + item);
@@ -193,9 +191,9 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
 
                         View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
-                        wheelView.setOffset(2);
+                        wheelView.setOffset(0);
                         wheelView.setItems(teamLists);
-                        wheelView.setSeletion(3);
+                        wheelView.setSeletion(1);
                         wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
                             public void onSelected(int selectedIndex, String item) {
                                 Log.i(mTag, "selectedIndex: " + selectedIndex + ", item: " + item);
@@ -248,15 +246,16 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
             msg.obj = Prompt.PROMPT_SERVER_NOT_AVAILABLE;
             mShopInfoHandler.sendMessage(msg);
         }
-
-
-
     }
 
 
     @Override
     public void goNextPage() {
-        checkSimpleData();//非空校验
+        if(!checkSimpleData()){
+            //非空校验
+            return;
+        }
+
         PersonalInfo personalInfo = getIntent().getParcelableExtra(RegisterStep03Activity.PERSONAL_INFO);
         personalInfo.setUserName(mUserNameEditText.getText().toString());
         personalInfo.setPhone(mPhoneEditText.getText().toString());
@@ -267,8 +266,6 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
         RegisterStep03Activity.start(this, personalInfo);
         this.finish();
     }
-
-
 
     @Override
     public void goBackPage() {
@@ -281,37 +278,37 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
         this.finish();
     }
 
-    private void checkSimpleData(){
+    private boolean checkSimpleData(){
         if(StringHelper.isEmpty(mUserNameEditText.getText().toString())){
             Toast.makeText(getApplicationContext(),R.string.tech_input_name, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         if(StringHelper.isEmpty(mPhoneEditText.getText().toString())){
             Toast.makeText(getApplicationContext(),R.string.tech_input_phone, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         if(StringHelper.isEmpty(mStaffIdEditText.getText().toString())){
             Toast.makeText(getApplicationContext(),R.string.tech_input_job_id, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         if(StringHelper.isEmpty(mJobTypeEditText.getText().toString())){
             Toast.makeText(getApplicationContext(),R.string.tech_input_job_type, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         if(StringHelper.isEmpty(mStationEditText.getText().toString())){
             Toast.makeText(getApplicationContext(),R.string.tech_input_job_station, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         if(StringHelper.isEmpty(mTeamEditText.getText().toString())){
             Toast.makeText(getApplicationContext(),R.string.tech_input_job_team, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
-
+        return true;
     }
 
 }

@@ -92,16 +92,15 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.tech_4s_shop_edit_text:
-                        /*隐藏键盘
+                        /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        */
 
                         View view = LayoutInflater.from(RegisterStep01Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
-                        wheelView.setOffset(2);
+                        wheelView.setOffset(0);
                         wheelView.setItems(mShopList);
-                        wheelView.setSeletion(3);
+                        wheelView.setSeletion(1);
                         wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
                             public void onSelected(int selectedIndex, String item) {
                                 Log.i(mTag, "selectedIndex: " + selectedIndex + ", item: " + item);
