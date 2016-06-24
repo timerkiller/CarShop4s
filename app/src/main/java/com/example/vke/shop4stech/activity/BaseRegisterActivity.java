@@ -1,6 +1,7 @@
 package com.example.vke.shop4stech.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,11 +13,15 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.customLayout.WheelView;
+
+import java.util.List;
 
 /**
  * Created by vke on 2016/5/18.
@@ -152,4 +157,39 @@ public abstract class BaseRegisterActivity extends BaseSwipeBackActivity impleme
     public abstract void goNextPage();
 
     public abstract void goBackPage();
+
+    /**
+     * 隐藏键盘
+     * @param view
+     */
+    public void hideSoftInput(View view){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static View packWheelView(Context context,List list,int offset,int position,final Callback callback){
+        //View view = LayoutInflater.from(RegisterStep01Activity.this).inflate(R.layout.wheelview,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.wheelview,null);
+        WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
+        wheelView.setOffset(offset);
+        //wheelView.setItems(mShopList);
+        wheelView.setItems(list);
+        wheelView.setSeletion(position);
+        wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
+            public void onSelected(int selectedIndex, String item) {
+                Log.i(mTag, "selectedIndex: " + selectedIndex + ", item: " + item);
+                callback.selectCallback(selectedIndex, item);
+                //mShopEditText.setText(item);
+                //customerDialog.dismiss();
+            }
+        });
+        return view ;
+    }
+
+
+    public interface Callback{
+        public void selectCallback(int selectedIndex, String item);
+
+    }
+
 }

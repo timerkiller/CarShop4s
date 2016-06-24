@@ -1,6 +1,7 @@
 package com.example.vke.shop4stech.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.Prompt;
+import com.example.vke.shop4stech.customLayout.CustomerDialog;
 import com.example.vke.shop4stech.customLayout.WheelView;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.StringHelper;
@@ -104,12 +107,23 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.tech_job_type_edit_text:
-                        /*隐藏键盘
+                        /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        */
+                        //自定义对话框
+                        final CustomerDialog customerDialog = new CustomerDialog(RegisterStep02Activity.this);
+                        //组装wheelview
+                        final View view = BaseRegisterActivity.packWheelView(RegisterStep02Activity.this,jobTypeLists, 0, 1,  new Callback() {
+                            @Override
+                            public void selectCallback(int selectedIndex, String item) {
+                                mJobTypeEditText.setText(item);
+                                customerDialog.dismiss();
+                            }
+                        });
+                        customerDialog.createDialog("请选择",  "", "",view, null);
 
-                        View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
+
+                       /* View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
                         wheelView.setOffset(0);
                         wheelView.setItems(jobTypeLists);
@@ -132,7 +146,7 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                                     }
                                 })
                                 .setNegativeButton("取消",null)
-                                .show();
+                                .show();*/
                         break;
                 }
             }
@@ -143,12 +157,23 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.tech_job_station_edit_text:
-                        /*隐藏键盘
+                        /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        */
 
-                        View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
+                        //自定义对话框
+                        final CustomerDialog customerDialog = new CustomerDialog(RegisterStep02Activity.this);
+                        //组装wheelview
+                        final View view = BaseRegisterActivity.packWheelView(RegisterStep02Activity.this,stationLists, 0, 1,  new Callback() {
+                            @Override
+                            public void selectCallback(int selectedIndex, String item) {
+                                mStationEditText.setText(item);
+                                customerDialog.dismiss();
+                            }
+                        });
+                        customerDialog.createDialog("请选择",  "", "",view, null);
+
+                        /*View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
                         wheelView.setOffset(0);
                         wheelView.setItems(stationLists);
@@ -171,7 +196,7 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                                     }
                                 })
                                 .setNegativeButton("取消",null)
-                                .show();
+                                .show();*/
                         break;
                 }
 
@@ -184,12 +209,23 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.tech_job_team_edit_text:
-                        /*隐藏键盘
+                        /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        */
 
-                        View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
+                        //自定义对话框
+                        final CustomerDialog customerDialog = new CustomerDialog(RegisterStep02Activity.this);
+                        //组装wheelview
+                        final View view = BaseRegisterActivity.packWheelView(RegisterStep02Activity.this,teamLists, 0, 1,  new Callback() {
+                            @Override
+                            public void selectCallback(int selectedIndex, String item) {
+                                mTeamEditText.setText(item);
+                                customerDialog.dismiss();
+                            }
+                        });
+                        customerDialog.createDialog("请选择",  "", "",view, null);
+
+                        /*View view = LayoutInflater.from(RegisterStep02Activity.this).inflate(R.layout.wheelview,null);
                         final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
                         wheelView.setOffset(0);
                         wheelView.setItems(teamLists);
@@ -212,7 +248,7 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                                     }
                                 })
                                 .setNegativeButton("取消",null)
-                                .show();
+                                .show();*/
                         break;
                 }
 

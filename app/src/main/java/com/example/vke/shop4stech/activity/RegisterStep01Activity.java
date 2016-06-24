@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.vke.shop4stech.R;
 import com.example.vke.shop4stech.constant.MessageType;
 import com.example.vke.shop4stech.constant.Prompt;
+import com.example.vke.shop4stech.customLayout.CustomerDialog;
 import com.example.vke.shop4stech.customLayout.WheelView;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.model.PersonalInfo;
@@ -71,6 +72,7 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
 
         setToolBarTitle(getResources().getString(R.string.tech_register_step_01));
         Log.i(mTag,"after parent base register");
+        final Activity activity = this;
         mShopHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -81,12 +83,31 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
                     case MessageType.TYPE_GET_SHOP_LIST_FAILED:
                         Toast.makeText(getApplicationContext(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                         break;
+                    case MessageType.TYPE_GET_SHOP_INFO:
+                        HashMap<String,Object> result = (HashMap<String, Object>) msg.obj;
+                        if("ok".equals(result.get("ok"))) {
+							PersonalInfo personalInfo = new PersonalInfo();
+                            personalInfo.setmRegisterCode(mRegisterCodeEditText.getText().toString());
+                            personalInfo.setmCarShop(mShopEditText.getText().toString());
+
+                            Intent intent = new Intent(activity,RegisterStep02Activity.class);
+                            intent.putExtra(RegisterStep03Activity.PERSONAL_INFO,personalInfo);
+                            startActivity(intent);
+                            //RegisterStep02Activity.start(this);
+                            activity.finish();
+                            
+                        }else{
+                            Toast.makeText(getApplicationContext(), result.get("error").toString(), Toast.LENGTH_SHORT).show();
+                        }
+                        break;
                     default:
                         Log.e(mTag,"Unknow message type:" + msg.what);
                 }
 
             }
         };
+
+
 
         mShopEditText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -95,30 +116,17 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
                         /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                        View view = LayoutInflater.from(RegisterStep01Activity.this).inflate(R.layout.wheelview,null);
-                        final WheelView wheelView = (WheelView) view.findViewById(R.id.wheel_view);
-                        wheelView.setOffset(0);
-                        wheelView.setItems(mShopList);
-                        wheelView.setSeletion(1);
-                        wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
-                            public void onSelected(int selectedIndex, String item) {
-                                Log.i(mTag, "selectedIndex: " + selectedIndex + ", item: " + item);
-                                //selectItem = item;
+                        //自定义对话框
+                        final CustomerDialog customerDialog = new CustomerDialog(RegisterStep01Activity.this);
+                        //组装wheelview
+                        final View view = BaseRegisterActivity.packWheelView(RegisterStep01Activity.this,mShopList, 0, 1,  new Callback() {
+                            @Override
+                            public void selectCallback(int selectedIndex, String item) {
+                                mShopEditText.setText(item);
+                                customerDialog.dismiss();
                             }
                         });
-
-                        new AlertDialog.Builder(RegisterStep01Activity.this)
-                                .setTitle("请选择")
-                                .setView(view)
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mShopEditText.setText(wheelView.getSeletedItem());
-                                    }
-                                })
-                                .setNegativeButton("取消",null)
-                                .show();
+                        customerDialog.createDialog("请选择",  "", "",view, null);
                     break;
                 }
 
@@ -149,18 +157,31 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
         }
 
         //校验4s点和注册码是否存在
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("mode", "info");
-        map.put("4SShop",mShopEditText.getText().toString());
-        map.put("registerCode",mRegisterCodeEditText.getText().toString());
+
         //HashMap<String,Object> result = NetOperationHelper.getShopInfoAbout(map);
        /* if(!"ok".equals(result.get("ok"))){
             Toast.makeText(getApplicationContext(),result.get("error").toString(),Toast.LENGTH_SHORT).show();
             return;
         }*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, Object> map = new HashMap<String, Object>();
+                map.put("mode", "info");
+                map.put("4SShop",mShopEditText.getText().toString());
+                map.put("registerCode",mRegisterCodeEditText.getText().toString());
+                HashMap<String,Object> result = NetOperationHelper.getShopInfoAbout(map);
+                Message msg = mShopHandler.obtainMessage();
+                if(null!=result){
+                    msg.what = MessageType.TYPE_GET_SHOP_INFO;
+                    msg.obj = result;
+                    mShopHandler.sendMessage(msg);
+                }
+            }
+        }).start();
 
         //Bundle bundle = new Bundle();
-        PersonalInfo personalInfo = new PersonalInfo();
+        /*PersonalInfo personalInfo = new PersonalInfo();
         personalInfo.setmRegisterCode(mRegisterCodeEditText.getText().toString());
         personalInfo.setmCarShop(mShopEditText.getText().toString());
 
@@ -168,7 +189,7 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
         intent.putExtra(RegisterStep03Activity.PERSONAL_INFO,personalInfo);
         startActivity(intent);
         //RegisterStep02Activity.start(this);
-        this.finish();
+        this.finish();*/
     }
 
     @Override

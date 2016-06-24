@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vke.shop4stech.R;
+import com.example.vke.shop4stech.constant.Prompt;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.StringHelper;
 import com.example.vke.shop4stech.model.PersonalInfo;
@@ -56,6 +57,8 @@ public class RegisterStep03Activity extends BaseRegisterActivity {
                 if(!"ok".equals(result)){
                     Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
                     return ;
+                }else{
+                    Toast.makeText(getApplicationContext(), Prompt.PROMPT_REGISTER_SUCCESS, Toast.LENGTH_SHORT).show();//注册成功
                 }
 
                 SignInActivity.startWithNoAnimate(RegisterStep03Activity.this);
