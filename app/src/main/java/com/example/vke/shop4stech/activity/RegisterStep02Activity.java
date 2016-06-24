@@ -28,6 +28,7 @@ import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.helper.StringHelper;
 import com.example.vke.shop4stech.model.PersonalInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -110,6 +111,10 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                         /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+						if(null==jobTypeLists){
+							Toast.makeText(getApplicationContext(), Prompt.PROMPT_NETWORK_NOT_AVAILABLE, Toast.LENGTH_SHORT).show();
+							return ;
+						}
                         //自定义对话框
                         final CustomerDialog customerDialog = new CustomerDialog(RegisterStep02Activity.this);
                         //组装wheelview
@@ -160,7 +165,10 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                         /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
+						if(null==stationLists){
+							Toast.makeText(getApplicationContext(), Prompt.PROMPT_NETWORK_NOT_AVAILABLE, Toast.LENGTH_SHORT).show();
+							return ;
+						}
                         //自定义对话框
                         final CustomerDialog customerDialog = new CustomerDialog(RegisterStep02Activity.this);
                         //组装wheelview
@@ -213,6 +221,10 @@ public class RegisterStep02Activity extends BaseRegisterActivity {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
+						if(null==teamLists){
+							Toast.makeText(getApplicationContext(), Prompt.PROMPT_NETWORK_NOT_AVAILABLE, Toast.LENGTH_SHORT).show();
+							return ;
+						}
                         //自定义对话框
                         final CustomerDialog customerDialog = new CustomerDialog(RegisterStep02Activity.this);
                         //组装wheelview

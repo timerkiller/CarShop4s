@@ -34,6 +34,7 @@ import com.example.vke.shop4stech.customLayout.WheelView;
 import com.example.vke.shop4stech.helper.NetOperationHelper;
 import com.example.vke.shop4stech.model.PersonalInfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -116,6 +117,10 @@ public class RegisterStep01Activity extends BaseRegisterActivity{
                         /*隐藏键盘*/
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+						if(null==mShopList){
+							Toast.makeText(getApplicationContext(), Prompt.PROMPT_NETWORK_NOT_AVAILABLE, Toast.LENGTH_SHORT).show();
+							return ;
+						}
                         //自定义对话框
                         final CustomerDialog customerDialog = new CustomerDialog(RegisterStep01Activity.this);
                         //组装wheelview
